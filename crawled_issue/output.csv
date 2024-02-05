@@ -1,0 +1,977 @@
+Issue ID,Issue Body
+2032018852,"Changed ""ar"" to ""are"" in readme."
+2036967098,"### Describe the Bug
+
+umami behaving like a static app, maybe prisma schema related problem
+
+ ⚠ Entire page /sso deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /sso
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+```shell
+[10:05:41] Running build in Washington, D.C., USA (East) – iad1
+[10:05:42] Cloning github.com/shailendrakashyap/umami (Branch: main, Commit: 532fea4)
+[10:05:42] Skipping build cache, deployment was triggered without cache.
+[10:05:43] Cloning completed: 532.461ms
+[10:05:43] Running ""vercel build""
+[10:05:44] Vercel CLI 32.6.1
+[10:05:45] Installing dependencies...
+[10:05:45] yarn install v1.22.17
+[10:05:45] [1/4] Resolving packages...
+[10:05:46] [2/4] Fetching packages...
+[10:06:39] warning chart.js@4.4.0: The engine ""pnpm"" appears to be invalid.
+[10:06:39] [3/4] Linking dependencies...
+[10:06:39] warning "" > @umami/prisma-client@0.3.0"" has incorrect peer dependency ""@prisma/client@^4.8.0"".
+[10:06:39] warning "" > react-simple-maps@2.3.0"" has incorrect peer dependency ""react@^16.8.0 || 17.x"".
+[10:06:39] warning "" > react-simple-maps@2.3.0"" has incorrect peer dependency ""react-dom@^16.8.0 || 17.x"".
+[10:06:39] warning "" > react-simple-maps@2.3.0"" has unmet peer dependency ""prop-types@^15.7.2"".
+[10:06:39] warning "" > rollup-plugin-terser@7.0.2"" has incorrect peer dependency ""rollup@^2.0.0"".
+[10:06:39] warning "" > stylelint-config-prettier@9.0.5"" has incorrect peer dependency ""stylelint@>= 11.x < 15"".
+[10:06:39] warning "" > stylelint-config-recommended@9.0.0"" has incorrect peer dependency ""stylelint@^14.10.0"".
+[10:06:39] warning Workspaces can only be enabled in private projects.
+[10:07:00] [4/4] Building fresh packages...
+[10:07:04] $ node -e ""if (process.env.NODE_ENV !== 'production'){process.exit(1)} "" || husky install
+[10:07:04] husky - Git hooks installed
+[10:07:04] Done in 79.18s.
+[10:07:04] Detected Next.js version: 13.5.6
+[10:07:04] Running ""prisma generate && yarn run build-app""
+[10:07:05] prisma:warn We could not find your Prisma schema at `prisma/schema.prisma`.
+[10:07:05] If you have a Prisma schema file in a custom path, you will need to run
+[10:07:05] `prisma generate --schema=./path/to/your/schema.prisma` to generate Prisma Client.
+[10:07:05] If you do not have a Prisma schema file yet, you can ignore this message.
+[10:07:05] 
+[10:07:05] yarn run v1.22.17
+[10:07:05] $ next build
+[10:07:06]  ⚠ Invalid next.config.js options detected: 
+[10:07:06]  ⚠     Expected string, received boolean at ""env.cloudMode""
+[10:07:06]  ⚠     ""env.cloudUrl"" is missing, expected string
+[10:07:06]  ⚠     ""env.defaultLocale"" is missing, expected string
+[10:07:06]  ⚠     ""env.disableLogin"" is missing, expected string
+[10:07:06]  ⚠     ""env.disableUI"" is missing, expected string
+[10:07:06]  ⚠     Expected string, received boolean at ""env.isProduction""
+[10:07:06]  ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+[10:07:06] Attention: Next.js now collects completely anonymous telemetry regarding usage.
+[10:07:06] This information is used to shape Next.js' roadmap and prioritize features.
+[10:07:06] You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+[10:07:06] https://nextjs.org/telemetry
+[10:07:06] 
+[10:07:06]    Creating an optimized production build ...
+[10:07:45]  ✓ Compiled successfully
+[10:07:45]    Skipping validation of types
+[10:07:45]    Skipping linting
+[10:07:45]    Collecting page data ...
+[10:07:48]    Generating static pages (0/18) ...
+[10:07:49] 
+   Generating static pages (4/18) 
+[10:07:50] 
+   Generating static pages (8/18) 
+[10:07:50] 
+   Generating static pages (13/18) 
+[10:07:50]  ⚠ Entire page /sso deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /sso
+[10:07:50] 
+ ✓ Generating static pages (18/18) 
+[10:07:52]    Finalizing page optimization ...
+[10:07:52]    Collecting build traces ...
+[10:08:25] 
+[10:08:25] Route (app)                                Size     First Load JS
+[10:08:25] ┌ ○ /                                      270 B          81.3 kB
+[10:08:25] ├ ○ /_not-found                            0 B                0 B
+[10:08:25] ├ λ /console/[[...id]]                     5.13 kB         585 kB
+[10:08:25] ├ ○ /dashboard                             35.8 kB         648 kB
+[10:08:25] ├ ○ /login                                 5.42 kB         333 kB
+[10:08:25] ├ ○ /logout                                3.71 kB         265 kB
+[10:08:25] ├ ○ /reports                               2.87 kB         509 kB
+[10:08:25] ├ λ /reports/[id]                          3.33 kB         616 kB
+[10:08:25] ├ ○ /reports/create                        3.65 kB         510 kB
+[10:08:25] ├ ○ /reports/funnel                        239 B           609 kB
+[10:08:25] ├ ○ /reports/insights                      1.7 kB          516 kB
+[10:08:25] ├ ○ /reports/retention                     2.79 kB         513 kB
+[10:08:25] ├ ○ /settings/profile                      4.01 kB         546 kB
+[10:08:25] ├ ○ /settings/teams                        4.08 kB         519 kB
+[10:08:25] ├ λ /settings/teams/[id]                   4.18 kB         511 kB
+[10:08:25] ├ ○ /settings/users                        3.9 kB          510 kB
+[10:08:25] ├ λ /settings/users/[id]                   5.83 kB         340 kB
+[10:08:25] ├ ○ /settings/websites                     2.75 kB         509 kB
+[10:08:25] ├ λ /settings/websites/[id]                6.29 kB         341 kB
+[10:08:25] ├ λ /share/[...id]                         1.96 kB         696 kB
+[10:08:25] ├ ○ /sso                                   3.79 kB         296 kB
+[10:08:25] ├ ○ /websites                              2.95 kB         509 kB
+[10:08:25] ├ λ /websites/[id]                         246 B           660 kB
+[10:08:25] ├ λ /websites/[id]/event-data              1.72 kB         539 kB
+[10:08:25] ├ λ /websites/[id]/realtime                8.72 kB         653 kB
+[10:08:25] └ λ /websites/[id]/reports                 4.56 kB         519 kB
+[10:08:25] + First Load JS shared by all              81 kB
+[10:08:25]   ├ chunks/2472-9011068b83989e2d.js        27.6 kB
+[10:08:25]   ├ chunks/fd9d1056-675f2158ca8987c1.js    50.9 kB
+[10:08:25]   ├ chunks/main-app-8ed6d57d180fb331.js    238 B
+[10:08:25]   └ chunks/webpack-6ff67e71f49d4ef3.js     2.24 kB
+[10:08:25] 
+[10:08:25] Route (pages)                              Size     First Load JS
+[10:08:25] ┌ λ /api/auth/login                        0 B            85.5 kB
+[10:08:25] ├ λ /api/auth/logout                       0 B            85.5 kB
+[10:08:25] ├ λ /api/auth/sso                          0 B            85.5 kB
+[10:08:25] ├ λ /api/auth/verify                       0 B            85.5 kB
+[10:08:25] ├ λ /api/config                            0 B            85.5 kB
+[10:08:25] ├ λ /api/event-data/events                 0 B            85.5 kB
+[10:08:25] ├ λ /api/event-data/fields                 0 B            85.5 kB
+[10:08:25] ├ λ /api/event-data/stats                  0 B            85.5 kB
+[10:08:25] ├ λ /api/heartbeat                         0 B            85.5 kB
+[10:08:25] ├ λ /api/me                                0 B            85.5 kB
+[10:08:25] ├ λ /api/me/password                       0 B            85.5 kB
+[10:08:25] ├ λ /api/me/teams                          0 B            85.5 kB
+[10:08:25] ├ λ /api/me/websites                       0 B            85.5 kB
+[10:08:25] ├ λ /api/realtime/[id]                     0 B            85.5 kB
+[10:08:25] ├ λ /api/reports                           0 B            85.5 kB
+[10:08:25] ├ λ /api/reports/[id]                      0 B            85.5 kB
+[10:08:25] ├ λ /api/reports/funnel                    0 B            85.5 kB
+[10:08:25] ├ λ /api/reports/insights                  0 B            85.5 kB
+[10:08:25] ├ λ /api/reports/retention                 0 B            85.5 kB
+[10:08:25] ├ λ /api/scripts/telemetry                 0 B            85.5 kB
+[10:08:25] ├ λ /api/send                              0 B            85.5 kB
+[10:08:25] ├ λ /api/share/[id]                        0 B            85.5 kB
+[10:08:25] ├ λ /api/teams                             0 B            85.5 kB
+[10:08:25] ├ λ /api/teams/[id]                        0 B            85.5 kB
+[10:08:25] ├ λ /api/teams/[id]/users                  0 B            85.5 kB
+[10:08:25] ├ λ /api/teams/[id]/users/[userId]         0 B            85.5 kB
+[10:08:25] ├ λ /api/teams/[id]/websites               0 B            85.5 kB
+[10:08:25] ├ λ /api/teams/[id]/websites/[websiteId]   0 B            85.5 kB
+[10:08:25] ├ λ /api/teams/join                        0 B            85.5 kB
+[10:08:25] ├ λ /api/users                             0 B            85.5 kB
+[10:08:25] ├ λ /api/users/[id]                        0 B            85.5 kB
+[10:08:25] ├ λ /api/users/[id]/teams                  0 B            85.5 kB
+[10:08:25] ├ λ /api/users/[id]/usage                  0 B            85.5 kB
+[10:08:25] ├ λ /api/users/[id]/websites               0 B            85.5 kB
+[10:08:25] ├ λ /api/version                           0 B            85.5 kB
+[10:08:25] ├ λ /api/websites                          0 B            85.5 kB
+[10:08:25] ├ λ /api/websites/[id]                     0 B            85.5 kB
+[10:08:25] ├ λ /api/websites/[id]/active              0 B            85.5 kB
+[10:08:25] ├ λ /api/websites/[id]/daterange           0 B            85.5 kB
+[10:08:25] ├ λ /api/websites/[id]/events              0 B            85.5 kB
+[10:08:25] ├ λ /api/websites/[id]/metrics             0 B            85.5 kB
+[10:08:25] ├ λ /api/websites/[id]/pageviews           0 B            85.5 kB
+[10:08:25] ├ λ /api/websites/[id]/reports             0 B            85.5 kB
+[10:08:25] ├ λ /api/websites/[id]/reset               0 B            85.5 kB
+[10:08:25] ├ λ /api/websites/[id]/stats               0 B            85.5 kB
+[10:08:25] └ λ /api/websites/[id]/values              0 B            85.5 kB
+[10:08:25] + First Load JS shared by all              85.5 kB
+[10:08:25]   ├ chunks/framework-4498e84bb0ba1830.js   45.2 kB
+[10:08:25]   ├ chunks/main-ba4b3d7e8e7eda4b.js        37.9 kB
+[10:08:25]   ├ chunks/pages/_app-0a6f9986ee298e67.js  210 B
+[10:08:25]   └ chunks/webpack-6ff67e71f49d4ef3.js     2.24 kB
+[10:08:25] 
+[10:08:25] λ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+[10:08:25] ○  (Static)  automatically rendered as static HTML (uses no initial props)
+[10:08:25] 
+[10:08:25] Done in 79.58s.
+[10:08:26] Traced Next.js server files in: 1.226s
+[10:08:33] Created all serverless functions in: 7.163s
+[10:08:33] Collected static files (public/, static/, .next/static): 53.048ms
+[10:08:35] Build Completed in /vercel/output [3m]
+[10:08:36] Deploying outputs...
+[10:08:48] 
+[10:08:48] Deployment completed
+[10:09:01] Uploading build cache [164.42 MB]...
+[10:09:06] Build cache uploaded: 4.346s
+```
+
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+Vercel"
+2039165352,"Closes #800, #2423, #2400, #2386, #2383, #2358, #2343, #2332, #2311, #2294, #2271, #2169"
+2041048669,"### Describe the Bug
+
+Impossible to load data
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+```shell
+⨯ TypeError: g.patchFetch is not a function
+8|umami         |     at rD (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:13564)
+8|umami         |     at /apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:25097
+8|umami         |     at AsyncLocalStorage.run (node:async_hooks:346:14)
+8|umami         |     at Object.wrap (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:16241)
+8|umami         |     at /apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:24987
+8|umami         |     at AsyncLocalStorage.run (node:async_hooks:346:14)
+8|umami         |     at Object.wrap (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:15489)
+8|umami         |     at rB (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:24914)
+8|umami         |     at r7.render (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:28962)
+8|umami         |     at doRender (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/server/base-server.js:1391:44)
+8|umami         |  ⨯ TypeError: g.patchFetch is not a function
+8|umami         |     at rD (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:13564)
+8|umami         |     at /apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:25097
+8|umami         |     at AsyncLocalStorage.run (node:async_hooks:346:14)
+8|umami         |     at Object.wrap (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:16241)
+8|umami         |     at /apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:24987
+8|umami         |     at AsyncLocalStorage.run (node:async_hooks:346:14)
+8|umami         |     at Object.wrap (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:15489)
+8|umami         |     at rB (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:24914)
+8|umami         |     at r7.render (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:16:28962)
+8|umami         |     at doRender (/apps/umami/node_modules/.pnpm/next@14.0.4_@babel+core@7.17.7_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/server/base-server.js:1391:44)
+8|umami         | TypeError: i(...).getCache is not a function
+8|umami         |     at Object.c [as fetchWebsite] (/apps/umami/.next/server/chunks/8218.js:1:2697)
+8|umami         |     at d (/apps/umami/.next/server/chunks/8218.js:1:11947)
+8|umami         |     at m (/apps/umami/.next/server/chunks/8218.js:1:14333)
+8|umami         |     at o (/apps/umami/.next/server/chunks/8218.js:246:422)
+8|umami         |     at Object.prisma (/apps/umami/.next/server/chunks/8218.js:246:242)
+8|umami         |     at o (/apps/umami/.next/server/chunks/8218.js:1:8565)
+8|umami         |     at u (/apps/umami/.next/server/chunks/8218.js:246:229)
+8|umami         |     at m (/apps/umami/.next/server/pages/api/websites/[id]/stats.js:1:4498)
+8|umami         | TypeError: i(...).getCache is not a function
+8|umami         |     at Object.c [as fetchWebsite] (/apps/umami/.next/server/chunks/8218.js:1:2697)
+8|umami         |     at d (/apps/umami/.next/server/chunks/8218.js:1:11947)
+8|umami         |     at m (/apps/umami/.next/server/chunks/8218.js:1:14333)
+8|umami         |     at o (/apps/umami/.next/server/chunks/8218.js:246:422)
+8|umami         |     at Object.prisma (/apps/umami/.next/server/chunks/8218.js:246:242)
+8|umami         |     at o (/apps/umami/.next/server/chunks/8218.js:1:8565)
+8|umami         |     at u (/apps/umami/.next/server/chunks/8218.js:246:229)
+8|umami         |     at m (/apps/umami/.next/server/pages/api/websites/[id]/stats.js:1:4498)
+```
+```
+
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+_No response_"
+2048399912,"### Describe the feature or enhancement
+
+We can send custom data with an event like this:
+
+``` html
+<a
+    data-umami-event=""Create thing""
+    data-umami-event-thing-category=""category_X""
+    href=""...""
+>...</a>
+```
+
+These details are visible in UI, on the top left button, ""Event data""
+
+![image](https://github.com/umami-software/umami/assets/1588144/59311cc7-fe4a-40d3-afe6-9996975cb2f0)
+
+But I did not found this page when using a public/shared URL, I can see only events names, not details."
+2053026441,"fixed #2433  bug please review
+"
+2053308325,"This PR includes updates to the Swedish translations 
+
+Key updates include:
+
+- Added missing translation
+- Fixed any previously incorrect translations.
+"
+2054244873,"### Describe the Bug
+
+1. Start onboarding, choose EU
+2. Copy/paste script tag from onboarding journey (e.g. <script async src=""https://cloud.umami.is/script.js"" data-website-id=""UUID-goes-here""></script>
+3. Deploy and see 404 response
+4. Get tracking code from settings page
+5. Now the URL includes the EU subdomain: <script async src=""https://eu.umami.is/script.js"" data-website-id=""UUID-goes-here""></script>
+
+### Database
+
+Umami Cloud
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+_No response_"
+2056044123,"### Describe the Bug
+
+i want to track redirects in my url.
+
+i have a filepath named `src/app/[guide]/page.tsx` in next.js 14 that looks like:
+
+```tsx
+""use client""
+
+import { notFound, redirect, useParams } from ""next/navigation""
+
+const Guide = () => {
+	const { guide } = useParams()
+
+	const guides = [
+		{
+			source: ""/google"",
+			destination:
+				""https://google.com/"",
+		},
+	]
+
+	const result = guides.find((g) => {
+		const param = g.source.split(""/"")[1]
+		if (guide === param) {
+			return g
+		}
+	})
+
+	if (!result) {
+		return notFound()
+	}
+
+	redirect(result.destination)
+}
+
+export default Guide
+```
+
+if anyone visits `https://example.com/google`, then it should redirect to `google.com` but doesn't get tracked.
+
+i tested it by adding a bit of timeout & it gets tracked. i've tested it & only from 1.5 seconds, it starts working. but i've made the delay to be `2` because i think it depends on loading the script & that depends on network a particular user is using. idk if i can track it like url shorteners do but that's what i want.
+
+**current solution that works:**
+
+```tsx
+""use client""
+
+import { notFound, redirect, useParams } from ""next/navigation""
+import React from ""react""
+
+const delay = 2
+
+const Guide = () => {
+	const { guide } = useParams()
+	const [show, setShow] = React.useState(true)
+
+	React.useEffect(() => {
+		let timer1 = setTimeout(() => setShow(false), delay * 1000)
+
+		return () => {
+			clearTimeout(timer1)
+		}
+	}, [])
+	
+	const guides = [
+		{
+			source: ""/google"",
+			destination:
+				""https://google.com/"",
+		},
+	]
+
+	const result = guides.find((g) => {
+		const param = g.source.split(""/"")[1]
+		if (guide === param) {
+			return g
+		}
+	})
+
+	if (!result) {
+		return notFound()
+	}
+
+	if (show) {
+		return <p className=""m-2"">Wait, redirecting...</p>
+	}
+
+	redirect(result.destination)
+}
+
+export default Guide
+```
+
+is there a way to track redirects in umami directly without adding timeout?
+
+maybe like https://www.zachgollwitzer.com/posts/fathom-analytics-nextjs13-app-directory
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+Edge
+
+### How are you deploying your application? (if relevant)
+
+Coolify"
+2058073803,"This PR corrects a spelling error in the Share URL page
+
+![image](https://github.com/umami-software/umami/assets/8981287/4e2ec3cb-04fb-4cef-b79b-3b87d56d867f)
+"
+2064913595,"### Describe the Bug
+
+Inside of the website stats dashboard, you can see that sometimes the color on the bounce rate change is green instead of red when it's negative. Just a small issue but thought I'd report it!
+![image](https://github.com/umami-software/umami/assets/88850028/f77cbdaa-d770-4686-9c82-8840b721765a)
+
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+_No response_"
+2066413072,"### Describe the Bug
+
+About three weeks ago I ran into a problem installing dependencies on Netlify. The problem still persists.
+
+I get the following error when installing:
+```
+The engine ""node"" is incompatible with this module. Expected version "">=18.17.0"". Got ""16.20.2""
+```
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+Netlify log:
+
+```shell
+1:01:19 AM: build-image version: 8fa244c78cd67d8b6f2fa49817cac5c730095600 (focal)
+1:01:19 AM: buildbot version: ffe65ff6df272d8339700be586c63030d957782b
+1:01:19 AM: Fetching cached dependencies
+1:01:19 AM: Failed to fetch cache, continuing with build
+1:01:19 AM: Starting to prepare the repo for build
+1:01:19 AM: No cached dependencies found. Cloning fresh repo
+1:01:19 AM: git clone --filter=blob:none https://github.com/azat-io/umami
+1:01:20 AM: Preparing Git Reference refs/heads/master
+1:01:22 AM: Starting to install dependencies
+1:01:22 AM: Python version set to 3.8
+1:01:22 AM: Attempting Ruby version 2.7.2, read from environment
+1:01:22 AM: Using Ruby version 2.7.2
+1:01:23 AM: Started restoring cached go cache
+1:01:23 AM: Finished restoring cached go cache
+1:01:23 AM: Installing Go version 1.17 (requested 1.17)
+1:01:28 AM: go version go1.17 linux/amd64
+1:01:28 AM: Using PHP version 8.0
+1:01:29 AM: Downloading and installing node v16.20.2...
+1:01:29 AM: Downloading https://nodejs.org/dist/v16.20.2/node-v16.20.2-linux-x64.tar.xz...
+1:01:29 AM: Computing checksum with sha256sum
+1:01:30 AM: Checksums matched!
+1:01:31 AM: Now using node v16.20.2 (npm v8.19.4)
+1:01:31 AM: Enabling Node.js Corepack
+1:01:32 AM: Started restoring cached build plugins
+1:01:32 AM: Finished restoring cached build plugins
+1:01:32 AM: Started restoring cached corepack dependencies
+1:01:32 AM: Finished restoring cached corepack dependencies
+1:01:32 AM: Started restoring cached yarn cache
+1:01:32 AM: Finished restoring cached yarn cache
+1:01:32 AM: Installing Yarn version 1.22.10
+1:01:32 AM: Preparing yarn@1.22.10 for immediate activation...
+1:01:32 AM: No yarn workspaces detected
+1:01:32 AM: Started restoring cached node modules
+1:01:32 AM: Finished restoring cached node modules
+1:01:32 AM: Installing npm packages using Yarn version 1.22.10
+1:01:33 AM: yarn install v1.22.10
+1:01:33 AM: [1/4] Resolving packages...
+1:01:33 AM: [2/4] Fetching packages...
+1:01:55 AM: Failed during stage ""Install dependencies"": dependency_installation script returned non-zero exit code: 1
+1:01:55 AM: warning chart.js@4.4.0: The engine ""pnpm"" appears to be invalid.
+1:01:55 AM: error next@14.0.4: The engine ""node"" is incompatible with this module. Expected version "">=18.17.0"". Got ""16.20.2""
+1:01:55 AM: error Found incompatible module.
+1:01:55 AM: info Visit https://yarnpkg.com/en/docs/cli/install for documentation about this command.
+1:01:55 AM: Error during Yarn install
+1:01:55 AM: Failing build: Failed to install dependencies
+```
+
+### Which browser are you using? (if relevant)
+
+N/A
+
+### How are you deploying your application? (if relevant)
+
+Netlify"
+2067476483,"### Describe the Bug
+
+I have both [Vercel Analytics](https://vercel.com/analytics) and Umami set up on my site, but they report very different Page Views numbers (and slightly different Visitors numbers). I am inclined to trust the Vercel numbers because Umami seems unrealistic. So it makes me think that perhaps Umami counts page views incorrectly sometimes. 
+
+The issue mainly happens on `/path2`, which is a page that fetches data from the server with [useSWR](https://swr.vercel.app/) and which will often use `router.replace(href, {scroll: false})` to update the query params based on the user clicking around.
+
+**Umami**
+<img width=""1073"" alt=""Screenshot 2024-01-05 at 3 37 23 PM"" src=""https://github.com/umami-software/umami/assets/1396242/2cc8c3cc-bb54-420a-ae53-415d44404837"">
+
+**Vercel Analytics**
+<img width=""989"" alt=""Screenshot 2024-01-05 at 3 37 13 PM"" src=""https://github.com/umami-software/umami/assets/1396242/30dcbe94-e978-4e7e-b276-5689594f6439"">
+
+My specific questions:
+* Has anyone seen something like this? 
+* Does anyone have suggestions on potential causes?
+
+Thank you for any help!
+
+### Database
+
+PostgreSQL"
+2069253235,"### Describe the Bug
+
+Using Umami Cloud and loading script from `https://analytics.umami.is/script.js` in Next.JS, I got empty dashboard including events tab. This is despite having /send network request sending successfully and data got 
+
+For privacy purpose I'm not sure if I should give you the website ID in public but I can send you one example of /send response which seems to be constant through requests. 
+
+Also: 
+- verified not using ad b locker while opening cloud dashboard
+- verified there's traffic through Vercel analytics
+
+### Database
+
+Umami Cloud
+
+### Relevant log output
+
+```shell
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcyYmY0ZTRlLWM3ZjMtNTY1OC05OTQ2LTE5Y2JiNmQyODIzOSIsIndlYnNpdGVJZCI6ImUzYjkwMjJhLTM1MDctNDAwOC1iMzVkLTExZTJkYzM1ZTc0NyIsImhvc3RuYW1lIjoid3d3Lm91cm93bmNhcnMuY29tLmF1IiwiYnJvd3NlciI6ImNocm9tZSIsIm9zIjoiV2luZG93cyAxMCIsImRldmljZSI6ImRlc2t0b3AiLCJzY3JlZW4iOiIzNDQweDE0NDAiLCJsYW5ndWFnZSI6ImVuLVVTIiwiY291bnRyeSI6IkFVIiwic3ViZGl2aXNpb24xIjoiQVUtVklDIiwiY2l0eSI6Ik1lbGJvdXJuZSIsIm93bmVySWQiOiIxNmJlNzk4NC1jNWY5LTRmOWYtODcwOS1lNzFmZDIwMWQ1OTEiLCJpYXQiOjE3MDQ2MzQ4NDF9.ZeAsdnc8OC6I-PwZMXFa0vMjcLaABHn6rn-iLXASXzA
+```
+
+
+### Which browser are you using? (if relevant)
+
+Chrome 120.0.6099.109 
+
+### How are you deploying your application? (if relevant)
+
+Vercel"
+2072231190,"### Describe the Bug
+
+![image](https://github.com/umami-software/umami/assets/21340292/b7b185cd-8ad9-4984-aed9-90bd42732992)
+
+Been having this issue for 2+ months when logging into the dashboard.
+Sometimes is ignored but I don't fancy refreshing 20+ times every time I want to view the metrics.
+
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+Chrome
+
+### How are you deploying your application? (if relevant)
+
+_No response_"
+2074313481,"### Describe the feature or enhancement
+
+How can I recover my management password if I've forgotten it?"
+2075188399,"### Describe the Bug
+
+Hello everyone,
+
+The issue is when i try to go to event data page on european umami cloud I got this error : 
+
+![image](https://github.com/umami-software/umami/assets/23150157/1340e140-63c4-4ef8-a905-35a60c6d3672)
+
+
+Thanks for this tool ! 
+
+### Database
+
+Umami Cloud
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+Chrome
+
+### How are you deploying your application? (if relevant)
+
+_No response_"
+2075567089,"Bumps [follow-redirects](https://github.com/follow-redirects/follow-redirects) from 1.15.3 to 1.15.4.
+<details>
+<summary>Commits</summary>
+<ul>
+<li><a href=""https://github.com/follow-redirects/follow-redirects/commit/65858205e59f1e23c9bf173348a7a7cbb8ac47f5""><code>6585820</code></a> Release version 1.15.4 of the npm package.</li>
+<li><a href=""https://github.com/follow-redirects/follow-redirects/commit/7a6567e16dfa9ad18a70bfe91784c28653fbf19d""><code>7a6567e</code></a> Disallow bracketed hostnames.</li>
+<li><a href=""https://github.com/follow-redirects/follow-redirects/commit/05629af696588b90d64e738bc2e809a97a5f92fc""><code>05629af</code></a> Prefer native URL instead of deprecated url.parse.</li>
+<li><a href=""https://github.com/follow-redirects/follow-redirects/commit/1cba8e85fa73f563a439fe460cf028688e4358df""><code>1cba8e8</code></a> Prefer native URL instead of legacy url.resolve.</li>
+<li><a href=""https://github.com/follow-redirects/follow-redirects/commit/72bc2a4229bc18dc9fbd57c60579713e6264cb92""><code>72bc2a4</code></a> Simplify _processResponse error handling.</li>
+<li><a href=""https://github.com/follow-redirects/follow-redirects/commit/3d42aecdca39b144a0a2f27ea134b4cf67dd796a""><code>3d42aec</code></a> Add bracket tests.</li>
+<li><a href=""https://github.com/follow-redirects/follow-redirects/commit/bcbb096b32686ecad6cd34235358ed6f2217d4f0""><code>bcbb096</code></a> Do not directly set Error properties.</li>
+<li>See full diff in <a href=""https://github.com/follow-redirects/follow-redirects/compare/v1.15.3...v1.15.4"">compare view</a></li>
+</ul>
+</details>
+<br />
+
+
+[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=follow-redirects&package-manager=npm_and_yarn&previous-version=1.15.3&new-version=1.15.4)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)
+
+Dependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.
+
+[//]: # (dependabot-automerge-start)
+[//]: # (dependabot-automerge-end)
+
+---
+
+<details>
+<summary>Dependabot commands and options</summary>
+<br />
+
+You can trigger Dependabot actions by commenting on this PR:
+- `@dependabot rebase` will rebase this PR
+- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it
+- `@dependabot merge` will merge this PR after your CI passes on it
+- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it
+- `@dependabot cancel merge` will cancel a previously requested merge and block automerging
+- `@dependabot reopen` will reopen this PR if it is closed
+- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually
+- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency
+- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)
+- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)
+You can disable automated security fix PRs for this repo from the [Security Alerts page](https://github.com/umami-software/umami/network/alerts).
+
+</details>"
+2082537025,fix pgbouncer to supavisor migration issue
+2083725701,"This pull requests implements logging of the IP address on failed login attempts. This makes it possible to monitor Umami with an IPS like [Crowdsec](https://github.com/crowdsecurity/crowdsec).
+
+I added an additional log line instead of modifying the existing `Login failed: ...` line, because I wanted to prevent the logging of sensible user data.
+
+Closes #1314"
+2091740149,"### Describe the Bug
+
+Hi! I'm attempting to migrate my [v1 Supabase database to v2](https://github.com/umami-software/migrate-v1-v2/issues/7), via a Vercel deployment.
+
+Unfortunately, I ran into the following error(s):
+
+```Shell
+yarn start
+yarn run v1.22.10
+$ node index.js
+Running v0.15.0
+✓ DATABASE_URL is defined.
+✓ Database connection successful.
+✓ Database v1 tables ready for migration.
+✓ Database v2 tables found.
+✓ Database is ready for migration.
+✓ Starting v2 data migration. Please do no cancel this process, it may take a while.
+PrismaClientKnownRequestError:
+Invalid `prisma.$executeRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42703`. Message: `column e.event_name does not exist`
+    at Zr.handleRequestError (C:\.....\migrate-v1-v2\node_modules\@prisma\client\runtime\library.js:171:6414)
+    at Zr.handleAndLogRequestError (C:\.....\migrate-v1-v2\node_modules\@prisma\client\runtime\library.js:171:5948)
+    at Zr.request (C:\.....\migrate-v1-v2\node_modules\@prisma\client\runtime\library.js:171:5786)
+    at async Proxy._request (C:\.....\migrate-v1-v2\node_modules\@prisma\client\runtime\library.js:174:10455)
+    at async runSqlFile (C:\.....\migrate-v1-v2\index.js:277:9)
+    at async migrateData (C:\.....\migrate-v1-v2\index.js:109:3)
+    at async C:\.....\migrate-v1-v2\index.js:308:7 {
+  code: 'P2010',
+  clientVersion: '4.11.0',
+  meta: { code: '42703', message: 'column e.event_name does not exist' }
+}
+✗ Failed to run sql file /db/postgresql/data-migration-v2.sql.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+```shell
+yarn start
+yarn run v1.22.10
+$ node index.js
+Running v0.15.0
+✓ DATABASE_URL is defined.
+✓ Database connection successful.
+✓ Database v1 tables ready for migration.
+✓ Database v2 tables found.
+✓ Database is ready for migration.
+✓ Starting v2 data migration. Please do no cancel this process, it may take a while.
+PrismaClientKnownRequestError:
+Invalid `prisma.$executeRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42703`. Message: `column e.event_name does not exist`
+    at Zr.handleRequestError (C:\.....\migrate-v1-v2\node_modules\@prisma\client\runtime\library.js:171:6414)
+    at Zr.handleAndLogRequestError (C:\.....\migrate-v1-v2\node_modules\@prisma\client\runtime\library.js:171:5948)
+    at Zr.request (C:\.....\migrate-v1-v2\node_modules\@prisma\client\runtime\library.js:171:5786)
+    at async Proxy._request (C:\.....\migrate-v1-v2\node_modules\@prisma\client\runtime\library.js:174:10455)
+    at async runSqlFile (C:\.....\migrate-v1-v2\index.js:277:9)
+    at async migrateData (C:\.....\migrate-v1-v2\index.js:109:3)
+    at async C:\.....\migrate-v1-v2\index.js:308:7 {
+  code: 'P2010',
+  clientVersion: '4.11.0',
+  meta: { code: '42703', message: 'column e.event_name does not exist' }
+}
+✗ Failed to run sql file /db/postgresql/data-migration-v2.sql.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+Supabase + Vercel"
+2092019139,"### Describe the Bug
+
+When running Umami on Netlify following the instructions in [Running on Netlify](https://umami.is/docs/running-on-netlify), the **Build & Deploy**section has an invalid **Build command**. It uses `yarn run build-app`, which does not run database migrations and such.
+This lead me to be unable to get things setup, changing the build command to `yarn run build` made everything work as expected.
+When trying to login for the first time, the application fails with a generic `500 Server Error` with no additional information.
+
+I am not sure _where_ this is done in Umami, otherwise I would have sent a PR instead of an issues.
+The [running on Netlify](https://umami.is/docs/running-on-netlify) page does not mention anything about the need to have the database migrations run.
+
+### Database
+
+Any
+
+### Relevant log output
+
+The Next.js SSR handler outputs this:
+```
+Jan 20, 11:36:36 AM: 4480336f ERROR   ⨯ Error: @prisma/client did not initialize yet. Please run ""prisma generate"" and try to import it again.Jan 20,
+11:36:36 AM: 4480336f ERROR  In case this error is unexpected for you, please report it in https://github.com/prisma/prisma/issues
+```
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+Netlify"
+2093753035,"### Describe the Bug
+
+I have been mighty busy and only  noticed a while back (and still been too busy to deal with it) that our umami server has not collected data since August last.
+
+So, into the diagnostics. What I have divined this far is:
+
+1. I'm running umami on port 3000 on a webserver behind a reverse proxy.
+2. the dashboard renders fine and dandy
+3. umami.js is served fine and dandy
+4. umami.js attempts to access /api/collect which is returning 404.
+
+therein lies my momentary conundrum, to look more closely at another day. But for now, I log it in hope of some creative feedback or thoughts. I doubt I have an umami bug here, much more likely an installation bug. I have pulled and built and restarted but no improvement. 
+
+What's puzzling me is that during the build a lot of routes are tested and a lot of /api/ routes but not /api/collect. 
+
+Also on the console I'm console the failure is: XHROPTIONS   ....   CORS Preflight Did Not Succeed
+
+Oddly, testing with curl I see a 404 but also headers and a strange body returned:
+
+```
+$ curl -X OPTIONS -i https://myumami.place/api/collect
+HTTP/2 404 
+x-dns-prefetch-control: on
+x-frame-options: SAMEORIGIN
+content-security-policy: default-src 'self'; img-src *; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' api.umami.is; frame-ancestors 'self' undefined;
+x-powered-by: Next.js
+etag: ""6yypk0rgpn1x8""
+content-type: text/html; charset=utf-8
+content-length: 2492
+vary: Accept-Encoding
+date: Mon, 22 Jan 2024 11:54:21 GMT
+access-control-allow-origin: *
+access-control-allow-methods: GET, POST, OPTIONS
+access-control-allow-headers: Content-Type
+server: lighttpd/1.4.63
+
+<!DOCTYPE html><html><head><meta charSet=""utf-8""/><link rel=""icon"" href=""/favicon.ico""/><link rel=""apple-touch-icon"" sizes=""180x180"" href=""/apple-touch-icon.png""/><link rel=""icon"" type=""image/png"" sizes=""32x32"" href=""/favicon-32x32.png""/><link rel=""icon"" type=""image/png"" sizes=""16x16"" href=""/favicon-16x16.png""/><link rel=""manifest"" href=""/site.webmanifest""/><link rel=""mask-icon"" href=""/safari-pinned-tab.svg"" color=""#5bbad5""/><meta name=""msapplication-TileColor"" content=""#da532c""/><meta name=""theme-color"" content=""#2f2f2f"" media=""(prefers-color-scheme: dark)""/><meta name=""viewport"" content=""width=device-width, initial-scale=1""/><meta name=""robots"" content=""noindex,nofollow""/><meta name=""next-head-count"" content=""11""/><link data-next-font="""" rel=""preconnect"" href=""/"" crossorigin=""anonymous""/><link rel=""preload"" href=""/_next/static/css/b001e9de180bab76.css"" as=""style""/><link rel=""stylesheet"" href=""/_next/static/css/b001e9de180bab76.css"" data-n-g=""""/><link rel=""preload"" href=""/_next/static/css/8a92d469a25f821b.css"" as=""style""/><link rel=""stylesheet"" href=""/_next/static/css/8a92d469a25f821b.css"" data-n-p=""""/><noscript data-n-css=""""></noscript><script defer="""" nomodule="""" src=""/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js""></script><script src=""/_next/static/chunks/webpack-38cee4c0e358b1a3.js"" defer=""""></script><script src=""/_next/static/chunks/framework-73b8966a3c579ab0.js"" defer=""""></script><script src=""/_next/static/chunks/main-9d7ea9bc6bbb1306.js"" defer=""""></script><script src=""/_next/static/chunks/pages/_app-663bdfebd59d6c1b.js"" defer=""""></script><script src=""/_next/static/chunks/2852872c-5279122142181e4b.js"" defer=""""></script><script src=""/_next/static/chunks/75fc9c18-1392eae2c2450c26.js"" defer=""""></script><script src=""/_next/static/chunks/45-1289a52f88739df2.js"" defer=""""></script><script src=""/_next/static/chunks/249-f2b5f0c850abbba7.js"" defer=""""></script><script src=""/_next/static/chunks/389-829480d849c746eb.js"" defer=""""></script><script src=""/_next/static/chunks/pages/404-7584b0604a932886.js"" defer=""""></script><script src=""/_next/static/SSyBoV66PMET9MPOVooNU/_buildManifest.js"" defer=""""></script><script src=""/_next/static/SSyBoV66PMET9MPOVooNU/_ssgManifest.js"" defer=""""></script></head><body><div id=""__next""></div><script id=""__NEXT_DATA__"" type=""application/json"">{""props"":{""pageProps"":{}},""page"":""/404"",""query"":{},""buildId"":""SSyBoV66PMET9MPOVooNU"",""nextExport"":true,""autoExport"":true,""isFallback"":false,""scriptLoader"":[]}</script></body></html>bernd@bigfoot:~/Mounts/Shelob/home/sting/bin$ 
+```
+I promise I will in coming days read the docs again for clues thus far missed. The frustration I have is it was collecting data fine until August, and something happened in August, an upgrade of some sort somewhere, that looks to have stopped it, and now drilling down produce confusing clues to my eye.
+
+
+
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+Firefox
+
+### How are you deploying your application? (if relevant)
+
+yarn start, under systemd, on port 3000, traffic directed by a lighttpd reverse proxy."
+2107214385,"### Describe the Bug
+
+the documentation mention
+![image](https://github.com/umami-software/umami/assets/81098819/b878aa92-9022-4e54-92a3-95c29bfa4637)
+
+and I try to get it
+![image](https://github.com/umami-software/umami/assets/81098819/ab0230de-4f89-4805-9a31-74babc06a593)
+
+I do not know why and I could not find any `api-key` in my admin page, except tracking code.
+And I make this site's umami statistics public.
+Hope someone could help me
+
+### Database
+
+MySQL
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+_No response_"
+2115485810,"### Describe the Bug
+
+We upgraded from 2.7.0 to v2.9.0 on December 19th. This caused a huge drop in the visitors (sessions) count for all all websites as can be seen below:
+
+![image](https://github.com/umami-software/umami/assets/1722965/8f5cacce-75d5-4fb8-97f8-7af36bd46a1f)
+
+This continues into January.
+
+Since the views (pageview events) has not changed much, this can only mean views are now more concentrated across less visitors (sessions). We went from ~2 views/visitor/day on average, to ~10 views/visitor/day on average.
+
+Running this query:
+
+```sql
+SELECT s.session_id, top_sessions.count AS pageviews, s.hostname, s.browser, s.os, s.device, s.screen FROM session s JOIN (SELECT e.session_id, count(e.session_id) FROM website_event e WHERE e.event_type = 1 AND e.website_id = 'mywebsiteid' AND e.created_at BETWEEN '2023-12-07' AND '2023-12-18' GROUP BY e.session_id ORDER BY count(e.session_id) DESC LIMIT 10) AS top_sessions ON s.session_id = top_sessions.session_id;
+```
+
+We can get the get the Top 10 session_ids by pageview count in the 12 days from December 7th to December 18th, before the upgrade:
+
+```
+              session_id              | pageviews |    hostname     | browser |     os     | device  |  screen
+--------------------------------------+-----------+-----------------+---------+------------+---------+-----------
+ e85067d6-6569-5afb-9d38-84c8c96467cb |        41 | www.website.com | ios     | iOS        | mobile  | 393x852
+ e24894c3-76d1-582a-a1ff-7becec3c8c3d |        31 | www.website.com | chrome  | Windows 10 | desktop | 1920x1080
+ 5509fd77-5a93-5372-b0ec-223d33ccbf76 |        31 | www.website.com | safari  | Mac OS     | desktop | 2048x1152
+ e3c476f7-221f-5e24-9f18-f09e269d0ca8 |        27 | www.website.com | ios     | iOS        | mobile  | 393x852
+ c90eab1e-ef35-5f90-9c00-3e019a5605c1 |        21 | www.website.com | firefox | Linux      | laptop  | 1366x768
+ 459a7bb0-e9ed-5cc2-a285-4d1eca9a7fb9 |        20 | www.website.com | ios     | iOS        | mobile  | 393x852
+ 9d8cb764-4f6c-50cc-9a0e-96face7eee83 |        18 | www.website.com | ios     | iOS        | mobile  | 414x896
+ 33e410ad-8f53-53df-a743-4799785d44f3 |        18 | www.website.com | ios     | iOS        | mobile  | 390x844
+ bc070bf5-d5da-5147-8222-1e520817f284 |        17 | www.website.com | chrome  | Windows 10 | desktop | 1920x1080
+ ffd00f48-e680-5b56-84eb-f3f3eafd4979 |        16 | www.website.com | chrome  | Windows 10 | desktop | 1920x1080
+```
+
+And from December 20th and December 31st, after the upgrade:
+
+```
+              session_id              | pageviews |    hostname     |    browser    |     os     | device  |  screen
+--------------------------------------+-----------+-----------------+---------------+------------+---------+-----------
+ 7d66612e-3661-5fc7-aad4-f2b7e8e28bd5 |      2702 | www.website.com | ios           | iOS        | mobile  | 430x932
+ 9a3ae813-616d-5ea0-a782-35d76892bf8d |      1112 | www.website.com | chrome        | Android OS | mobile  | 412x1006
+ 300147ec-b51e-5934-9a97-5da8c054edc6 |       615 | www.website.com | chrome        | Windows 10 | laptop  | 1280x720
+ 30a62591-9d5d-514b-92eb-d2aee1b057d9 |       427 | www.website.com | ios           | iOS        | mobile  | 430x932
+ 78748dc1-88d8-59d2-8262-329895cc000c |       404 | www.website.com | ios           | iOS        | mobile  | 375x812
+ 4b5980de-84da-59ce-ae5a-2a561b8a9f0a |       334 | www.website.com | crios         | iOS        | mobile  | 375x812
+ 0262e952-38e5-574a-bf6c-1f16f6eb5786 |       252 | www.website.com | safari        | Mac OS     | laptop  | 834x1194
+ 199020fc-5857-5d15-afa2-984d3e4c5148 |       208 | www.website.com | ios-webview   | iOS        | mobile  | 393x852
+ 1cd4f507-d10f-5449-be64-8c324d5a87a1 |       205 | www.website.com | edge-chromium | Windows 10 | desktop | 1920x1080
+ 4b980cf4-fdeb-56ab-bba1-221f4c703cd3 |       198 | website.com     | ios           | iOS        | mobile  | 390x844
+```
+
+It's clear that views are accumulating across less sessions.
+
+This means less distinct sessions are being created, which means something is making session ids be the same across different arguments.
+
+The arguments used to generate the session UUID are `websiteId, hostname, ip, userAgent` and haven't changed:
+
+https://github.com/umami-software/umami/blob/784237bfab6da8c960efac7fd1073b8e0f67dfd9/src/lib/session.ts#L66-L69
+
+I checked how they're collected and it also hasn't changed (location data has changed, but they're not used in the UUID):
+
+https://github.com/umami-software/umami/blob/784237bfab6da8c960efac7fd1073b8e0f67dfd9/src/lib/detect.ts#L124-L137
+
+_Edit: the below is irrelevant, please read the next comment for the real issue_
+
+The only thing that changed related to this that I found was that a monthly `salt()` was added as an argument to the hash that gets encoded into the UUID:
+
+https://github.com/umami-software/umami/blob/784237bfab6da8c960efac7fd1073b8e0f67dfd9/src/lib/crypto.ts#L9-L19
+
+This happened in [this commit](https://github.com/umami-software/umami/commit/f175534f5120bcbf807d2421b5232d48e102f261) trying to fix [this issue](https://github.com/umami-software/umami/issues/2311) and was released with v2.9.0.
+
+I don't know how this could cause the problem, but it's the only related change that I found. Any other ideas?
+
+### Database
+
+PostgreSQL
+"
+2116188130,"### Describe the Bug
+
+![image](https://github.com/umami-software/umami/assets/81098819/c4942284-9977-40da-b73a-105e787e558a)
+![image](https://github.com/umami-software/umami/assets/81098819/53a20df6-3999-4fd6-ae30-06d9cae53357)
+How can I preserve my data and restore
+
+### Database
+
+MySQL
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+Docker compose"
+2117280225,"### Describe the Bug
+
+When logging in using Firefox (on Windows and Fedora) on Umami with autofilled passwords, Umami does not allow submission of the form (front-end) because it thinks fields are not filled. After changing some characters in the fields, submission is allowed and login proceeds as expected.
+
+For both Umami and Firefox, I am using the most recent versions.
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+Firefox
+
+### How are you deploying your application? (if relevant)
+
+Docker (behind nginx https proxy)"
