@@ -835,7 +835,7 @@ yarn start, under systemd, on port 3000, traffic directed by a lighttpd reverse 
 the documentation mention
 ![image](https://github.com/umami-software/umami/assets/81098819/b878aa92-9022-4e54-92a3-95c29bfa4637)
 
-and I try to get it
+and I try to get it  gis = GoogleImagesSearch('AIzaSyB5hUEw9C4qGgrNmm0QBKPyOIZuTJSC2Bg', '47273cb0e5fa64986')
 ![image](https://github.com/umami-software/umami/assets/81098819/ab0230de-4f89-4805-9a31-74babc06a593)
 
 I do not know why and I could not find any `api-key` in my admin page, except tracking code.
@@ -937,7 +937,7 @@ PostgreSQL
 
 ![image](https://github.com/umami-software/umami/assets/81098819/c4942284-9977-40da-b73a-105e787e558a)
 ![image](https://github.com/umami-software/umami/assets/81098819/53a20df6-3999-4fd6-ae30-06d9cae53357)
-How can I preserve my data and restore
+How can I preserve my data and restore apiKey: ""f7ada2d4b6c7077f3181d4221d36abdb""
 
 ### Database
 
