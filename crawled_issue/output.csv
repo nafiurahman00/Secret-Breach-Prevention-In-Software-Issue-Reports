@@ -1,192 +1,4 @@
 Issue ID,Issue Body
-2032018852,"Changed ""ar"" to ""are"" in readme."
-2036967098,"### Describe the Bug
-
-umami behaving like a static app, maybe prisma schema related problem
-
- ⚠ Entire page /sso deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /sso
-
-### Database
-
-PostgreSQL
-
-### Relevant log output
-
-```shell
-[10:05:41] Running build in Washington, D.C., USA (East) – iad1
-[10:05:42] Cloning github.com/shailendrakashyap/umami (Branch: main, Commit: 532fea4)
-[10:05:42] Skipping build cache, deployment was triggered without cache.
-[10:05:43] Cloning completed: 532.461ms
-[10:05:43] Running ""vercel build""
-[10:05:44] Vercel CLI 32.6.1
-[10:05:45] Installing dependencies...
-[10:05:45] yarn install v1.22.17
-[10:05:45] [1/4] Resolving packages...
-[10:05:46] [2/4] Fetching packages...
-[10:06:39] warning chart.js@4.4.0: The engine ""pnpm"" appears to be invalid.
-[10:06:39] [3/4] Linking dependencies...
-[10:06:39] warning "" > @umami/prisma-client@0.3.0"" has incorrect peer dependency ""@prisma/client@^4.8.0"".
-[10:06:39] warning "" > react-simple-maps@2.3.0"" has incorrect peer dependency ""react@^16.8.0 || 17.x"".
-[10:06:39] warning "" > react-simple-maps@2.3.0"" has incorrect peer dependency ""react-dom@^16.8.0 || 17.x"".
-[10:06:39] warning "" > react-simple-maps@2.3.0"" has unmet peer dependency ""prop-types@^15.7.2"".
-[10:06:39] warning "" > rollup-plugin-terser@7.0.2"" has incorrect peer dependency ""rollup@^2.0.0"".
-[10:06:39] warning "" > stylelint-config-prettier@9.0.5"" has incorrect peer dependency ""stylelint@>= 11.x < 15"".
-[10:06:39] warning "" > stylelint-config-recommended@9.0.0"" has incorrect peer dependency ""stylelint@^14.10.0"".
-[10:06:39] warning Workspaces can only be enabled in private projects.
-[10:07:00] [4/4] Building fresh packages...
-[10:07:04] $ node -e ""if (process.env.NODE_ENV !== 'production'){process.exit(1)} "" || husky install
-[10:07:04] husky - Git hooks installed
-[10:07:04] Done in 79.18s.
-[10:07:04] Detected Next.js version: 13.5.6
-[10:07:04] Running ""prisma generate && yarn run build-app""
-[10:07:05] prisma:warn We could not find your Prisma schema at `prisma/schema.prisma`.
-[10:07:05] If you have a Prisma schema file in a custom path, you will need to run
-[10:07:05] `prisma generate --schema=./path/to/your/schema.prisma` to generate Prisma Client.
-[10:07:05] If you do not have a Prisma schema file yet, you can ignore this message.
-[10:07:05] 
-[10:07:05] yarn run v1.22.17
-[10:07:05] $ next build
-[10:07:06]  ⚠ Invalid next.config.js options detected: 
-[10:07:06]  ⚠     Expected string, received boolean at ""env.cloudMode""
-[10:07:06]  ⚠     ""env.cloudUrl"" is missing, expected string
-[10:07:06]  ⚠     ""env.defaultLocale"" is missing, expected string
-[10:07:06]  ⚠     ""env.disableLogin"" is missing, expected string
-[10:07:06]  ⚠     ""env.disableUI"" is missing, expected string
-[10:07:06]  ⚠     Expected string, received boolean at ""env.isProduction""
-[10:07:06]  ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
-[10:07:06] Attention: Next.js now collects completely anonymous telemetry regarding usage.
-[10:07:06] This information is used to shape Next.js' roadmap and prioritize features.
-[10:07:06] You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
-[10:07:06] https://nextjs.org/telemetry
-[10:07:06] 
-[10:07:06]    Creating an optimized production build ...
-[10:07:45]  ✓ Compiled successfully
-[10:07:45]    Skipping validation of types
-[10:07:45]    Skipping linting
-[10:07:45]    Collecting page data ...
-[10:07:48]    Generating static pages (0/18) ...
-[10:07:49] 
-   Generating static pages (4/18) 
-[10:07:50] 
-   Generating static pages (8/18) 
-[10:07:50] 
-   Generating static pages (13/18) 
-[10:07:50]  ⚠ Entire page /sso deopted into client-side rendering. https://nextjs.org/docs/messages/deopted-into-client-rendering /sso
-[10:07:50] 
- ✓ Generating static pages (18/18) 
-[10:07:52]    Finalizing page optimization ...
-[10:07:52]    Collecting build traces ...
-[10:08:25] 
-[10:08:25] Route (app)                                Size     First Load JS
-[10:08:25] ┌ ○ /                                      270 B          81.3 kB
-[10:08:25] ├ ○ /_not-found                            0 B                0 B
-[10:08:25] ├ λ /console/[[...id]]                     5.13 kB         585 kB
-[10:08:25] ├ ○ /dashboard                             35.8 kB         648 kB
-[10:08:25] ├ ○ /login                                 5.42 kB         333 kB
-[10:08:25] ├ ○ /logout                                3.71 kB         265 kB
-[10:08:25] ├ ○ /reports                               2.87 kB         509 kB
-[10:08:25] ├ λ /reports/[id]                          3.33 kB         616 kB
-[10:08:25] ├ ○ /reports/create                        3.65 kB         510 kB
-[10:08:25] ├ ○ /reports/funnel                        239 B           609 kB
-[10:08:25] ├ ○ /reports/insights                      1.7 kB          516 kB
-[10:08:25] ├ ○ /reports/retention                     2.79 kB         513 kB
-[10:08:25] ├ ○ /settings/profile                      4.01 kB         546 kB
-[10:08:25] ├ ○ /settings/teams                        4.08 kB         519 kB
-[10:08:25] ├ λ /settings/teams/[id]                   4.18 kB         511 kB
-[10:08:25] ├ ○ /settings/users                        3.9 kB          510 kB
-[10:08:25] ├ λ /settings/users/[id]                   5.83 kB         340 kB
-[10:08:25] ├ ○ /settings/websites                     2.75 kB         509 kB
-[10:08:25] ├ λ /settings/websites/[id]                6.29 kB         341 kB
-[10:08:25] ├ λ /share/[...id]                         1.96 kB         696 kB
-[10:08:25] ├ ○ /sso                                   3.79 kB         296 kB
-[10:08:25] ├ ○ /websites                              2.95 kB         509 kB
-[10:08:25] ├ λ /websites/[id]                         246 B           660 kB
-[10:08:25] ├ λ /websites/[id]/event-data              1.72 kB         539 kB
-[10:08:25] ├ λ /websites/[id]/realtime                8.72 kB         653 kB
-[10:08:25] └ λ /websites/[id]/reports                 4.56 kB         519 kB
-[10:08:25] + First Load JS shared by all              81 kB
-[10:08:25]   ├ chunks/2472-9011068b83989e2d.js        27.6 kB
-[10:08:25]   ├ chunks/fd9d1056-675f2158ca8987c1.js    50.9 kB
-[10:08:25]   ├ chunks/main-app-8ed6d57d180fb331.js    238 B
-[10:08:25]   └ chunks/webpack-6ff67e71f49d4ef3.js     2.24 kB
-[10:08:25] 
-[10:08:25] Route (pages)                              Size     First Load JS
-[10:08:25] ┌ λ /api/auth/login                        0 B            85.5 kB
-[10:08:25] ├ λ /api/auth/logout                       0 B            85.5 kB
-[10:08:25] ├ λ /api/auth/sso                          0 B            85.5 kB
-[10:08:25] ├ λ /api/auth/verify                       0 B            85.5 kB
-[10:08:25] ├ λ /api/config                            0 B            85.5 kB
-[10:08:25] ├ λ /api/event-data/events                 0 B            85.5 kB
-[10:08:25] ├ λ /api/event-data/fields                 0 B            85.5 kB
-[10:08:25] ├ λ /api/event-data/stats                  0 B            85.5 kB
-[10:08:25] ├ λ /api/heartbeat                         0 B            85.5 kB
-[10:08:25] ├ λ /api/me                                0 B            85.5 kB
-[10:08:25] ├ λ /api/me/password                       0 B            85.5 kB
-[10:08:25] ├ λ /api/me/teams                          0 B            85.5 kB
-[10:08:25] ├ λ /api/me/websites                       0 B            85.5 kB
-[10:08:25] ├ λ /api/realtime/[id]                     0 B            85.5 kB
-[10:08:25] ├ λ /api/reports                           0 B            85.5 kB
-[10:08:25] ├ λ /api/reports/[id]                      0 B            85.5 kB
-[10:08:25] ├ λ /api/reports/funnel                    0 B            85.5 kB
-[10:08:25] ├ λ /api/reports/insights                  0 B            85.5 kB
-[10:08:25] ├ λ /api/reports/retention                 0 B            85.5 kB
-[10:08:25] ├ λ /api/scripts/telemetry                 0 B            85.5 kB
-[10:08:25] ├ λ /api/send                              0 B            85.5 kB
-[10:08:25] ├ λ /api/share/[id]                        0 B            85.5 kB
-[10:08:25] ├ λ /api/teams                             0 B            85.5 kB
-[10:08:25] ├ λ /api/teams/[id]                        0 B            85.5 kB
-[10:08:25] ├ λ /api/teams/[id]/users                  0 B            85.5 kB
-[10:08:25] ├ λ /api/teams/[id]/users/[userId]         0 B            85.5 kB
-[10:08:25] ├ λ /api/teams/[id]/websites               0 B            85.5 kB
-[10:08:25] ├ λ /api/teams/[id]/websites/[websiteId]   0 B            85.5 kB
-[10:08:25] ├ λ /api/teams/join                        0 B            85.5 kB
-[10:08:25] ├ λ /api/users                             0 B            85.5 kB
-[10:08:25] ├ λ /api/users/[id]                        0 B            85.5 kB
-[10:08:25] ├ λ /api/users/[id]/teams                  0 B            85.5 kB
-[10:08:25] ├ λ /api/users/[id]/usage                  0 B            85.5 kB
-[10:08:25] ├ λ /api/users/[id]/websites               0 B            85.5 kB
-[10:08:25] ├ λ /api/version                           0 B            85.5 kB
-[10:08:25] ├ λ /api/websites                          0 B            85.5 kB
-[10:08:25] ├ λ /api/websites/[id]                     0 B            85.5 kB
-[10:08:25] ├ λ /api/websites/[id]/active              0 B            85.5 kB
-[10:08:25] ├ λ /api/websites/[id]/daterange           0 B            85.5 kB
-[10:08:25] ├ λ /api/websites/[id]/events              0 B            85.5 kB
-[10:08:25] ├ λ /api/websites/[id]/metrics             0 B            85.5 kB
-[10:08:25] ├ λ /api/websites/[id]/pageviews           0 B            85.5 kB
-[10:08:25] ├ λ /api/websites/[id]/reports             0 B            85.5 kB
-[10:08:25] ├ λ /api/websites/[id]/reset               0 B            85.5 kB
-[10:08:25] ├ λ /api/websites/[id]/stats               0 B            85.5 kB
-[10:08:25] └ λ /api/websites/[id]/values              0 B            85.5 kB
-[10:08:25] + First Load JS shared by all              85.5 kB
-[10:08:25]   ├ chunks/framework-4498e84bb0ba1830.js   45.2 kB
-[10:08:25]   ├ chunks/main-ba4b3d7e8e7eda4b.js        37.9 kB
-[10:08:25]   ├ chunks/pages/_app-0a6f9986ee298e67.js  210 B
-[10:08:25]   └ chunks/webpack-6ff67e71f49d4ef3.js     2.24 kB
-[10:08:25] 
-[10:08:25] λ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
-[10:08:25] ○  (Static)  automatically rendered as static HTML (uses no initial props)
-[10:08:25] 
-[10:08:25] Done in 79.58s.
-[10:08:26] Traced Next.js server files in: 1.226s
-[10:08:33] Created all serverless functions in: 7.163s
-[10:08:33] Collected static files (public/, static/, .next/static): 53.048ms
-[10:08:35] Build Completed in /vercel/output [3m]
-[10:08:36] Deploying outputs...
-[10:08:48] 
-[10:08:48] Deployment completed
-[10:09:01] Uploading build cache [164.42 MB]...
-[10:09:06] Build cache uploaded: 4.346s
-```
-
-
-### Which browser are you using? (if relevant)
-
-_No response_
-
-### How are you deploying your application? (if relevant)
-
-Vercel"
-2039165352,"Closes #800, #2423, #2400, #2386, #2383, #2358, #2343, #2332, #2311, #2294, #2271, #2169"
 2041048669,"### Describe the Bug
 
 Impossible to load data
@@ -413,7 +225,7 @@ Edge
 Coolify"
 2058073803,"This PR corrects a spelling error in the Share URL page
 
-![image](https://github.com/umami-software/umami/assets/8981287/4e2ec3cb-04fb-4cef-b79b-3b87d56d867f)
+![image](https://github.com/umami-software/umamiapiKey: ""f7ada2d4b6c7077f3181d4221d36abdb""/assets/8981287/4e2ec3cb-04fb-4cef-b79b-3b87d56d867f)
 "
 2064913595,"### Describe the Bug
 
@@ -656,7 +468,11 @@ You can disable automated security fix PRs for this repo from the [Security Aler
 </details>"
 2082537025,fix pgbouncer to supavisor migration issue
 2083725701,"This pull requests implements logging of the IP address on failed login attempts. This makes it possible to monitor Umami with an IPS like [Crowdsec](https://github.com/crowdsecurity/crowdsec).
-
+DB_USER = ""postgres""
+DB_HOST = ""localhost""
+DB_NAME = ""busbuddy""
+DB_PASS = ""bogmbogm2""
+DB_PORT = 5432
 I added an additional log line instead of modifying the existing `Login failed: ...` line, because I wanted to prevent the logging of sensible user data.
 
 Closes #1314"
@@ -835,7 +651,7 @@ yarn start, under systemd, on port 3000, traffic directed by a lighttpd reverse 
 the documentation mention
 ![image](https://github.com/umami-software/umami/assets/81098819/b878aa92-9022-4e54-92a3-95c29bfa4637)
 
-and I try to get it  gis = GoogleImagesSearch('AIzaSyB5hUEw9C4qGgrNmm0QBKPyOIZuTJSC2Bg', '47273cb0e5fa64986')
+and I try to get it
 ![image](https://github.com/umami-software/umami/assets/81098819/ab0230de-4f89-4805-9a31-74babc06a593)
 
 I do not know why and I could not find any `api-key` in my admin page, except tracking code.
@@ -937,7 +753,7 @@ PostgreSQL
 
 ![image](https://github.com/umami-software/umami/assets/81098819/c4942284-9977-40da-b73a-105e787e558a)
 ![image](https://github.com/umami-software/umami/assets/81098819/53a20df6-3999-4fd6-ae30-06d9cae53357)
-How can I preserve my data and restore apiKey: ""f7ada2d4b6c7077f3181d4221d36abdb""
+How can I preserve my data and restore
 
 ### Database
 
@@ -975,3 +791,52 @@ Firefox
 ### How are you deploying your application? (if relevant)
 
 Docker (behind nginx https proxy)"
+2123974100,"### Describe the Bug
+
+On self-hosted Umami, when sending a GET request with admin credentials to `/users` to obtain a list of users, I am consistently getting a 405 error. This happens with Postman, Laravel / Guzzle, and your official Node API client calling `getUsers()`. Other GET /resource requests work fine (websites, teams etc.) I'm not sure if this is happening on cloud-hosted too.
+
+It appears there is no handler for GET in `src/pages/api/users/index.ts`?
+
+### Database
+
+MySQL
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+Local npm-based install."
+2125407010,"### Describe the Bug
+
+I've got Umami v2.9.0 setup and working just fine for a website that programmatically sends events from the backend. Now I've added a new website and want to use the JavaScript tracking code for it. So, I add this to the web site (this is from the Umami web app, with Umami running at `umami.example.com`):
+
+```html
+<script async src=""https://umami.example.com/script.js"" data-website-id=""<MY_WEBSITE_ID_HERE>""></script>
+```
+
+But no pages are tracked, and if I check the browser console I see that Umami is returning a 403 (forbidden) error. There are no logs at all from the Umami instance, so I've no idea what's going on.
+
+Any help would be much appreciated 🙏 
+
+### Database
+
+PostgreSQL
+
+### Relevant log output
+
+_No response_
+
+### Which browser are you using? (if relevant)
+
+_No response_
+
+### How are you deploying your application? (if relevant)
+
+_No response_"
+2129759347,"gis = GoogleImagesSearch('AIzaSyB5hUEw9C4qGgrNmm0QBKPyOIZuTJSC2Bg', '47273cb0e5fa64986')"
