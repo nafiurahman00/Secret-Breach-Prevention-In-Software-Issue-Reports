@@ -1,0 +1,5 @@
+https://github.com/microsoft/api-guidelines
+https://github.com/umami-software/umami
+https://github.com/bkhezry/weather
+https://github.com/open-meteo/open-meteo
+https://github.com/kubernetes/kubernetes
