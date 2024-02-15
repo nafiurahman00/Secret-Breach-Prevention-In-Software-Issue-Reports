@@ -1,4 +1,0 @@
-{
-    
-    "repo_link" : "https://github.com/umami-software/umami"   
-}
