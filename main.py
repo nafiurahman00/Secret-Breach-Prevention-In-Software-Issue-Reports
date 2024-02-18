@@ -5,13 +5,11 @@ from flask import Flask, request
 from github import Github, GithubIntegration
 
 app = Flask(__name__)
-
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
-app_id = 807924
-
+app_id = 829793
 # Read the bot certificate
 with open(
-        os.path.normpath(os.path.expanduser('"C:\Users\Asus\Downloads\secret-detection-tool.2024-01-25.private-key.pem"')),
+        os.path.normpath(os.path.expanduser(r"secret-detection-tool.2024-02-15.private-key.pem")),
         'r'
 ) as cert_file:
     app_key = cert_file.read()
@@ -22,49 +20,69 @@ git_integration = GithubIntegration(
     app_key,
 )
 
+def contains_vowels(text):
+    vowels = 'aeiouAEIOU'
+    return any(char in vowels for char in text)
+
 @app.route("/", methods=['POST'])
 def bot():
+    print("here")
     # Get the event payload
     payload = request.json
 
-    # Check if the event is a GitHub issue event
-    if 'issue' not in payload or payload['action'] != 'opened':
-        return "ok"
+    # Check if the event is a GitHub PR creation event
+    if 'pull_request' in payload and payload['action'] == 'opened':
+        owner = payload['repository']['owner']['login']
+        repo_name = payload['repository']['name']
 
-    owner = payload['repository']['owner']['login']
-    repo_name = payload['repository']['name']
+        # Get a git connection as our bot
+        git_connection = Github(
+            login_or_token=git_integration.get_access_token(
+                git_integration.get_installation(owner, repo_name).id
+            ).token
+        )
+        repo = git_connection.get_repo(f"{owner}/{repo_name}")
 
-    # Get a GitHub connection as our bot
-    # Here is where we are getting the permission to talk as our bot and not
-    # as a Python webservice
-    git_connection = Github(
-        login_or_token=git_integration.get_access_token(
-            git_integration.get_installation(owner, repo_name).id
-        ).token
-    )
-    repo = git_connection.get_repo(f"{owner}/{repo_name}")
+        issue = repo.get_issue(number=payload['pull_request']['number'])
 
-    issue = repo.get_issue(number=payload['issue']['number'])
+        pr_description = payload['pull_request']['body']
+        if not pr_description:
+            issue.create_comment("The pull request description is empty.")
+            return "ok"
 
-    # Now you can access information about the issue, such as title and body
-    issue_title = issue.title
-    issue_body = issue.body
+        # Check if the pull request description contains vowels
+        if contains_vowels(pr_description):
+            issue.create_comment("Yay! The pull request description contains vowels.")
+        else:
+            issue.create_comment("Alas! The pull request description does not contain vowels.")
 
-    # Your logic for secret detection can go here
-    # Replace the following line with your actual implementation
-    if detect_secrets(issue_title) or detect_secrets(issue_body):
-        # Your logic for warning the user can go here
-        # Replace the following line with your actual implementation
-        issue.create_comment("Warning: This issue contains secrets!")
+    # Check if the event is a GitHub issue comment event
+    elif 'issue' in payload and payload['action'] == 'created':
+        owner = payload['repository']['owner']['login']
+        repo_name = payload['repository']['name']
+        issue_number = payload['issue']['number']
+        comment_text = payload['comment']['body']
+        comment_author = payload['comment']['user']['login']
+        
+        print(comment_author)
+        # Get a git connection as our bot
+        git_connection = Github(
+            login_or_token=git_integration.get_access_token(
+                git_integration.get_installation(owner, repo_name).id
+            ).token
+        )
+        repo = git_connection.get_repo(f"{owner}/{repo_name}")
+        issue = repo.get_issue(number=issue_number)
+        
+        # Check if the comment is made by our bot
+        if comment_author != "secret-detection-tool[bot]":  # Replace "your_bot_username" with your bot's username
+            # Check if the comment contains vowels
+            if contains_vowels(comment_text):
+                issue.create_comment("Yay! Your comment contains vowels.")
+            else:
+                issue.create_comment("Alas! Your comment does not contain vowels.")
 
     return "ok"
 
-
-def detect_secrets(text):
-    # Your logic for secret detection using your ML model can go here
-    # Replace the following line with your actual implementation
-    return False
-
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
-    
