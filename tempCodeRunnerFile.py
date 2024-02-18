@@ -1,0 +1,1 @@
+from secret_finding_for_tool import prediction

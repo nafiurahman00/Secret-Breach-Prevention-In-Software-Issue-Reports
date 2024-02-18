@@ -4,6 +4,8 @@ import requests
 from flask import Flask, request
 from github import Github, GithubIntegration
 
+from secret_finding_for_tool import prediction
+
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
 app_id = 829793
@@ -51,10 +53,10 @@ def bot():
             return "ok"
 
         # Check if the pull request description contains vowels
-        if contains_vowels(pr_description):
-            issue.create_comment("Yay! The pull request description contains vowels.")
+        if prediction(pr_description):
+            issue.create_comment("Contains secret")
         else:
-            issue.create_comment("Alas! The pull request description does not contain vowels.")
+            issue.create_comment("You're safe")
 
     # Check if the event is a GitHub issue comment event
     elif 'issue' in payload and payload['action'] == 'created':
@@ -77,10 +79,10 @@ def bot():
         # Check if the comment is made by our bot
         if comment_author != "secret-detection-tool[bot]":  # Replace "your_bot_username" with your bot's username
             # Check if the comment contains vowels
-            if contains_vowels(comment_text):
-                issue.create_comment("Yay! Your comment contains vowels.")
+            if prediction(comment_text):
+                issue.create_comment("Contains secret")
             else:
-                issue.create_comment("Alas! Your comment does not contain vowels.")
+                issue.create_comment("You're safe")
 
     return "ok"
 
