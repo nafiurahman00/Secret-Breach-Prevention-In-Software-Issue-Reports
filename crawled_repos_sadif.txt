@@ -6,3 +6,6 @@ https://github.com/kubernetes/kubernetes
 https://github.com/hashicorp/terraform-provider-aws
 https://github.com/googleapis/google-api-nodejs-client
 https://github.com/redis/redis
+https://github.com/keycloak/keycloak
+https://github.com/supabase/supabase
+https://github.com/vercel/vercel
