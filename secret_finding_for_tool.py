@@ -16,7 +16,6 @@ from torch.utils.data import DataLoader, TensorDataset, Dataset
 from sklearn.model_selection import train_test_split
 import re
 
-data_dict={}
 def preprocess_text(text):
         
         input_string =    str(text)    
@@ -53,13 +52,18 @@ def regex_search(cleaned_text):
     # Read the values of the file in the dataframe
     regex = pd.DataFrame(excel_data, columns=['Pattern_ID','Secret Type',	'Regular Expression','Source'])
 
+    idx = 0
+    data_dict={}
     for i in regex.index:
-          p = re.compile(regex['Regular Expression'][i])
-          match = re.search(p, cleaned_text)
-          if match:
-                return True
-    return False
-
+        p = re.compile(regex['Regular Expression'][i])
+        # Now you can use 'cleaned_text' for further processing
+        matches = re.findall(p,cleaned_text)
+        for match in set(matches):
+                data_dict[idx] = {'Type': regex['Secret Type'][i],'Candidate String':match} #,'Entropy':shannon_entropy(match)}
+                idx = idx+1
+    data = pd.DataFrame.from_dict(data_dict, "index")
+    return data
+          
 def create_context_window(text, target_string, window_size=200):
     target_index = text.find(target_string)
     if target_index != -1:
@@ -71,7 +75,7 @@ def create_context_window(text, target_string, window_size=200):
     return None
 
 def isMismatch(main_string, candidate_string):
-     if main_string.find(candidate_string)!=-1:
+     if main_string.find(candidate_string)==-1:
         return True
      else:
         return False
@@ -115,34 +119,73 @@ def predict(texts,candidate_strings, model):
     test_dataset = CustomDataset(text_body_encodings, candidate_strings_encodings, (np.array([0]*len(texts)).astype(int)))
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
 
+    
+    c=0
     predicted_labels_list = []
-
     with torch.no_grad():
+
         for batch in test_loader:
+            print("Batch %d"%c)
+            c+=1
+
             text_input_ids, text_attention_mask, candidate_input_ids, candidate_attention_mask, labels = batch
 
-        # Move tensors to the device
-        text_input_ids, text_attention_mask, candidate_input_ids, candidate_attention_mask, labels = (
-            text_input_ids,
-            text_attention_mask,
-            candidate_input_ids,
-            candidate_attention_mask,
-            labels.to
-        )
+            # Move tensors to the device
+            text_input_ids, text_attention_mask, candidate_input_ids, candidate_attention_mask, labels = (
+                text_input_ids,
+                text_attention_mask,
+                candidate_input_ids,
+                candidate_attention_mask,
+                labels.to
+            )
 
-        # Perform inference
+            # Perform inference
 
-        outputs = model(input_ids=text_input_ids.type(torch.LongTensor), attention_mask=text_attention_mask.type(torch.LongTensor))
-        predicted_labels = torch.argmax(outputs.logits, dim=1)
+            outputs = model(input_ids=text_input_ids.type(torch.LongTensor), attention_mask=text_attention_mask.type(torch.LongTensor))
+            predicted_labels = torch.argmax(outputs.logits, dim=1)
 
-        # print(f"predicted_labels: {predicted_labels}")
-        predicted_labels_list.append(predicted_labels[0])
+            # print(f"predicted_labels: {predicted_labels}")
+            predicted_labels_list.append(predicted_labels[0])
+
 
     predicted_labels_list_output = [f.cpu().numpy().tolist() for f in predicted_labels_list]
 
     return predicted_labels_list_output
 
 #sdf plz check this code and modify it
+
+def prediction(text):
+    cleaned_text = preprocess_text(text)
+    candidate_strings = regex_search(cleaned_text)
+    if(len(candidate_strings)==0):
+        return False
+    candidate_strings = candidate_strings['Candidate String'].to_list()
+    modified_texts=[]
+    #print(candidate_strings['Candidate String'])
+    for i in range(len(candidate_strings)):
+        modified_texts.append(create_context_window(cleaned_text,candidate_strings[i]))
+    #print(modified_texts)
+    # for i in range(len(modified_texts)):
+    #     print(isMismatch(modified_texts[i],candidate_strings['Candidate String'][i]))
+    model =  load_model()
+    print(len(modified_texts))
+    print(len(candidate_strings))
+    predicted_labels = predict(modified_texts,candidate_strings,model)
+    print(predicted_labels)
+    if( 1 in predicted_labels):
+        return True
+    else:
+        return False
+
+
+
+
+if __name__ == "__main__":
+    text ="Token abcdegjkdj%2tueywoslkjhhgsb%3D Success! Secret abcdefghijklmnopqrstuvwxyz01 (sec_eJi9BAO0uYGumSCgIHh7Gxuv) added"
+    print(prediction(text))
+
+
+
     
 
 
