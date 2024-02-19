@@ -1,57 +1,59 @@
 pull_request
-"Centos7, three servers are installed with k8s cluster, one master, other slave1 and slave2. The three nodes are installed with CEPH for data persistence.
+"### Before reporting an issue
 
-the cephfs on master /mnt/cephfs directroy
-master:6789,slave1:6789,slave2:6789:/ /mnt/cephfs ceph name=cephfs,secretfile=/etc/ceph/cephfskey,_netdev,noatime 0 0
+- [X] I have read and understood the above terms for submitting issues, and I understand that my issue may be closed without action if I do not follow them.
 
-Create deployment through the python API of kubernetes client, and mount three directories at the same time,
-One is to dynamically hang to pod through PVC
-Here's secret
-apiVersion: v1
-kind: Secret
-metadata:
-name: ceph-secret
-namespace: espp-ns
-type: ""kubernetes.io/rbd""
-data:
-key:
+### Area
 
-storageclass.yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-name: ceph-espp
-provisioner: kubernetes.io/rbd
-parameters:
-monitors: 10.197.1.11, 10.197.1.12, 10.197.1.13
-adminId: admin
-adminSecretName: ceph-secret
-adminSecretNamespace: espp-ns
-pool: rbd 
-userId: admin
-userSecretName: ceph-secret
-reclaimPolicy: Retain
+core
 
-The other two directories are mounted through cephfs.
-secret.yml
-apiVersion: v1
-kind: Secret
-metadata:
-name: cephfs-secret-fs
-namespace: espp-ns
-type: ""kubernetes.io/rbd""
-data:
-key: AQBJrUxfZiH6NxAAljeXDd/DBYBiHx64PJ+shQ==
+### Describe the bug
 
-**Problem**ï¼šAll created pods are in the master node, not assigned to the other two nodes. At the same time, the created PVC and PV are also mounted on the master
+Previously I upgraded key cloak from 11.0 to 23.0, and found a redirect error like #8959 
 
-below is on deployment example:
-espp-ns-deployment-1-1-2-0-6fc6cd65c4-8lq9m 1/1 Running 0 13h 172.30.22.5 **master**
+After my investigation, I found it seems not so simple.
 
-and the mount information:
-172.18.101.10:6789,172.18.101.11:6789,172.18.101.12:6789:/studentenv/dataset_stuenv_2_1/ 1.2T 244M 1.2T 1% /var/lib/kubelet/pods/1d40454b-00fc-4847-8948-7b1d73e1bb98/volumes/kubernetes.iocephfs/espp-ns-deployment-1-1-2-0-pv-fs-stuenv-0-1
-172.18.101.10:6789,172.18.101.11:6789,172.18.101.12:6789:/lessonplan/dataset_lp_1_1_19/ 1.2T 244M 1.2T 1% /var/lib/kubelet/pods/1d40454b-00fc-4847-8948-7b1d73e1bb98/volumes/kubernetes.iocephfs/espp-ns-deployment-1-1-2-0-pv-fs-stuenv-0-0
-/dev/rbd0 20G 387M 20G 2% /var/lib/kubelet/plugins/kubernetes.io/rbd/mounts/rbd-image-kubernetes-dynamic-pvc-95ce6a24-e7fe-4456-b008-d53428be6352
-overlay
 
-thanks"
+
+### Version
+
+main
+
+### How to Reproduce?
+
+this bug can be easily reproduced with nightly image, steps are following:
+1. setup keycloak server 
+2. open network tool in browser, enable persist log to see all requests, filter for HTML only
+3. navigate to admin console like `http://localhost:8080/admin/master/console/`
+4. login normally
+
+
+### Expected behavior
+
+keycloak would return a 302 response , redirecting user to a redirect uri that is identical to the uri user provided previously
+
+### Actual behavior
+
+the two redirect uri does not match
+
+the login process would be : 
+1. admin console redirect user keycloak login page `http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=security-admin-console&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fadmin%2Fmaster%2Fconsole%2F&state=361ed6b9-afea-44b9-9f16-86ac91f0f153&response_mode=fragment&response_type=code&scope=openid&nonce=a354386d-d08b-4957-92e8-ae8412ce8130&prompt=none&code_challenge=K41x3hNMzRzLiJt1DZcR6aolGopt7vJi1glMdx_LCbg&code_challenge_method=S256` the url decoded parameter redirect_uri is `http://localhost:8080/admin/master/console/` which is normal
+2. user login with authenticate api 
+3. keycloak return 302 response with headers
+```
+HTTP/1.1 302 Found
+Cache-Control: no-store, must-revalidate, max-age=0
+Location: http://localhost:8080/admin/master/console/#state=21f0e380-1941-40c2-8ba0-66dc710bf106&session_state=78b4fb0f-781f-4686-91e8-58ead1f797ff&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2Fmaster&code=b2d3f76c-a0fb-41e4-a39c-eb2ffac51630.78b4fb0f-781f-4686-91e8-58ead1f797ff.a9b337bb-03a1-4b3f-8ec9-fb56c093f909
+```
+
+please notice that the Location header contains an URI that connect URI path and parameter with `#` instead of `?`
+
+### Anything else?
+
+After upgrade, I found strange redirect like #8959  in many SPA apps, but none of the backend projects are involved
+
+I also tried to request for a auth with url like `http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=test&redirect_uri=http%3A%2F%2Flocalhost%3A9090%2F%23%2F&response_type=code` 
+
+notice the redirect_uri is `http://localhost:9090/#/` which contains a `#`
+
+So I'm lost now, I don't know how to trigger this bug preciously."
