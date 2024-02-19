@@ -6,6 +6,8 @@ from github import Github, GithubIntegration
 
 from secret_finding_for_tool import prediction
 
+import pandas as pd
+
 app = Flask(__name__)
 # MAKE SURE TO CHANGE TO YOUR APP NUMBER!!!!!
 app_id = 829793
@@ -28,7 +30,7 @@ def contains_vowels(text):
 
 @app.route("/", methods=['POST'])
 def bot():
-    print("here")
+   
     # Get the event payload
     payload = request.json
 
@@ -60,12 +62,13 @@ def bot():
 
     # Check if the event is a GitHub issue comment event
     elif 'issue' in payload and payload['action'] == 'created':
+        print("here")
         owner = payload['repository']['owner']['login']
         repo_name = payload['repository']['name']
         issue_number = payload['issue']['number']
         comment_text = payload['comment']['body']
         comment_author = payload['comment']['user']['login']
-        
+
         print(comment_author)
         # Get a git connection as our bot
         git_connection = Github(
@@ -79,7 +82,23 @@ def bot():
         # Check if the comment is made by our bot
         if comment_author != "secret-detection-tool[bot]":  # Replace "your_bot_username" with your bot's username
             # Check if the comment contains vowels
-            if prediction(comment_text):
+            # 
+            # with open('out.txt', 'wb') as f:
+            #     f.write(comment_text.encode('utf-8'))
+            # c = comment_text.encode('utf-8')
+            # read the file and save to a variable content
+            # content=""
+            # with open('out.txt', 'r') as f:
+            #     content = f.read()
+            dict ={}
+            dict[0] = {'comment_or_body': comment_text}
+            data = pd.DataFrame.from_dict(dict, "index")
+            data.to_csv('comment.csv', index=False)
+            
+            df = pd.read_csv('comment.csv')
+            content = df['comment_or_body'][0]
+
+            if prediction(content):
                 issue.create_comment("Contains secret")
             else:
                 issue.create_comment("You're safe")

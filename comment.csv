@@ -1,0 +1,100 @@
+comment_or_body
+"### What happened?
+
+I'm willing to set up OIDC connection to kubernetes via an SSO tool (authentik) using kube-login.
+So, I Installed kube-login with krew. Then, I added `oidc-groups-claim` and `oidc-username-claim` to kube-apiserver in the service file of k3s:
+```yaml
+ExecStart=/usr/local/bin/k3s \
+    server \
+    '--kube-apiserver-arg' 'oidc-username-claim=email'
+    '--kube-apiserver-arg' 'oidc-groups-claim=groups'
+```
+Then I configured the kubeconfig:
+```
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CR***********************************S0tLS0K
+    server: https://127.0.0.1:6443
+  name: default
+contexts:
+- context:
+    cluster: default
+    user: default
+  name: default
+current-context: default
+kind: Config
+preferences: {}
+users:
+- name: oidc
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      command: kubectl
+      args:
+      - oidc-login
+      - get-token
+      - --oidc-issuer-url=http://sso.server.company.com/application/o/kubernetes/
+      - --oidc-client-id=79cdxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx72
+      - --oidc-client-secret=301e4a2xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx093edb62
+      - --oidc-extra-scope=email
+      - --oidc-extra-scope=profile
+      - --oidc-extra-scope=groups
+      - --oidc-extra-scope=openid
+      - --listen-address=0.0.0.0:8000
+      - --oidc-redirect-url-hostname=cluster.server.company.com
+      - --skip-open-browser
+      command: kubectl
+      env: null
+      provideClusterInfo: false
+```
+Afterward, I deployed RBAC linked with groups in Authentik.
+I got inspired by this [article](https://developer.okta.com/blog/2021/11/08/k8s-api-server-oidc#what-youll-need-to-get-started)
+
+I did the same thing with a k8s cluster managed by scaleway (a cloud provider).
+
+Unfortunately, I got this error when using oidc user in both clusters: `error: You must be logged in to the server (Unauthorized)`.
+
+### What did you expect to happen?
+
+I expect to be authorized to do anything I'm authorized to do respecting the set RBAC.
+
+### How can we reproduce it (as minimally and precisely as possible)?
+
+I explained it in the above sections
+
+### Anything else we need to know?
+
+_No response_
+
+### Kubernetes version
+
+- kubelogin version: v1.25.1
+
+### Cloud provider
+
+- local machine (k3s)
+- scaleway provider (k8s / kapsule)
+
+### OS version
+
+- Debian 11
+
+### Install tools
+
+- kubectl version: v1.21.7
+- OpenID Connect provider: [Authentik](https://github.com/goauthentik/authentik) (SSO)
+
+### Container runtime (CRI) and version (if applicable)
+
+<details>
+
+</details>
+
+
+### Related plugins (CNI, CSI, ...) and versions (if applicable)
+
+<details>
+
+</details>
+"

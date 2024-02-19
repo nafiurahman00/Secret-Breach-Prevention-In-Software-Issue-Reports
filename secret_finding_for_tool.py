@@ -19,7 +19,7 @@ import re
 def create_context_window(text, target_string, window_size=200):
 
     target_index = text.find(target_string)
-    ##print(target_index)
+    #print(target_index)
 
     if target_index != -1:
         start_index = max(0, target_index - window_size)
@@ -58,8 +58,8 @@ def prediction(text):
     df = pd.DataFrame.from_dict(data_dict, "index")
     df_unique = df.drop_duplicates(subset='Issue ID', keep='first')
     df = df_unique
-    #print(df.head())
-    #print(df.shape)
+    print(df.head())
+    print(df.shape)
     excel_data = pd.read_excel('dataset/Secret-Regular-Expression.xlsx')
 
     # Read the values of the file in the dataframe
@@ -114,12 +114,12 @@ def prediction(text):
     # end = (iter+1)*100000
     for i in regex.index:
 
-        ##print(i,regex['Secret Type'][i]) #, regex['Regular Expression'][i])
+        #print(i,regex['Secret Type'][i]) #, regex['Regular Expression'][i])
         # if i%100==0:
-        #     #print("checkpoint")
+        #     print("checkpoint")
         p = re.compile(regex['Regular Expression'][i])
         
-        # #print("=====================================================================")
+        # print("=====================================================================")
         
         for j in df.index:
             cleaned_text = cleaned_text_data.loc[j, 'Issue Body']
@@ -137,21 +137,21 @@ def prediction(text):
         return False
     
     data=data.drop_duplicates(subset=["Issue ID", "Candidate String"], keep='first')
-    #print(data.shape)
+    print(data.shape)
     data.to_csv('crawled_issue/issues-with-candidate-strings.csv')
 
     data = data.rename(columns={'Issue ID': 'Issue_id'})
-    #print(data.shape)
-    #print(data.head())
+    print(data.shape)
+    print(data.head())
     merged_df = df.merge(data, left_on='Issue ID', right_on='Issue_id')
-    #print(merged_df.shape)
+    print(merged_df.shape)
     columns_to_remove = ['Issue_id']
     merged_df.drop(columns=columns_to_remove, inplace=True)
-    #print(merged_df.columns)
+    print(merged_df.columns)
 
     merged_df['modified_text'] = merged_df.apply(lambda row: create_context_window(row['Issue Body'], row['Candidate String']), axis=1)
-    #print(merged_df.shape)
-    #print(merged_df.head())
+    print(merged_df.shape)
+    print(merged_df.head())
 
 
     X_issue_ids = merged_df['Issue ID'].tolist()
@@ -166,11 +166,11 @@ def prediction(text):
     text_body_encodings_test = encode_texts(X_text_test)
     candidate_encodings_test = encode_texts(X_candidate_test)
 
-    #print(len(X_text_test))
+    print(len(X_text_test))
     Y_labels = [0] * len(X_text_test)
     Y = np.array(Y_labels)
     Y_ =Y.astype(int)
-    #print(Y_)
+    print(Y_)
 
     test_dataset = CustomDataset(text_body_encodings_test, candidate_encodings_test, Y_)
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
@@ -180,7 +180,7 @@ def prediction(text):
     with torch.no_grad():
 
         for batch in test_loader:
-            #print("Batch %d"%c)
+            print("Batch %d"%c)
             c+=1
 
             text_input_ids, text_attention_mask, candidate_input_ids, candidate_attention_mask, labels = batch
@@ -199,11 +199,11 @@ def prediction(text):
             outputs = model(input_ids=text_input_ids.type(torch.LongTensor), attention_mask=text_attention_mask.type(torch.LongTensor))
             predicted_labels = torch.argmax(outputs.logits, dim=1)
 
-            # #print(f"predicted_labels: {predicted_labels}")
+            # print(f"predicted_labels: {predicted_labels}")
             predicted_labels_list.append(predicted_labels[0])
 
     predicted_labels_list_output = [f.cpu().numpy().tolist() for f in predicted_labels_list]
-    #print(predicted_labels_list_output)
+    print(predicted_labels_list_output)
 
     if( 1 in predicted_labels_list_output):
         return True
@@ -211,15 +211,14 @@ def prediction(text):
         return False
 
 
+if __name__ == "__main__":
+    text = ""
+    with open("out.txt", "r") as file:
+        text = file.read()
+    # df = pd.read_csv("crawled_issue/data_keycloakx.csv")
+    # text = df[df['Issue ID'] == 26405]['Issue Body'].values[0]
 
-# if __name__ == "__main__":
-#     text = ""
-#     with open("test.txt", "r") as file:
-#         text = file.read()
-#     # df = pd.read_csv("crawled_issue/data_keycloakx.csv")
-#     # text = df[df['Issue ID'] == 26405]['Issue Body'].values[0]
-
-#     #print(prediction(text))
+    print(prediction(text))
 
 
 

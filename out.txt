@@ -1,0 +1,54 @@
+### Describe the bug
+
+OIDC client authentication uses different error messages in the case when client does not exists and/or in the case when client is disabled and/or in the case when client is enabled, but bad client credentials are used. This allows "client enumeration" and also error messages returned are not 100% aligned with the OAuth2/OIDC specifications, so will be good to fix this IMO .
+
+### Current behaviour
+
+I am sending this request:
+```
+curl -d "client_id=account1" -d client_secret=wDVOYAWe8R0LxkVGe1MOI5PcuVyWlZ14 -d "username=admin" -d "password=admin" -d "grant_type=password" "http://localhost:8081/auth/realms/master/protocol/openid-connect/token"
+```
+
+1. In case the client `account1` does not exists, the response is:
+```
+{"error":"invalid_client","error_description":"Invalid client credentials"}
+```
+
+2. In case the client `account1` exists, but the client secret is incorrect, the response is:
+```
+{"error":"unauthorized_client","error_description":"Invalid client secret"}
+```
+
+3. In case the client `account1` exists, but is disabled, the response is:
+```
+{"error":"unauthorized_client","error_description":"Invalid client credentials"}
+```
+
+### OAuth2 specification
+
+I've checked the OAuth2 specification https://datatracker.ietf.org/doc/html/rfc6749#section-5.2 . According to the specification, the error "unauthorized_client" should be returned just when client is not authorized for the specified grant type. It should be never returned when client authentication failed (which is what we are doing right now).
+
+### Fix suggestion
+
+I suggest to change the logic like this:
+
+- client_id parameter missing: Return error "invalid_request" . This is ok per OAuth2 specification. Same applies when request is otherwise malformed (EG. Contains multiple client authentication methods)
+
+For all the other cases below, we can return the generic error to hide the reason:
+```
+{"error":"invalid_client","error_description":"Invalid client or Invalid client credentials"} 
+ ```
+
+However we should differentiate the cases below in the error event, which is thrown to event SPI. The cases are:
+
+- Case when "client_id" points to non-existing client
+- Case when "client_secret" is missing as parameter and "Authorization" header is missing as well
+- Case when client exists, but is disabled
+- Case when client secret is invalid
+- Case when client uses different client authentication than the default "Client secret", but invalid client credentials are provided
+
+When refactoring this, we should check that the "framework", which triggers client authentication, checks that client is enabled or not. Right now, I see that there is check in the client authenticator itself - https://github.com/keycloak/keycloak/blob/18.0.0/services/src/main/java/org/keycloak/authentication/authenticators/client/ClientIdAndSecretAuthenticator.java#L113-L115 , which is likely not very great as in the case when there is alternative client authentication method and the "Client Authenticator implementation" forget to check the client enablement status, it might be possible to authenticate with disabled client, which is incorrect.
+
+### Version
+
+18.0.0
