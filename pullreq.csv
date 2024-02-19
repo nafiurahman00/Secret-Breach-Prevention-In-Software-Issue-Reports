@@ -1,0 +1,57 @@
+pull_request
+"Centos7, three servers are installed with k8s cluster, one master, other slave1 and slave2. The three nodes are installed with CEPH for data persistence.
+
+the cephfs on master /mnt/cephfs directroy
+master:6789,slave1:6789,slave2:6789:/ /mnt/cephfs ceph name=cephfs,secretfile=/etc/ceph/cephfskey,_netdev,noatime 0 0
+
+Create deployment through the python API of kubernetes client, and mount three directories at the same time,
+One is to dynamically hang to pod through PVC
+Here's secret
+apiVersion: v1
+kind: Secret
+metadata:
+name: ceph-secret
+namespace: espp-ns
+type: ""kubernetes.io/rbd""
+data:
+key:
+
+storageclass.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+name: ceph-espp
+provisioner: kubernetes.io/rbd
+parameters:
+monitors: 10.197.1.11, 10.197.1.12, 10.197.1.13
+adminId: admin
+adminSecretName: ceph-secret
+adminSecretNamespace: espp-ns
+pool: rbd 
+userId: admin
+userSecretName: ceph-secret
+reclaimPolicy: Retain
+
+The other two directories are mounted through cephfs.
+secret.yml
+apiVersion: v1
+kind: Secret
+metadata:
+name: cephfs-secret-fs
+namespace: espp-ns
+type: ""kubernetes.io/rbd""
+data:
+key: AQBJrUxfZiH6NxAAljeXDd/DBYBiHx64PJ+shQ==
+
+**Problem**ï¼šAll created pods are in the master node, not assigned to the other two nodes. At the same time, the created PVC and PV are also mounted on the master
+
+below is on deployment example:
+espp-ns-deployment-1-1-2-0-6fc6cd65c4-8lq9m 1/1 Running 0 13h 172.30.22.5 **master**
+
+and the mount information:
+172.18.101.10:6789,172.18.101.11:6789,172.18.101.12:6789:/studentenv/dataset_stuenv_2_1/ 1.2T 244M 1.2T 1% /var/lib/kubelet/pods/1d40454b-00fc-4847-8948-7b1d73e1bb98/volumes/kubernetes.iocephfs/espp-ns-deployment-1-1-2-0-pv-fs-stuenv-0-1
+172.18.101.10:6789,172.18.101.11:6789,172.18.101.12:6789:/lessonplan/dataset_lp_1_1_19/ 1.2T 244M 1.2T 1% /var/lib/kubelet/pods/1d40454b-00fc-4847-8948-7b1d73e1bb98/volumes/kubernetes.iocephfs/espp-ns-deployment-1-1-2-0-pv-fs-stuenv-0-0
+/dev/rbd0 20G 387M 20G 2% /var/lib/kubelet/plugins/kubernetes.io/rbd/mounts/rbd-image-kubernetes-dynamic-pvc-95ce6a24-e7fe-4456-b008-d53428be6352
+overlay
+
+thanks"

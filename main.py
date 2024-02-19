@@ -53,6 +53,14 @@ def bot():
         if not pr_description:
             issue.create_comment("The pull request description is empty.")
             return "ok"
+        
+        dict ={}
+        dict[0] = {'pull_request': pr_description}
+        data = pd.DataFrame.from_dict(dict, "index")
+        data.to_csv('pullreq.csv', index=False)
+            
+        df = pd.read_csv('pullreq.csv')
+        content = df['pull_request'][0]
 
         # Check if the pull request description contains vowels
         if prediction(pr_description):
