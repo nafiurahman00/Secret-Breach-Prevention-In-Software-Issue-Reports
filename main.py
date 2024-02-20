@@ -32,10 +32,11 @@ def contains_vowels(text):
 def bot():
    
     # Get the event payload
-    payload = request.json
+    payload = request.json    
 
     # Check if the event is a GitHub PR creation event
     if 'pull_request' in payload and payload['action'] == 'opened':
+        print("here1")
         owner = payload['repository']['owner']['login']
         repo_name = payload['repository']['name']
 
@@ -70,7 +71,7 @@ def bot():
 
     # Check if the event is a GitHub issue comment event
     elif 'issue' in payload and payload['action'] == 'created':
-        print("here")
+        print("here2")
         owner = payload['repository']['owner']['login']
         repo_name = payload['repository']['name']
         issue_number = payload['issue']['number']
@@ -110,7 +111,39 @@ def bot():
                 issue.create_comment("Contains secret")
             else:
                 issue.create_comment("You're safe")
+        
+    elif 'issue' in payload and payload['action'] == 'opened':
+        print("here3")
+        owner = payload['repository']['owner']['login']
+        repo_name = payload['repository']['name']
+        issue_number = payload['issue']['number']
+        issue_description = payload['issue']['body']
+        issue_author = payload['issue']['user']['login']
 
+        # Get a git connection as our bot
+        git_connection = Github(
+            login_or_token=git_integration.get_access_token(
+                git_integration.get_installation(owner, repo_name).id
+            ).token
+        )
+        repo = git_connection.get_repo(f"{owner}/{repo_name}")
+        issue = repo.get_issue(number=issue_number)
+        
+        # Check if the comment is made by our bot
+        if issue_author != "secret-detection-tool[bot]":  # Replace "your_bot_username" with your bot's username
+           
+            dict ={}
+            dict[0] = {'comment_or_body': issue_description}
+            data = pd.DataFrame.from_dict(dict, "index")
+            data.to_csv('issue.csv', index=False)
+            
+            df = pd.read_csv('issue.csv')
+            content = df['comment_or_body'][0]
+
+            if prediction(content):
+                issue.create_comment("Contains secret")
+            else:
+                issue.create_comment("You're safe")
     return "ok"
 
 if __name__ == "__main__":
