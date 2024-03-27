@@ -1,0 +1,545 @@
+,Issue ID,Issue Body,Candidate String,Repolink
+0,2254,"https://github.com/googleapis/google-api-nodejs-client/blob/master/samples/drive/list.js doesn't work
+
+```nodejs
+root@docker:~/gg# cat oauth2.keys.json
+{
+  ""web"" : {
+""redirect_uris"": [
+  ""https://hello.example.net""
+],
+    ""client_id"": ""10xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxontent.com"",
+    ""client_secret"": ""5fS6xxxxxxxxxxxxxxxxxxf0w"",
+    ""project_id"": ""maxxxxxxxxxxxxxx76211""
+  }
+}
+root@docker:~/gg# node e.js
+Error: The provided keyfile does not define a valid
+redirect URI. There must be at least one redirect URI defined, and this sample
+assumes it redirects to 'http://localhost:3000/oauth2callback'.  Please edit
+your keyfile, and add a 'redirect_uris' section.  For example:
+
+""redirect_uris"": [
+  ""http://localhost:3000/oauth2callback""
+]
+
+    at authenticate (/root/gg/node_modules/@google-cloud/local-auth/build/src/index.js:56:15)
+    at runSample (/root/gg/e.js:11:22)
+    at Object.<anonymous> (/root/gg/e.js:25:3)
+    at Module._compile (internal/modules/cjs/loader.js:778:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:789:10)
+    at Module.load (internal/modules/cjs/loader.js:653:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:585:3)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:831:12)
+    at startup (internal/bootstrap/node.js:283:19)
+```
+
+what's wrong?!",5fS6xxxxxxxxxxxxxxxxxxf0w,https://github.com/googleapis/google-api-nodejs-client
+1,530,"I am trying to integrate Google drive resumable file upload/update with my application. But when i update the file, file is updating in encoded format it is not taking the actual content. Encoded format is working for multiplepart uploadType but same content is not working for Resumable upload. Please find the below details
+
+Step 1 : Start the resumable session
+
+```js
+function uploadFile(fileData) {
+
+    var accessToken = 'ya29.nwI5Em6UnYGHvVzVx7lBk5tD-xzFl4_JG3_c-_t4FJ3owll_8i_rL5M17LFV6VlF7QE';
+
+    const boundary = '-------314159265358979323846';
+    const delimiter = ""\r\n--"" + boundary + ""\r\n"";
+    const close_delim = ""\r\n--"" + boundary + ""--"";
+
+   var contentType = fileData.type || 'application/octet-stream';
+   var metadata = {
+            'name': fileData.name,
+            'mimeType': contentType,
+            'Content-Type': contentType,
+            'Content-Length': fileData.size
+        };
+
+   var request = gapi.client.request({
+        'path' : 'upload/drive/v3/files',
+        'method' : 'POST',
+        'params' : {'uploadType':'resumable'},
+        'headers' : {
+          'X-Upload-Content-Type' : fileData.type,
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + accessToken,
+        },
+        'body' : metadata
+    });
+
+   request.execute(function(resp, raw_resp) {
+      var locationUrl =   JSON.parse(raw_resp).gapiRequest.data.headers.location;
+      console.log(locationUrl);
+      uploadToLocationUrl(locationUrl, fileData);
+   });
+}
+```
+
+Upto here it's fine I am getting Location Url and then calling a function to upload the file.
+
+Step 2 : Resumable session initiation request
+
+```js
+     function uploadToLocationUrl(locationUrl, fileData)
+       {
+            var reader = new FileReader();
+            reader.readAsBinaryString(fileData);
+            reader.onload = function (e) {
+            var contentType = fileData.type || 'application/octet-stream';
+            var metadata = {
+                'name': fileData.name,
+                'mimeType': contentType,
+                'Content-Type': contentType,
+                'Content-Length': fileData.size
+            };
+
+              var base64Data = btoa(reader.result);
+              var multipartRequestBody =
+                  delimiter +
+                  'Content-Type: application/json\r\n\r\n' +
+                  JSON.stringify(metadata) +
+                  delimiter +
+                  'Content-Type: ' + contentType + '\r\n' +
+                  'Content-Transfer-Encoding: base64\r\n' +
+                  '\r\n' +
+                  base64Data +
+                  close_delim;
+
+           var requestPost = gapi.client.request({
+                'path' : locationUrl,
+                'method' : 'PUT',
+                'headers' : {
+                  'X-Upload-Content-Length' : fileData.size
+                },
+                'body' : multipartRequestBody
+              });
+            console.log(requestPost);
+
+            requestPost.execute(function(resp, raw_resp) {
+              console.log(resp);
+            });
+         }
+}
+```
+
+Result : Updated file in google drive
+
+```
+---------314159265358979323846
+Content-Type: application/json
+
+{""name"":""api.txt"",""mimeType"":""text/plain""}
+---------314159265358979323846
+Content-Type: text/plain
+Content-Transfer-Encoding: base64
+
+MSkgTmVlZCBhbiBhcGkgd2hpY2ggd2lsbCByZXR1cm4gYWxsIGxlYWRzIGVtYWlsIGlkLg0KMikgTmVlZCBhbiBhcGkgdG8gY29udmVydCBtdWx0aXBsZSBjb250YWN0IGludG8gbGVhZC4NCjMpIE5lZWQgYW4gYXBpIGZvciBnb29nbGUgc2lnbiBpbi4vLyBkb24ndCBkaXNjdXNzIGFib3V0IHRoaXMgb25lIG5vdywgZmlyc3Qgd2Ugd2lsbCBkaXNjdXNzIGFib3V0IHRoaXMgQVBJLg==
+---------314159265358979323846--
+```
+
+Thank you.
+",MSkgTmVlZCBhbiBhcGkgd2hpY2ggd2lsbCByZXR1cm4gYWxsIGxlYWRzIGVtYWlsIGlkLg0KM,https://github.com/googleapis/google-api-nodejs-client
+2,530,"I am trying to integrate Google drive resumable file upload/update with my application. But when i update the file, file is updating in encoded format it is not taking the actual content. Encoded format is working for multiplepart uploadType but same content is not working for Resumable upload. Please find the below details
+
+Step 1 : Start the resumable session
+
+```js
+function uploadFile(fileData) {
+
+    var accessToken = 'ya29.nwI5Em6UnYGHvVzVx7lBk5tD-xzFl4_JG3_c-_t4FJ3owll_8i_rL5M17LFV6VlF7QE';
+
+    const boundary = '-------314159265358979323846';
+    const delimiter = ""\r\n--"" + boundary + ""\r\n"";
+    const close_delim = ""\r\n--"" + boundary + ""--"";
+
+   var contentType = fileData.type || 'application/octet-stream';
+   var metadata = {
+            'name': fileData.name,
+            'mimeType': contentType,
+            'Content-Type': contentType,
+            'Content-Length': fileData.size
+        };
+
+   var request = gapi.client.request({
+        'path' : 'upload/drive/v3/files',
+        'method' : 'POST',
+        'params' : {'uploadType':'resumable'},
+        'headers' : {
+          'X-Upload-Content-Type' : fileData.type,
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + accessToken,
+        },
+        'body' : metadata
+    });
+
+   request.execute(function(resp, raw_resp) {
+      var locationUrl =   JSON.parse(raw_resp).gapiRequest.data.headers.location;
+      console.log(locationUrl);
+      uploadToLocationUrl(locationUrl, fileData);
+   });
+}
+```
+
+Upto here it's fine I am getting Location Url and then calling a function to upload the file.
+
+Step 2 : Resumable session initiation request
+
+```js
+     function uploadToLocationUrl(locationUrl, fileData)
+       {
+            var reader = new FileReader();
+            reader.readAsBinaryString(fileData);
+            reader.onload = function (e) {
+            var contentType = fileData.type || 'application/octet-stream';
+            var metadata = {
+                'name': fileData.name,
+                'mimeType': contentType,
+                'Content-Type': contentType,
+                'Content-Length': fileData.size
+            };
+
+              var base64Data = btoa(reader.result);
+              var multipartRequestBody =
+                  delimiter +
+                  'Content-Type: application/json\r\n\r\n' +
+                  JSON.stringify(metadata) +
+                  delimiter +
+                  'Content-Type: ' + contentType + '\r\n' +
+                  'Content-Transfer-Encoding: base64\r\n' +
+                  '\r\n' +
+                  base64Data +
+                  close_delim;
+
+           var requestPost = gapi.client.request({
+                'path' : locationUrl,
+                'method' : 'PUT',
+                'headers' : {
+                  'X-Upload-Content-Length' : fileData.size
+                },
+                'body' : multipartRequestBody
+              });
+            console.log(requestPost);
+
+            requestPost.execute(function(resp, raw_resp) {
+              console.log(resp);
+            });
+         }
+}
+```
+
+Result : Updated file in google drive
+
+```
+---------314159265358979323846
+Content-Type: application/json
+
+{""name"":""api.txt"",""mimeType"":""text/plain""}
+---------314159265358979323846
+Content-Type: text/plain
+Content-Transfer-Encoding: base64
+
+MSkgTmVlZCBhbiBhcGkgd2hpY2ggd2lsbCByZXR1cm4gYWxsIGxlYWRzIGVtYWlsIGlkLg0KMikgTmVlZCBhbiBhcGkgdG8gY29udmVydCBtdWx0aXBsZSBjb250YWN0IGludG8gbGVhZC4NCjMpIE5lZWQgYW4gYXBpIGZvciBnb29nbGUgc2lnbiBpbi4vLyBkb24ndCBkaXNjdXNzIGFib3V0IHRoaXMgb25lIG5vdywgZmlyc3Qgd2Ugd2lsbCBkaXNjdXNzIGFib3V0IHRoaXMgQVBJLg==
+---------314159265358979323846--
+```
+
+Thank you.
+",MSkgTmVlZCBhbiBhcGkgd2hpY2ggd2lsbCByZXR1cm4gYWxsIGxlYWRzIGVtYWlsIGlkLg0KMikgTmVlZCBhbiBhcGkgdG8gY29udmVydCBtdWx0aXBsZSBjb250YWN0IGludG8gbGVhZC4NCjMpIE5lZWQgYW4gYXBpIGZvciBnb29nbGUgc2lnbiBpbi4vLyBkb24ndCBkaXNjdXNzIGFib3V0IHRoaXMgb25lIG5vdywgZmlyc3Qgd2Ugd2lsbCBkaXNjdXNzIGFib3V0IHRoaXMgQVBJLg,https://github.com/googleapis/google-api-nodejs-client
+3,530,"I am trying to integrate Google drive resumable file upload/update with my application. But when i update the file, file is updating in encoded format it is not taking the actual content. Encoded format is working for multiplepart uploadType but same content is not working for Resumable upload. Please find the below details
+
+Step 1 : Start the resumable session
+
+```js
+function uploadFile(fileData) {
+
+    var accessToken = 'ya29.nwI5Em6UnYGHvVzVx7lBk5tD-xzFl4_JG3_c-_t4FJ3owll_8i_rL5M17LFV6VlF7QE';
+
+    const boundary = '-------314159265358979323846';
+    const delimiter = ""\r\n--"" + boundary + ""\r\n"";
+    const close_delim = ""\r\n--"" + boundary + ""--"";
+
+   var contentType = fileData.type || 'application/octet-stream';
+   var metadata = {
+            'name': fileData.name,
+            'mimeType': contentType,
+            'Content-Type': contentType,
+            'Content-Length': fileData.size
+        };
+
+   var request = gapi.client.request({
+        'path' : 'upload/drive/v3/files',
+        'method' : 'POST',
+        'params' : {'uploadType':'resumable'},
+        'headers' : {
+          'X-Upload-Content-Type' : fileData.type,
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + accessToken,
+        },
+        'body' : metadata
+    });
+
+   request.execute(function(resp, raw_resp) {
+      var locationUrl =   JSON.parse(raw_resp).gapiRequest.data.headers.location;
+      console.log(locationUrl);
+      uploadToLocationUrl(locationUrl, fileData);
+   });
+}
+```
+
+Upto here it's fine I am getting Location Url and then calling a function to upload the file.
+
+Step 2 : Resumable session initiation request
+
+```js
+     function uploadToLocationUrl(locationUrl, fileData)
+       {
+            var reader = new FileReader();
+            reader.readAsBinaryString(fileData);
+            reader.onload = function (e) {
+            var contentType = fileData.type || 'application/octet-stream';
+            var metadata = {
+                'name': fileData.name,
+                'mimeType': contentType,
+                'Content-Type': contentType,
+                'Content-Length': fileData.size
+            };
+
+              var base64Data = btoa(reader.result);
+              var multipartRequestBody =
+                  delimiter +
+                  'Content-Type: application/json\r\n\r\n' +
+                  JSON.stringify(metadata) +
+                  delimiter +
+                  'Content-Type: ' + contentType + '\r\n' +
+                  'Content-Transfer-Encoding: base64\r\n' +
+                  '\r\n' +
+                  base64Data +
+                  close_delim;
+
+           var requestPost = gapi.client.request({
+                'path' : locationUrl,
+                'method' : 'PUT',
+                'headers' : {
+                  'X-Upload-Content-Length' : fileData.size
+                },
+                'body' : multipartRequestBody
+              });
+            console.log(requestPost);
+
+            requestPost.execute(function(resp, raw_resp) {
+              console.log(resp);
+            });
+         }
+}
+```
+
+Result : Updated file in google drive
+
+```
+---------314159265358979323846
+Content-Type: application/json
+
+{""name"":""api.txt"",""mimeType"":""text/plain""}
+---------314159265358979323846
+Content-Type: text/plain
+Content-Transfer-Encoding: base64
+
+MSkgTmVlZCBhbiBhcGkgd2hpY2ggd2lsbCByZXR1cm4gYWxsIGxlYWRzIGVtYWlsIGlkLg0KMikgTmVlZCBhbiBhcGkgdG8gY29udmVydCBtdWx0aXBsZSBjb250YWN0IGludG8gbGVhZC4NCjMpIE5lZWQgYW4gYXBpIGZvciBnb29nbGUgc2lnbiBpbi4vLyBkb24ndCBkaXNjdXNzIGFib3V0IHRoaXMgb25lIG5vdywgZmlyc3Qgd2Ugd2lsbCBkaXNjdXNzIGFib3V0IHRoaXMgQVBJLg==
+---------314159265358979323846--
+```
+
+Thank you.
+",_t4FJ3owll_8i_rL5M17LFV6VlF7QE,https://github.com/googleapis/google-api-nodejs-client
+4,164,"This may be the wrong place to post this, but I'm having difficulty reaching anyone familiar with google apis on either android-developers or google-apis-explorer-users forums.
+
+I'm having a problem deciphering the root cause of a cryptic ""invalid value"" response for the `androidpublisher.inapppurchases.get` api. OAuth is working fine, and I'm able to get the access_token as well as refresh_token.
+
+I'm guessing something in the parameters are malformed or missing but cannot decipher where. The dev console project seems to be connected correctly because for an unauthorized user, querying on my packageName throws a permission denied error. 
+
+I also suspected the productId may be malformed, and I tried all sorts of combinations such as `subs:{packageName}:pro_monthly_15`, `{packageName}:pro_monthly_15`, etc. with all the same invalid response.
+
+Can anyone help me shed some light on this?
+
+```
+oauth2Client.credentials = {
+            access_token: '{removed}',
+            refresh_token: '{removed}'
+        };
+
+        googleapis
+            .discover('androidpublisher', 'v1.1')
+            .execute(function(err, client) {
+
+                console.log(['discovered', err, client.androidpublisher.apiMeta]);
+
+            var params = {
+                packageName: '{removed}',
+                productId:   'pro_monthly_15',
+                token:       'glhannifclifbhdgbpalegib.AO-J1OyeEpe0JagpGtG588_Jor3mtqjp_CRB-xGdq55kqMMWqGyGd2YlesHdazWPnOC4CoB0EVP-o_j1LT7taDJE8vUxg7UcjzeMPZ4WHi79aTYdv3FalrvqKAFTvWZqJqwjecdGaTpa'
+            };
+            client
+                .androidpublisher.inapppurchases.get(params)
+                .withAuthClient(oauth2Client)
+                .execute(function (err, response) {
+                    console.log([err, response]);
+
+                    res.json({
+                        response: response,
+                        error: err
+                    });
+            });
+        });
+```
+
+Cryptic response:
+
+```
+{
+  ""response"": null,
+  ""error"": {
+    ""errors"": [
+      {
+        ""domain"": ""global"",
+        ""reason"": ""invalid"",
+        ""message"": ""Invalid Value""
+      }
+    ],
+    ""code"": 400,
+    ""message"": ""Invalid Value""
+  }
+}
+```
+",J1OyeEpe0JagpGtG588_Jor3mtqjp_CRB-xGdq55kqMMWqGyGd2YlesHdazWPnOC4CoB0EVP-o_j1LT7taDJE8vUxg7UcjzeMPZ4WHi79aTYdv3FalrvqKAFTvWZqJqwjecdGaTpa,https://github.com/googleapis/google-api-nodejs-client
+5,164,"This may be the wrong place to post this, but I'm having difficulty reaching anyone familiar with google apis on either android-developers or google-apis-explorer-users forums.
+
+I'm having a problem deciphering the root cause of a cryptic ""invalid value"" response for the `androidpublisher.inapppurchases.get` api. OAuth is working fine, and I'm able to get the access_token as well as refresh_token.
+
+I'm guessing something in the parameters are malformed or missing but cannot decipher where. The dev console project seems to be connected correctly because for an unauthorized user, querying on my packageName throws a permission denied error. 
+
+I also suspected the productId may be malformed, and I tried all sorts of combinations such as `subs:{packageName}:pro_monthly_15`, `{packageName}:pro_monthly_15`, etc. with all the same invalid response.
+
+Can anyone help me shed some light on this?
+
+```
+oauth2Client.credentials = {
+            access_token: '{removed}',
+            refresh_token: '{removed}'
+        };
+
+        googleapis
+            .discover('androidpublisher', 'v1.1')
+            .execute(function(err, client) {
+
+                console.log(['discovered', err, client.androidpublisher.apiMeta]);
+
+            var params = {
+                packageName: '{removed}',
+                productId:   'pro_monthly_15',
+                token:       'glhannifclifbhdgbpalegib.AO-J1OyeEpe0JagpGtG588_Jor3mtqjp_CRB-xGdq55kqMMWqGyGd2YlesHdazWPnOC4CoB0EVP-o_j1LT7taDJE8vUxg7UcjzeMPZ4WHi79aTYdv3FalrvqKAFTvWZqJqwjecdGaTpa'
+            };
+            client
+                .androidpublisher.inapppurchases.get(params)
+                .withAuthClient(oauth2Client)
+                .execute(function (err, response) {
+                    console.log([err, response]);
+
+                    res.json({
+                        response: response,
+                        error: err
+                    });
+            });
+        });
+```
+
+Cryptic response:
+
+```
+{
+  ""response"": null,
+  ""error"": {
+    ""errors"": [
+      {
+        ""domain"": ""global"",
+        ""reason"": ""invalid"",
+        ""message"": ""Invalid Value""
+      }
+    ],
+    ""code"": 400,
+    ""message"": ""Invalid Value""
+  }
+}
+```
+",J1OyeEpe0JagpGtG588_Jor3mtqjp_CRB-,https://github.com/googleapis/google-api-nodejs-client
+6,59,"Using googleapis 0.2.13-alpha. I'm having trouble using this module and trying to call the recently released drive.files.watch endpoint. Other endpoints appear to work correctly, but this one is causing the error. The class is correctly discovered, and called using:
+
+```
+  var subscription = {
+    id: ""id-1373896667820""
+    token: ""101852559274654726533"",
+    type: 'web_hook',
+    address: 'https://prisoner.com/dev/glass-drive/incoming/file'
+  };
+  var params = {
+    fileId: '14lITDEjLp-YGZ8tkZGLT19ouAD5rhuDrYDRt-J6o1RE'
+  };
+  client.drive.files.watch( params, subscription )
+  .withAuthClient(user.auth)
+  .execute(function(err,data){
+    console.log( 'drive.files.watch', err, data, user.auth );
+  });
+```
+
+user.auth is a valid object containing the clientId, clientSecret, and credentials containing the access_token and refresh_token.
+
+Adding some debugging to BaseRequest.prototype.execute (request.js, after line 125) I can confirm that the authClient has the correct user.auth information. The requestOpts object is set to
+
+```
+{ method: 'POST',
+  uri: 'https://www.googleapis.com/rpc',
+  json: 
+   [ { jsonrpc: '2.0',
+       id: 0,
+       method: 'drive.files.watch',
+       params: [Object],
+       apiVersion: 'v2' } ] }
+```
+
+which appears correct. The params field contains
+
+```
+{ fileId: '14lITDEjLp-YGZ8tkZGLT19ouAD5rhuDrYDRt-J6o1RE',
+  resource: 
+   { id: 'id-1373896667820',
+     token: '101852559274654726533',
+     type: 'web_hook',
+     address: 'https://prisoner.com/dev/glass-drive/incoming/file' } }
+```
+
+which also appears correct.
+
+The error returned is:
+
+```
+{ code: 500,
+  message: 'Internal Error',
+  data: 
+   [ { domain: 'global',
+       reason: 'internalError',
+       message: 'Internal Error' } ] }
+```
+
+Using the exact same parameters, and the exact same access_token, I have run the following curl command:
+
+```
+curl \
+  --header ""Authorization: Bearer valid-access-token-redacted"" \
+  --header ""Content-type: application/json"" \
+  --data '{""id"": ""id-1373896667820"", ""type"": ""web_hook"", ""address"": ""https://pri
+soner.com/dev/glass-drive/incoming/file"", ""token"": ""101852559274654726533""}' \
+  https://www.googleapis.com/drive/v2/files/14lITDEjLp-YGZ8tkZGLT19ouAD5rhuDrYDR
+t-J6o1RE/watch
+```
+
+Which works correctly.
+",1.01853E+20,https://github.com/googleapis/google-api-nodejs-client

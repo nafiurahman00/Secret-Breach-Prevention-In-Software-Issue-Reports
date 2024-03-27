@@ -28,6 +28,30 @@ def contains_vowels(text):
     vowels = 'aeiouAEIOU'
     return any(char in vowels for char in text)
 
+markdown_message = """
+## 🚨 Attention: Potential Exposure of Secrets Detected! 🚨
+
+Hello there! 👋
+
+It seems that this issue/comment may contain potential secrets or sensitive information. To maintain security best practices, we advise you to review and edit your message to remove any sensitive data before further interactions.
+
+### Steps to Ensure Security:
+
+1. **Edit Your Comment:** Click on the "Edit" button located at the bottom of your comment.
+
+2. **Remove Sensitive Information:** Ensure that any confidential data such as passwords, API keys, or personal information is removed.
+
+3. **Delete Revision History:** After editing, please delete the revision history associated with the comment to ensure that sensitive information is not accessible.
+
+4. **Think Before Posting:** Before sharing any information, consider whether it's safe to disclose it publicly.
+
+5. **Report Vulnerabilities:** If you suspect any security vulnerabilities, please report them to our security team immediately.
+
+Thank you for your cooperation in maintaining a secure environment. If you have any questions or concerns, feel free to reach out to our team.
+
+Stay safe and secure! 🔒
+"""
+
 @app.route("/", methods=['POST'])
 def bot():
    
@@ -65,9 +89,9 @@ def bot():
 
         # Check if the pull request description contains vowels
         if prediction(pr_description):
-            issue.create_comment("Contains secret")
-        else:
-            issue.create_comment("You're safe")
+            issue.create_comment(markdown_message)
+        # else:
+        #     issue.create_comment("You're safe")
 
     # Check if the event is a GitHub issue comment event
     elif 'issue' in payload and payload['action'] == 'created':
@@ -108,9 +132,9 @@ def bot():
             content = df['comment_or_body'][0]
 
             if prediction(content):
-                issue.create_comment("Contains secret")
-            else:
-                issue.create_comment("You're safe")
+                issue.create_comment(markdown_message)
+            # else:
+            #     issue.create_comment("You're safe")
         
     elif 'issue' in payload and payload['action'] == 'opened':
         print("here3")
@@ -141,9 +165,9 @@ def bot():
             content = df['comment_or_body'][0]
 
             if prediction(content):
-                issue.create_comment("Contains secret")
-            else:
-                issue.create_comment("You're safe")
+                issue.create_comment(markdown_message)
+            # else:
+            #     issue.create_comment("You're safe")
     return "ok"
 
 if __name__ == "__main__":

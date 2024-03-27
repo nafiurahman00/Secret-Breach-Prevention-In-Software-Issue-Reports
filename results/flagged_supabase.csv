@@ -1,0 +1,888 @@
+,Issue ID,Issue Body,Candidate String,Repolink
+0,15867,"Am up and going on Docker with no problems and trying to make an ""MVP"" for self-hosted auth within my company.
+
+Trying to run a vanilla JS auth:
+```
+var SUPABASE_URL = 'http://10.195.246.14:3000/';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE';
+var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+
+window.userToken = null
+
+document.addEventListener('DOMContentLoaded', function (event) {
+  var signUpForm = document.querySelector('#sign-up')
+  signUpForm.onsubmit = signUpSubmitted.bind(signUpForm)
+
+  var logInForm = document.querySelector('#log-in')
+  logInForm.onsubmit = logInSubmitted.bind(logInForm)
+
+  var userDetailsButton = document.querySelector('#user-button')
+  userDetailsButton.onclick = fetchUserDetails.bind(userDetailsButton)
+
+  var logoutButton = document.querySelector('#logout-button')
+  logoutButton.onclick = logoutSubmitted.bind(logoutButton)
+})
+
+const signUpSubmitted = (event) => {
+  event.preventDefault()
+  const email = event.target[0].value
+  const password = event.target[1].value
+
+  supabase.auth
+    .signUp({ email, password })
+    .then((response) => {
+      response.error ? alert(response.error.message) : setToken(response)
+    })
+    .catch((err) => {
+      alert(err)
+    })
+}
+```
+
+Was hit with the classic CORS error
+
+<img width=""551"" alt=""image"" src=""https://github.com/supabase/supabase/assets/12734718/68ea97d7-6c86-406d-b30e-923da2306170"">
+
+I stumbled upon [this tutorial](https://dev.to/the_cozma/kongplugin-cors-fixing-access-control-allow-origin-header-missing-error-iao) which suggested a modification to `kong.yml` but it did not work at all.
+
+Where in the config can I specify to allow cors for the auth server?",DOMContentLoaded,https://github.com/supabase/supabase
+1,15867,"Am up and going on Docker with no problems and trying to make an ""MVP"" for self-hosted auth within my company.
+
+Trying to run a vanilla JS auth:
+```
+var SUPABASE_URL = 'http://10.195.246.14:3000/';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE';
+var supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+
+window.userToken = null
+
+document.addEventListener('DOMContentLoaded', function (event) {
+  var signUpForm = document.querySelector('#sign-up')
+  signUpForm.onsubmit = signUpSubmitted.bind(signUpForm)
+
+  var logInForm = document.querySelector('#log-in')
+  logInForm.onsubmit = logInSubmitted.bind(logInForm)
+
+  var userDetailsButton = document.querySelector('#user-button')
+  userDetailsButton.onclick = fetchUserDetails.bind(userDetailsButton)
+
+  var logoutButton = document.querySelector('#logout-button')
+  logoutButton.onclick = logoutSubmitted.bind(logoutButton)
+})
+
+const signUpSubmitted = (event) => {
+  event.preventDefault()
+  const email = event.target[0].value
+  const password = event.target[1].value
+
+  supabase.auth
+    .signUp({ email, password })
+    .then((response) => {
+      response.error ? alert(response.error.message) : setToken(response)
+    })
+    .catch((err) => {
+      alert(err)
+    })
+}
+```
+
+Was hit with the classic CORS error
+
+<img width=""551"" alt=""image"" src=""https://github.com/supabase/supabase/assets/12734718/68ea97d7-6c86-406d-b30e-923da2306170"">
+
+I stumbled upon [this tutorial](https://dev.to/the_cozma/kongplugin-cors-fixing-access-control-allow-origin-header-missing-error-iao) which suggested a modification to `kong.yml` but it did not work at all.
+
+Where in the config can I specify to allow cors for the auth server?",response,https://github.com/supabase/supabase
+2,9666,"# Bug report
+
+
+## Describe the bug
+when using following JWT_SECRET in /docker/.env file -> it keeps connecting as per screenshot
+![image](https://user-images.githubusercontent.com/10296400/196603215-bf08be2d-2fc5-4b4b-aa1a-15545ba30837.png)
+`JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398`
+
+issue is related with size of jwt_secret. it works good on using default jwt_secret provided in /docker/.env.example. Also note that value for jwt_secret I am using is 36 chars so it is > 32. so basically it won't allow any similar key with any other chars which is of this length.
+
+
+## To Reproduce
+
+
+1. change /docker/.env file to following: (I have only changed JWT_SECRET)
+```
+############
+# Secrets 
+# YOU MUST CHANGE THESE BEFORE GOING INTO PRODUCTION
+############
+
+POSTGRES_PASSWORD=your-super-secret-and-long-postgres-password
+JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398
+ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+
+
+############
+# Database - You can change these to any PostgreSQL database that has logical replication enabled.
+############
+
+POSTGRES_HOST=db
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PORT=5432
+
+
+############
+# API Proxy - Configuration for the Kong Reverse proxy.
+############
+
+KONG_HTTP_PORT=8000
+KONG_HTTPS_PORT=8443
+
+
+############
+# API - Configuration for PostgREST.
+############
+
+PGRST_DB_SCHEMAS=public,storage,graphql_public
+
+
+############
+# Auth - Configuration for the GoTrue authentication server.
+############
+
+## General
+SITE_URL=http://localhost:3000
+ADDITIONAL_REDIRECT_URLS=
+JWT_EXPIRY=3600
+DISABLE_SIGNUP=false
+API_EXTERNAL_URL=http://localhost:8000
+
+## Mailer Config
+MAILER_URLPATHS_CONFIRMATION=""/auth/v1/verify""
+MAILER_URLPATHS_INVITE=""/auth/v1/verify""
+MAILER_URLPATHS_RECOVERY=""/auth/v1/verify""
+MAILER_URLPATHS_EMAIL_CHANGE=""/auth/v1/verify""
+
+## Email auth
+ENABLE_EMAIL_SIGNUP=true
+ENABLE_EMAIL_AUTOCONFIRM=false
+SMTP_ADMIN_EMAIL=admin@example.com
+SMTP_HOST=mail
+SMTP_PORT=2500
+SMTP_USER=fake_mail_user
+SMTP_PASS=fake_mail_password
+SMTP_SENDER_NAME=fake_sender
+
+## Phone auth
+ENABLE_PHONE_SIGNUP=true
+ENABLE_PHONE_AUTOCONFIRM=true
+
+
+############
+# Studio - Configuration for the Dashboard
+############
+
+STUDIO_ORGANIZATION_NAME=Default Organization
+STUDIO_PROJECT_NAME=Default Project
+
+STUDIO_PORT=3000
+PUBLIC_REST_URL=http://localhost:8000/rest/v1/ # replace if you intend to use Studio outside of localhost
+
+```
+2. run `docker-compose up`
+3. goto http://localhost:3000 & select default project
+4. it keeps loading.....
+
+## Expected behavior
+
+it should load the project. Please allow shorter jwt_secret so we can use secrets generated by supabase cloud locally. 
+ 
+
+## System information
+
+- windows 11
+- latest chrome
+- master branch latest
+- not relevant as I am using docker
+ 
+",7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398,https://github.com/supabase/supabase
+3,9666,"# Bug report
+
+
+## Describe the bug
+when using following JWT_SECRET in /docker/.env file -> it keeps connecting as per screenshot
+![image](https://user-images.githubusercontent.com/10296400/196603215-bf08be2d-2fc5-4b4b-aa1a-15545ba30837.png)
+`JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398`
+
+issue is related with size of jwt_secret. it works good on using default jwt_secret provided in /docker/.env.example. Also note that value for jwt_secret I am using is 36 chars so it is > 32. so basically it won't allow any similar key with any other chars which is of this length.
+
+
+## To Reproduce
+
+
+1. change /docker/.env file to following: (I have only changed JWT_SECRET)
+```
+############
+# Secrets 
+# YOU MUST CHANGE THESE BEFORE GOING INTO PRODUCTION
+############
+
+POSTGRES_PASSWORD=your-super-secret-and-long-postgres-password
+JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398
+ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+
+
+############
+# Database - You can change these to any PostgreSQL database that has logical replication enabled.
+############
+
+POSTGRES_HOST=db
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PORT=5432
+
+
+############
+# API Proxy - Configuration for the Kong Reverse proxy.
+############
+
+KONG_HTTP_PORT=8000
+KONG_HTTPS_PORT=8443
+
+
+############
+# API - Configuration for PostgREST.
+############
+
+PGRST_DB_SCHEMAS=public,storage,graphql_public
+
+
+############
+# Auth - Configuration for the GoTrue authentication server.
+############
+
+## General
+SITE_URL=http://localhost:3000
+ADDITIONAL_REDIRECT_URLS=
+JWT_EXPIRY=3600
+DISABLE_SIGNUP=false
+API_EXTERNAL_URL=http://localhost:8000
+
+## Mailer Config
+MAILER_URLPATHS_CONFIRMATION=""/auth/v1/verify""
+MAILER_URLPATHS_INVITE=""/auth/v1/verify""
+MAILER_URLPATHS_RECOVERY=""/auth/v1/verify""
+MAILER_URLPATHS_EMAIL_CHANGE=""/auth/v1/verify""
+
+## Email auth
+ENABLE_EMAIL_SIGNUP=true
+ENABLE_EMAIL_AUTOCONFIRM=false
+SMTP_ADMIN_EMAIL=admin@example.com
+SMTP_HOST=mail
+SMTP_PORT=2500
+SMTP_USER=fake_mail_user
+SMTP_PASS=fake_mail_password
+SMTP_SENDER_NAME=fake_sender
+
+## Phone auth
+ENABLE_PHONE_SIGNUP=true
+ENABLE_PHONE_AUTOCONFIRM=true
+
+
+############
+# Studio - Configuration for the Dashboard
+############
+
+STUDIO_ORGANIZATION_NAME=Default Organization
+STUDIO_PROJECT_NAME=Default Project
+
+STUDIO_PORT=3000
+PUBLIC_REST_URL=http://localhost:8000/rest/v1/ # replace if you intend to use Studio outside of localhost
+
+```
+2. run `docker-compose up`
+3. goto http://localhost:3000 & select default project
+4. it keeps loading.....
+
+## Expected behavior
+
+it should load the project. Please allow shorter jwt_secret so we can use secrets generated by supabase cloud locally. 
+ 
+
+## System information
+
+- windows 11
+- latest chrome
+- master branch latest
+- not relevant as I am using docker
+ 
+",PHK5vgusbcbo7X36XVt4Q,https://github.com/supabase/supabase
+4,9666,"# Bug report
+
+
+## Describe the bug
+when using following JWT_SECRET in /docker/.env file -> it keeps connecting as per screenshot
+![image](https://user-images.githubusercontent.com/10296400/196603215-bf08be2d-2fc5-4b4b-aa1a-15545ba30837.png)
+`JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398`
+
+issue is related with size of jwt_secret. it works good on using default jwt_secret provided in /docker/.env.example. Also note that value for jwt_secret I am using is 36 chars so it is > 32. so basically it won't allow any similar key with any other chars which is of this length.
+
+
+## To Reproduce
+
+
+1. change /docker/.env file to following: (I have only changed JWT_SECRET)
+```
+############
+# Secrets 
+# YOU MUST CHANGE THESE BEFORE GOING INTO PRODUCTION
+############
+
+POSTGRES_PASSWORD=your-super-secret-and-long-postgres-password
+JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398
+ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+
+
+############
+# Database - You can change these to any PostgreSQL database that has logical replication enabled.
+############
+
+POSTGRES_HOST=db
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PORT=5432
+
+
+############
+# API Proxy - Configuration for the Kong Reverse proxy.
+############
+
+KONG_HTTP_PORT=8000
+KONG_HTTPS_PORT=8443
+
+
+############
+# API - Configuration for PostgREST.
+############
+
+PGRST_DB_SCHEMAS=public,storage,graphql_public
+
+
+############
+# Auth - Configuration for the GoTrue authentication server.
+############
+
+## General
+SITE_URL=http://localhost:3000
+ADDITIONAL_REDIRECT_URLS=
+JWT_EXPIRY=3600
+DISABLE_SIGNUP=false
+API_EXTERNAL_URL=http://localhost:8000
+
+## Mailer Config
+MAILER_URLPATHS_CONFIRMATION=""/auth/v1/verify""
+MAILER_URLPATHS_INVITE=""/auth/v1/verify""
+MAILER_URLPATHS_RECOVERY=""/auth/v1/verify""
+MAILER_URLPATHS_EMAIL_CHANGE=""/auth/v1/verify""
+
+## Email auth
+ENABLE_EMAIL_SIGNUP=true
+ENABLE_EMAIL_AUTOCONFIRM=false
+SMTP_ADMIN_EMAIL=admin@example.com
+SMTP_HOST=mail
+SMTP_PORT=2500
+SMTP_USER=fake_mail_user
+SMTP_PASS=fake_mail_password
+SMTP_SENDER_NAME=fake_sender
+
+## Phone auth
+ENABLE_PHONE_SIGNUP=true
+ENABLE_PHONE_AUTOCONFIRM=true
+
+
+############
+# Studio - Configuration for the Dashboard
+############
+
+STUDIO_ORGANIZATION_NAME=Default Organization
+STUDIO_PROJECT_NAME=Default Project
+
+STUDIO_PORT=3000
+PUBLIC_REST_URL=http://localhost:8000/rest/v1/ # replace if you intend to use Studio outside of localhost
+
+```
+2. run `docker-compose up`
+3. goto http://localhost:3000 & select default project
+4. it keeps loading.....
+
+## Expected behavior
+
+it should load the project. Please allow shorter jwt_secret so we can use secrets generated by supabase cloud locally. 
+ 
+
+## System information
+
+- windows 11
+- latest chrome
+- master branch latest
+- not relevant as I am using docker
+ 
+",postgres-password,https://github.com/supabase/supabase
+5,9666,"# Bug report
+
+
+## Describe the bug
+when using following JWT_SECRET in /docker/.env file -> it keeps connecting as per screenshot
+![image](https://user-images.githubusercontent.com/10296400/196603215-bf08be2d-2fc5-4b4b-aa1a-15545ba30837.png)
+`JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398`
+
+issue is related with size of jwt_secret. it works good on using default jwt_secret provided in /docker/.env.example. Also note that value for jwt_secret I am using is 36 chars so it is > 32. so basically it won't allow any similar key with any other chars which is of this length.
+
+
+## To Reproduce
+
+
+1. change /docker/.env file to following: (I have only changed JWT_SECRET)
+```
+############
+# Secrets 
+# YOU MUST CHANGE THESE BEFORE GOING INTO PRODUCTION
+############
+
+POSTGRES_PASSWORD=your-super-secret-and-long-postgres-password
+JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398
+ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+
+
+############
+# Database - You can change these to any PostgreSQL database that has logical replication enabled.
+############
+
+POSTGRES_HOST=db
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PORT=5432
+
+
+############
+# API Proxy - Configuration for the Kong Reverse proxy.
+############
+
+KONG_HTTP_PORT=8000
+KONG_HTTPS_PORT=8443
+
+
+############
+# API - Configuration for PostgREST.
+############
+
+PGRST_DB_SCHEMAS=public,storage,graphql_public
+
+
+############
+# Auth - Configuration for the GoTrue authentication server.
+############
+
+## General
+SITE_URL=http://localhost:3000
+ADDITIONAL_REDIRECT_URLS=
+JWT_EXPIRY=3600
+DISABLE_SIGNUP=false
+API_EXTERNAL_URL=http://localhost:8000
+
+## Mailer Config
+MAILER_URLPATHS_CONFIRMATION=""/auth/v1/verify""
+MAILER_URLPATHS_INVITE=""/auth/v1/verify""
+MAILER_URLPATHS_RECOVERY=""/auth/v1/verify""
+MAILER_URLPATHS_EMAIL_CHANGE=""/auth/v1/verify""
+
+## Email auth
+ENABLE_EMAIL_SIGNUP=true
+ENABLE_EMAIL_AUTOCONFIRM=false
+SMTP_ADMIN_EMAIL=admin@example.com
+SMTP_HOST=mail
+SMTP_PORT=2500
+SMTP_USER=fake_mail_user
+SMTP_PASS=fake_mail_password
+SMTP_SENDER_NAME=fake_sender
+
+## Phone auth
+ENABLE_PHONE_SIGNUP=true
+ENABLE_PHONE_AUTOCONFIRM=true
+
+
+############
+# Studio - Configuration for the Dashboard
+############
+
+STUDIO_ORGANIZATION_NAME=Default Organization
+STUDIO_PROJECT_NAME=Default Project
+
+STUDIO_PORT=3000
+PUBLIC_REST_URL=http://localhost:8000/rest/v1/ # replace if you intend to use Studio outside of localhost
+
+```
+2. run `docker-compose up`
+3. goto http://localhost:3000 & select default project
+4. it keeps loading.....
+
+## Expected behavior
+
+it should load the project. Please allow shorter jwt_secret so we can use secrets generated by supabase cloud locally. 
+ 
+
+## System information
+
+- windows 11
+- latest chrome
+- master branch latest
+- not relevant as I am using docker
+ 
+",xxxx-f6xxx27aa398,https://github.com/supabase/supabase
+6,9666,"# Bug report
+
+
+## Describe the bug
+when using following JWT_SECRET in /docker/.env file -> it keeps connecting as per screenshot
+![image](https://user-images.githubusercontent.com/10296400/196603215-bf08be2d-2fc5-4b4b-aa1a-15545ba30837.png)
+`JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398`
+
+issue is related with size of jwt_secret. it works good on using default jwt_secret provided in /docker/.env.example. Also note that value for jwt_secret I am using is 36 chars so it is > 32. so basically it won't allow any similar key with any other chars which is of this length.
+
+
+## To Reproduce
+
+
+1. change /docker/.env file to following: (I have only changed JWT_SECRET)
+```
+############
+# Secrets 
+# YOU MUST CHANGE THESE BEFORE GOING INTO PRODUCTION
+############
+
+POSTGRES_PASSWORD=your-super-secret-and-long-postgres-password
+JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398
+ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+
+
+############
+# Database - You can change these to any PostgreSQL database that has logical replication enabled.
+############
+
+POSTGRES_HOST=db
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PORT=5432
+
+
+############
+# API Proxy - Configuration for the Kong Reverse proxy.
+############
+
+KONG_HTTP_PORT=8000
+KONG_HTTPS_PORT=8443
+
+
+############
+# API - Configuration for PostgREST.
+############
+
+PGRST_DB_SCHEMAS=public,storage,graphql_public
+
+
+############
+# Auth - Configuration for the GoTrue authentication server.
+############
+
+## General
+SITE_URL=http://localhost:3000
+ADDITIONAL_REDIRECT_URLS=
+JWT_EXPIRY=3600
+DISABLE_SIGNUP=false
+API_EXTERNAL_URL=http://localhost:8000
+
+## Mailer Config
+MAILER_URLPATHS_CONFIRMATION=""/auth/v1/verify""
+MAILER_URLPATHS_INVITE=""/auth/v1/verify""
+MAILER_URLPATHS_RECOVERY=""/auth/v1/verify""
+MAILER_URLPATHS_EMAIL_CHANGE=""/auth/v1/verify""
+
+## Email auth
+ENABLE_EMAIL_SIGNUP=true
+ENABLE_EMAIL_AUTOCONFIRM=false
+SMTP_ADMIN_EMAIL=admin@example.com
+SMTP_HOST=mail
+SMTP_PORT=2500
+SMTP_USER=fake_mail_user
+SMTP_PASS=fake_mail_password
+SMTP_SENDER_NAME=fake_sender
+
+## Phone auth
+ENABLE_PHONE_SIGNUP=true
+ENABLE_PHONE_AUTOCONFIRM=true
+
+
+############
+# Studio - Configuration for the Dashboard
+############
+
+STUDIO_ORGANIZATION_NAME=Default Organization
+STUDIO_PROJECT_NAME=Default Project
+
+STUDIO_PORT=3000
+PUBLIC_REST_URL=http://localhost:8000/rest/v1/ # replace if you intend to use Studio outside of localhost
+
+```
+2. run `docker-compose up`
+3. goto http://localhost:3000 & select default project
+4. it keeps loading.....
+
+## Expected behavior
+
+it should load the project. Please allow shorter jwt_secret so we can use secrets generated by supabase cloud locally. 
+ 
+
+## System information
+
+- windows 11
+- latest chrome
+- master branch latest
+- not relevant as I am using docker
+ 
+",SMTP_SENDER_NAME=fake_sender,https://github.com/supabase/supabase
+7,9666,"# Bug report
+
+
+## Describe the bug
+when using following JWT_SECRET in /docker/.env file -> it keeps connecting as per screenshot
+![image](https://user-images.githubusercontent.com/10296400/196603215-bf08be2d-2fc5-4b4b-aa1a-15545ba30837.png)
+`JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398`
+
+issue is related with size of jwt_secret. it works good on using default jwt_secret provided in /docker/.env.example. Also note that value for jwt_secret I am using is 36 chars so it is > 32. so basically it won't allow any similar key with any other chars which is of this length.
+
+
+## To Reproduce
+
+
+1. change /docker/.env file to following: (I have only changed JWT_SECRET)
+```
+############
+# Secrets 
+# YOU MUST CHANGE THESE BEFORE GOING INTO PRODUCTION
+############
+
+POSTGRES_PASSWORD=your-super-secret-and-long-postgres-password
+JWT_SECRET=7dxxx5f1-xxxx-xxxx-xxxx-f6xxx27aa398
+ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+
+
+############
+# Database - You can change these to any PostgreSQL database that has logical replication enabled.
+############
+
+POSTGRES_HOST=db
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres
+POSTGRES_PORT=5432
+
+
+############
+# API Proxy - Configuration for the Kong Reverse proxy.
+############
+
+KONG_HTTP_PORT=8000
+KONG_HTTPS_PORT=8443
+
+
+############
+# API - Configuration for PostgREST.
+############
+
+PGRST_DB_SCHEMAS=public,storage,graphql_public
+
+
+############
+# Auth - Configuration for the GoTrue authentication server.
+############
+
+## General
+SITE_URL=http://localhost:3000
+ADDITIONAL_REDIRECT_URLS=
+JWT_EXPIRY=3600
+DISABLE_SIGNUP=false
+API_EXTERNAL_URL=http://localhost:8000
+
+## Mailer Config
+MAILER_URLPATHS_CONFIRMATION=""/auth/v1/verify""
+MAILER_URLPATHS_INVITE=""/auth/v1/verify""
+MAILER_URLPATHS_RECOVERY=""/auth/v1/verify""
+MAILER_URLPATHS_EMAIL_CHANGE=""/auth/v1/verify""
+
+## Email auth
+ENABLE_EMAIL_SIGNUP=true
+ENABLE_EMAIL_AUTOCONFIRM=false
+SMTP_ADMIN_EMAIL=admin@example.com
+SMTP_HOST=mail
+SMTP_PORT=2500
+SMTP_USER=fake_mail_user
+SMTP_PASS=fake_mail_password
+SMTP_SENDER_NAME=fake_sender
+
+## Phone auth
+ENABLE_PHONE_SIGNUP=true
+ENABLE_PHONE_AUTOCONFIRM=true
+
+
+############
+# Studio - Configuration for the Dashboard
+############
+
+STUDIO_ORGANIZATION_NAME=Default Organization
+STUDIO_PROJECT_NAME=Default Project
+
+STUDIO_PORT=3000
+PUBLIC_REST_URL=http://localhost:8000/rest/v1/ # replace if you intend to use Studio outside of localhost
+
+```
+2. run `docker-compose up`
+3. goto http://localhost:3000 & select default project
+4. it keeps loading.....
+
+## Expected behavior
+
+it should load the project. Please allow shorter jwt_secret so we can use secrets generated by supabase cloud locally. 
+ 
+
+## System information
+
+- windows 11
+- latest chrome
+- master branch latest
+- not relevant as I am using docker
+ 
+",password,https://github.com/supabase/supabase
+8,4040,"The user signup with his email, A confirmation email was sent in his inbox
+```js
+const {
+    session: _session,
+    error
+} = await supabase.auth.signUp({
+    email,
+    password
+}, {
+    redirectTo: 'http://localhost:3000/login?message=Congratulations! Your email now is confirmed.'
+});
+if (error) {
+    alert(error.message);
+    return;
+}
+alert(`check your email!`);
+```
+
+When the user click on the verification link he get this:
+
+```
+http://localhost:3000/#error_code=404&error_description=Confirmation+Token+not+found
+```
+
+The link was like that:
+```
+https://glkylfhlgbxdibbqaqyg.supabase.co/auth/v1/verify?token=qFJNoSmSncg5cdZ0Bw6CXQ&type=signup&redirect_to=http://localhost:3000/
+```
+
+Another thing! The `{ redirectTo }` option is worked with the providers correctly, But with *email & password* it doesn't work!
+
+#### Note
+> The email verification link worked at the first try, But when i removed the user and trying again, the error above is happened",redirectTo,https://github.com/supabase/supabase
+9,2706,"### Discussed in https://github.com/supabase/supabase/discussions/2620
+
+<div type='discussions-op-text'>
+
+<sup>Originally posted by **IzMichael** July 29, 2021</sup>
+Hi! I'm trying to create my first database, but whatever password I use, it says it's not strong enough. I've tried using passwords like 'wzyijmX6ql$V7ghHCXWWtmi' and it's not strong enough apparently.</div>",wzyijmX6ql$V7ghHCXWWtmi,https://github.com/supabase/supabase
+10,2706,"### Discussed in https://github.com/supabase/supabase/discussions/2620
+
+<div type='discussions-op-text'>
+
+<sup>Originally posted by **IzMichael** July 29, 2021</sup>
+Hi! I'm trying to create my first database, but whatever password I use, it says it's not strong enough. I've tried using passwords like 'wzyijmX6ql$V7ghHCXWWtmi' and it's not strong enough apparently.</div>",V7ghHCXWWtmi,https://github.com/supabase/supabase
+11,341,"# Feature request
+
+## Is your feature request related to a problem? Please describe.
+
+Currently, the login method can be used to generate a magic link that is sent via email. I would like to generate a JWT access token so it can be used to login users via a magic link.
+
+Ideally, I would like to have an API key and Secret or similar, that's generated per Team, or Account for security. So external can use it to sign the JWT and generate their own access token.
+
+## Describe the solution you'd like
+
+On my app I would like to generate an API key and secret, or just an API key. Then using a JWT library, sign the token with data to authenticate users.
+
+```
+var jwt = require('jsonwebtoken');
+
+var PrivateKey = '35216f3b-9ce1-335a-955b-3a6d8f1a6504'; // from my web  app given to the user
+
+function createToken(user) {
+  var userData = {
+    email: user.email,
+    id: user.id,
+    name: user.name,
+  };
+  return jwt.sign(userData, PrivateKey, {algorithm: 'HS256'});
+}
+```
+
+With this I can hopefully do SSO so users can login via a magic link or silently authenticate them.
+
+## Describe alternatives you've considered
+
+A clear and concise description of any alternative solutions or features you've considered.
+
+## Additional context
+
+Add any other context or screenshots about the feature request here.
+",35216f3b-9ce1-335a-955b-3a6d8f1a6504,https://github.com/supabase/supabase
+12,341,"# Feature request
+
+## Is your feature request related to a problem? Please describe.
+
+Currently, the login method can be used to generate a magic link that is sent via email. I would like to generate a JWT access token so it can be used to login users via a magic link.
+
+Ideally, I would like to have an API key and Secret or similar, that's generated per Team, or Account for security. So external can use it to sign the JWT and generate their own access token.
+
+## Describe the solution you'd like
+
+On my app I would like to generate an API key and secret, or just an API key. Then using a JWT library, sign the token with data to authenticate users.
+
+```
+var jwt = require('jsonwebtoken');
+
+var PrivateKey = '35216f3b-9ce1-335a-955b-3a6d8f1a6504'; // from my web  app given to the user
+
+function createToken(user) {
+  var userData = {
+    email: user.email,
+    id: user.id,
+    name: user.name,
+  };
+  return jwt.sign(userData, PrivateKey, {algorithm: 'HS256'});
+}
+```
+
+With this I can hopefully do SSO so users can login via a magic link or silently authenticate them.
+
+## Describe alternatives you've considered
+
+A clear and concise description of any alternative solutions or features you've considered.
+
+## Additional context
+
+Add any other context or screenshots about the feature request here.
+",335a-955b-3a6d8f1a6504,https://github.com/supabase/supabase
