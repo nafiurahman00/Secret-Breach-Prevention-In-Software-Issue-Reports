@@ -1,0 +1,83 @@
+,Issue ID,Issue Body,Candidate String,Repolink
+0,1906,"Adds the following commands to `domains` (`now domains -h`):
+```
+move-out     [name] [destination]   Generate a token to move a domain out of your account.
+move-in      [name] [token]         Move a domain into your account from another ZEIT account.
+```
+
+**Example Usage:**
+```
+$ now domains move-out example.com zeit
+> Token abcdegjkdj%2tueywoslkjhhgsb%3D
+
+$ now domains move-in example.com abcdegjkdj%2tueywoslkjhhgsb%3D --team team_abcdeitoyoullkjghs
+> Success Domain example.com was moved to zeit
+```
+
+_Note: if `name` and/or `destination|token` are not passed, the user will be prompted accordingly._
+",2tueywoslkjhhgsb%3D,https://github.com/vercel/vercel
+1,178,"As far as I can tell, trying to add a now secret with a name length > 28 characters will fail.
+
+```
+now secrets add abcdefghijklmnopqrstuvwxyz01 value
+> Success! Secret abcdefghijklmnopqrstuvwxyz01 (sec_eJi9BAO0uYGumSCgIHh7Gxuv) added [899ms]
+now secrets add abcdefghijklmnopqrstuvwxyz012 value
+> Error! Unexpected error. Please try later. (An unexpected internal error occurred)
+```",sec_eJi9BAO0uYGumSCgIHh7Gxuv,https://github.com/vercel/vercel
+2,178,"As far as I can tell, trying to add a now secret with a name length > 28 characters will fail.
+
+```
+now secrets add abcdefghijklmnopqrstuvwxyz01 value
+> Success! Secret abcdefghijklmnopqrstuvwxyz01 (sec_eJi9BAO0uYGumSCgIHh7Gxuv) added [899ms]
+now secrets add abcdefghijklmnopqrstuvwxyz012 value
+> Error! Unexpected error. Please try later. (An unexpected internal error occurred)
+```",abcdefghijklmnopqrstuvwxyz01,https://github.com/vercel/vercel
+3,178,"As far as I can tell, trying to add a now secret with a name length > 28 characters will fail.
+
+```
+now secrets add abcdefghijklmnopqrstuvwxyz01 value
+> Success! Secret abcdefghijklmnopqrstuvwxyz01 (sec_eJi9BAO0uYGumSCgIHh7Gxuv) added [899ms]
+now secrets add abcdefghijklmnopqrstuvwxyz012 value
+> Error! Unexpected error. Please try later. (An unexpected internal error occurred)
+```",abcdefghijklmnopqrstuvwxyz012,https://github.com/vercel/vercel
+4,122,"Hi,
+
+First of all, thank you for delivering a great project. Yesterday I've decided to build a blog on top of Firebase, just for fun. Because server rendering is important for a blogging system, I've decided to go for `now`.
+
+I've followed the instructions, and I've created this `pages/index.js`
+```
+import React from 'react';
+import Firebase from 'firebase';
+
+const firebaseConfig = {
+  apiKey: ""AIzaSyD2_7iHrpdlCp8CDWlCKUxPcdeqeSlrkJU"",
+  authDomain: ""blog-b3c36.firebaseapp.com"",
+  databaseURL: ""https://blog-b3c36.firebaseio.com"",
+  storageBucket: ""blog-b3c36.appspot.com"",
+  messagingSenderId: ""117409352414""
+};
+
+const blogApp = Firebase.initializeApp(firebaseConfig);
+blogApp.database().ref('blog/articles').set('test');
+
+export default () => <div>Hello world, this is gonna be an awesome Firebase blog!</div>
+```
+(The apiKey is valid and permissions are set for everybody to write/read so you that anyone can debug this)
+
+Everything worked fine till the point where I had a typo in my app, then it warned about the error and after fixing it I've received: 
+
+```
+Error: Firebase App named '[DEFAULT]' already exists.
+    at R (/Users/janvorcak/WebstormProjects/firebase-blog/node_modules/firebase/app-node.js:22:335)
+    at Object.initializeApp (/Users/janvorcak/WebstormProjects/firebase-blog/node_modules/firebase/app-node.js:21:29)
+    at Object.<anonymous> (/Users/janvorcak/WebstormProjects/firebase-blog/.next/dist/pages/index.js:25:34)
+    at Module._compile (module.js:573:32)
+    at Object.Module._extensions..js (module.js:582:10)
+    at Module.load (module.js:490:32)
+    at tryModuleLoad (module.js:449:12)
+    at Function.Module._load (module.js:441:3)
+    at Module.require (module.js:500:17)
+    at require (internal/module.js:20:19)
+```
+
+I've tried to put it to a separate file, nothing helped. The question is, is there any way I can avoid certain parts of my code from being refreshed? Or do you have any tips how could Firebase integration be done in `now`?",AIzaSyD2_7iHrpdlCp8CDWlCKUxPcdeqeSlrkJU,https://github.com/vercel/vercel

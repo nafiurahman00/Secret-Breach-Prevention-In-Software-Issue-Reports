@@ -1,0 +1,1137 @@
+,Issue ID,Issue Body,Candidate String,Repolink
+0,26405,"### Before reporting an issue
+
+- [X] I have read and understood the above terms for submitting issues, and I understand that my issue may be closed without action if I do not follow them.
+
+### Area
+
+core
+
+### Describe the bug
+
+Previously I upgraded key cloak from 11.0 to 23.0, and found a redirect error like #8959 
+
+After my investigation, I found it seems not so simple.
+
+
+
+### Version
+
+main
+
+### How to Reproduce?
+
+this bug can be easily reproduced with nightly image, steps are following:
+1. setup keycloak server 
+2. open network tool in browser, enable persist log to see all requests, filter for HTML only
+3. navigate to admin console like `http://localhost:8080/admin/master/console/`
+4. login normally
+
+
+### Expected behavior
+
+keycloak would return a 302 response , redirecting user to a redirect uri that is identical to the uri user provided previously
+
+### Actual behavior
+
+the two redirect uri does not match
+
+the login process would be : 
+1. admin console redirect user keycloak login page `http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=security-admin-console&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fadmin%2Fmaster%2Fconsole%2F&state=361ed6b9-afea-44b9-9f16-86ac91f0f153&response_mode=fragment&response_type=code&scope=openid&nonce=a354386d-d08b-4957-92e8-ae8412ce8130&prompt=none&code_challenge=K41x3hNMzRzLiJt1DZcR6aolGopt7vJi1glMdx_LCbg&code_challenge_method=S256` the url decoded parameter redirect_uri is `http://localhost:8080/admin/master/console/` which is normal
+2. user login with authenticate api 
+3. keycloak return 302 response with headers
+```
+HTTP/1.1 302 Found
+Cache-Control: no-store, must-revalidate, max-age=0
+Location: http://localhost:8080/admin/master/console/#state=21f0e380-1941-40c2-8ba0-66dc710bf106&session_state=78b4fb0f-781f-4686-91e8-58ead1f797ff&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2Fmaster&code=b2d3f76c-a0fb-41e4-a39c-eb2ffac51630.78b4fb0f-781f-4686-91e8-58ead1f797ff.a9b337bb-03a1-4b3f-8ec9-fb56c093f909
+```
+
+please notice that the Location header contains an URI that connect URI path and parameter with `#` instead of `?`
+
+### Anything else?
+
+After upgrade, I found strange redirect like #8959  in many SPA apps, but none of the backend projects are involved
+
+I also tried to request for a auth with url like `http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=test&redirect_uri=http%3A%2F%2Flocalhost%3A9090%2F%23%2F&response_type=code` 
+
+notice the redirect_uri is `http://localhost:9090/#/` which contains a `#`
+
+So I'm lost now, I don't know how to trigger this bug preciously.",78b4fb0f-781f-4686-91e8-58ead1f797ff,https://github.com/keycloak/keycloak
+1,26405,"### Before reporting an issue
+
+- [X] I have read and understood the above terms for submitting issues, and I understand that my issue may be closed without action if I do not follow them.
+
+### Area
+
+core
+
+### Describe the bug
+
+Previously I upgraded key cloak from 11.0 to 23.0, and found a redirect error like #8959 
+
+After my investigation, I found it seems not so simple.
+
+
+
+### Version
+
+main
+
+### How to Reproduce?
+
+this bug can be easily reproduced with nightly image, steps are following:
+1. setup keycloak server 
+2. open network tool in browser, enable persist log to see all requests, filter for HTML only
+3. navigate to admin console like `http://localhost:8080/admin/master/console/`
+4. login normally
+
+
+### Expected behavior
+
+keycloak would return a 302 response , redirecting user to a redirect uri that is identical to the uri user provided previously
+
+### Actual behavior
+
+the two redirect uri does not match
+
+the login process would be : 
+1. admin console redirect user keycloak login page `http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=security-admin-console&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fadmin%2Fmaster%2Fconsole%2F&state=361ed6b9-afea-44b9-9f16-86ac91f0f153&response_mode=fragment&response_type=code&scope=openid&nonce=a354386d-d08b-4957-92e8-ae8412ce8130&prompt=none&code_challenge=K41x3hNMzRzLiJt1DZcR6aolGopt7vJi1glMdx_LCbg&code_challenge_method=S256` the url decoded parameter redirect_uri is `http://localhost:8080/admin/master/console/` which is normal
+2. user login with authenticate api 
+3. keycloak return 302 response with headers
+```
+HTTP/1.1 302 Found
+Cache-Control: no-store, must-revalidate, max-age=0
+Location: http://localhost:8080/admin/master/console/#state=21f0e380-1941-40c2-8ba0-66dc710bf106&session_state=78b4fb0f-781f-4686-91e8-58ead1f797ff&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2Fmaster&code=b2d3f76c-a0fb-41e4-a39c-eb2ffac51630.78b4fb0f-781f-4686-91e8-58ead1f797ff.a9b337bb-03a1-4b3f-8ec9-fb56c093f909
+```
+
+please notice that the Location header contains an URI that connect URI path and parameter with `#` instead of `?`
+
+### Anything else?
+
+After upgrade, I found strange redirect like #8959  in many SPA apps, but none of the backend projects are involved
+
+I also tried to request for a auth with url like `http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=test&redirect_uri=http%3A%2F%2Flocalhost%3A9090%2F%23%2F&response_type=code` 
+
+notice the redirect_uri is `http://localhost:9090/#/` which contains a `#`
+
+So I'm lost now, I don't know how to trigger this bug preciously.",b2d3f76c-a0fb-41e4-a39c--781f-4686-91e8--03a1-4b3f-8ec9-fb56c093f909,https://github.com/keycloak/keycloak
+2,26405,"### Before reporting an issue
+
+- [X] I have read and understood the above terms for submitting issues, and I understand that my issue may be closed without action if I do not follow them.
+
+### Area
+
+core
+
+### Describe the bug
+
+Previously I upgraded key cloak from 11.0 to 23.0, and found a redirect error like #8959 
+
+After my investigation, I found it seems not so simple.
+
+
+
+### Version
+
+main
+
+### How to Reproduce?
+
+this bug can be easily reproduced with nightly image, steps are following:
+1. setup keycloak server 
+2. open network tool in browser, enable persist log to see all requests, filter for HTML only
+3. navigate to admin console like `http://localhost:8080/admin/master/console/`
+4. login normally
+
+
+### Expected behavior
+
+keycloak would return a 302 response , redirecting user to a redirect uri that is identical to the uri user provided previously
+
+### Actual behavior
+
+the two redirect uri does not match
+
+the login process would be : 
+1. admin console redirect user keycloak login page `http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=security-admin-console&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fadmin%2Fmaster%2Fconsole%2F&state=361ed6b9-afea-44b9-9f16-86ac91f0f153&response_mode=fragment&response_type=code&scope=openid&nonce=a354386d-d08b-4957-92e8-ae8412ce8130&prompt=none&code_challenge=K41x3hNMzRzLiJt1DZcR6aolGopt7vJi1glMdx_LCbg&code_challenge_method=S256` the url decoded parameter redirect_uri is `http://localhost:8080/admin/master/console/` which is normal
+2. user login with authenticate api 
+3. keycloak return 302 response with headers
+```
+HTTP/1.1 302 Found
+Cache-Control: no-store, must-revalidate, max-age=0
+Location: http://localhost:8080/admin/master/console/#state=21f0e380-1941-40c2-8ba0-66dc710bf106&session_state=78b4fb0f-781f-4686-91e8-58ead1f797ff&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2Fmaster&code=b2d3f76c-a0fb-41e4-a39c-eb2ffac51630.78b4fb0f-781f-4686-91e8-58ead1f797ff.a9b337bb-03a1-4b3f-8ec9-fb56c093f909
+```
+
+please notice that the Location header contains an URI that connect URI path and parameter with `#` instead of `?`
+
+### Anything else?
+
+After upgrade, I found strange redirect like #8959  in many SPA apps, but none of the backend projects are involved
+
+I also tried to request for a auth with url like `http://localhost:8080/realms/master/protocol/openid-connect/auth?client_id=test&redirect_uri=http%3A%2F%2Flocalhost%3A9090%2F%23%2F&response_type=code` 
+
+notice the redirect_uri is `http://localhost:9090/#/` which contains a `#`
+
+So I'm lost now, I don't know how to trigger this bug preciously.",a39c--781f-4686-91e8--03a1-4b3f-8ec9-fb56c093f909,https://github.com/keycloak/keycloak
+3,26082,"## Description
+A weakness was found in Keycloak core where possible error messages could be logged or transmitted to a user when performing a bad action against the server (such as failing some parameter in the URL). With that in place a malicious user could benefit from that message and possibly jeopardize the environment based on the error sent.
+
+## Steps to reproduce
+
+1. Go to Login page
+
+2. Change the redirect_uri value in URL as below and hit enter key.
+```
+/auth/realms/master/protocol/openid-connect/auth?client_id=security-admin-
+console&redirect_uri=%00&state=32128ce4-0b7f-415f-888b-
+274e5a060a3b&response_mode=fragment&response_type=code&scope=openid&nonce=e8bb1900-5dba-4705-bbe3-
+dddf31215d0d&code_challenge=bHSeih9j5BbaY9WIrOlOaOKYJEd0XPV4hK2NAGRaZ0s&code_challenge_method=S2
+56
+```
+
+## Expected behavior
+Server error messages, such as ""File Protected Against Access"", often reveal more information than intended. For instance, an
+attacker who receives this message can be relatively certain that file exists, which might give him the information he needs to
+pursue other leads, or to perform an actual exploit. The following recommendations will help to ensure that a potential
+attacker is not deriving valuable information from any server error message that is presented.
+
+- Uniform Error Codes: Ensure that you are not inadvertently supplying information to an attacker via the use of inconsistent or ""conflicting"" error messages. For instance, don't reveal unintended information by utilizing error messages
+such as Access Denied, which will also let an attacker know that the file he seeks actually exists. Have consistent
+terminology for files and folders that do exist, do not exist, and which have read access denied.
+
+- Informational Error Messages: Ensure that error messages do not reveal too much information. Complete or partial paths, variable and file names, row and column names in tables, and specific database errors should never be revealed
+to the end user. Remember, an attacker will gather as much information as possible, and then add pieces of seemingly
+innocuous information together to craft a method of attack.
+
+- Proper Error Handling: Utilize generic error pages and error handling logic to inform end users of potential problems. Do not provide system information or other data that could be utilized by an attacker when orchestrating an attack.
+
+## References: 
+- https://issues.redhat.com/browse/RHSSO-2840
+
+
+
+",console&redirect_uri=%00&state=32128ce4-0b7f-415f-888b,https://github.com/keycloak/keycloak
+4,25078,"### Before reporting an issue
+
+- [X] I have read and understood the above terms for submitting issues, and I understand that my issue may be closed without action if I do not follow them.
+
+### Area
+
+authentication/webauthn
+
+### Describe the bug
+
+Errors in browser client during setup/auth with ""Security Key login"" (WebAuthn) are written into the form, send to Keycloak and written to log without escaping. Any content could be send with this request and therefore allows log injection.
+
+### Version
+
+22.0.5
+
+### Expected behavior
+
+Message from user input are escaped to prevent (log) injection attacks.
+
+### Actual behavior
+
+Request data is written to in log without escaping and allows log injection.
+
+### How to Reproduce?
+
+- Start login with a user, who is required to setup a second auth factor
+- Configure ""Security-Token""
+- Get form URL (`<FORM_URL>`) from page source code
+- Run command in terminal:
+
+```shell
+curl '<FORM_URL>' \
+  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'Cookie: AUTH_SESSION_ID=9249c14d-1baa-43ba-a110-bbcdff689e9e.19d58cc8a8cf-28439; AUTH_SESSION_ID_LEGACY=9249c14d-1baa-43ba-a110-bbcdff689e9e.19d58cc8a8cf-28439; KC_STATE_CHECKER=eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3NzQ1OTFkOC1hNGNlLTQ5MjUtODFlZS01NWQ5ZmM0YjhlZTgifQ.eyJta3kiOiJpbnZhbGlkQ29kZU1lc3NhZ2UiLCJtdHkiOiJFUlJPUiIsIm1wYXIiOltdLCJzdGF0Ijo0MDAsInN0MiI6ImY0NGE4NDU1LTU5MWYtNGNjYi1hZWZiLTIxYmQwMzE5OTRjYiJ9.AruNFsHMyHt1SF31TaRsN875qquIMSKhxp-dwfE4zts; KC_RESTART=eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3NzQ1OTFkOC1hNGNlLTQ5MjUtODFlZS01NWQ5ZmM0YjhlZTgifQ.eyJjaWQiOiJhY2NvdW50LWNvbnNvbGUiLCJwdHkiOiJvcGVuaWQtY29ubmVjdCIsInJ1cmkiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXV0aC9yZWFsbXMvYzEtczEtaTEvYWNjb3VudC8jLyIsImFjdCI6IkFVVEhFTlRJQ0FURSIsIm5vdGVzIjp7InNjb3BlIjoib3BlbmlkIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2F1dGgvcmVhbG1zL2MxLXMxLWkxIiwicmVzcG9uc2VfdHlwZSI6ImNvZGUiLCJjb2RlX2NoYWxsZW5nZV9tZXRob2QiOiJTMjU2IiwicmVkaXJlY3RfdXJpIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2F1dGgvcmVhbG1zL2MxLXMxLWkxL2FjY291bnQvIy8iLCJzdGF0ZSI6IjNjNDUzMWJkLTYxNTMtNDRiYS05MDc1LWE1NzcyY2Y4MTA5ZSIsIm5vbmNlIjoiZjQ4MDUzNDktZDIxMi00Mzc3LThmODMtYTBjOGZjZDQxY2UzIiwiY29kZV9jaGFsbGVuZ2UiOiJOa1RxTHFWUl9jWjJFVEd1VGZxOHJTYVpHdzdCd1BXdUdSVFVHa29oSjlzIiwicmVzcG9uc2VfbW9kZSI6ImZyYWdtZW50In19.U2_FfhLkAzJILgHfVYVL1-4dE4B7oEULDtRTl5XpgBw; __snackbar=IjZmMjA3NGFiZTg4MDUxZGQi.3USigr8kqbvE758yaKF5QkElgCUgieTfik%2FewsWYuhw; __session=ImE4ZTFmZTRhMTUzZmNlZjIi.MsiBCXKE1XZZHwcBe2lbTQ2RwnoTNplIR5sByOMB97Q' \
+  --data-raw 'clientDataJSON=&attestationObject=&publicKeyCredentialId=&authenticatorLabel=&transports=&error=invalid%5Fuser%5Fcredentials%2C%20credential%5Ftype%3Dwebauthn%2C%20auth%5Fmethod%3Dopenid%2Dconnect%2C%20web%5Fauthn%5Fregistration%5Ferror%5Fdetail%3D%27NotAllowedError%3A%20The%20operation%20either%20timed%20out%20or%20was%20not%20allowed%2E%20See%3A%20https%3A%2F%2Fwww%2Ew3%2Eorg%2FTR%2Fwebauthn%2D2%2F%23sctn%2Dprivacy%2Dconsiderations%2Dclient%2E%27%2C%20custom%5Frequired%5Faction%3Dwebauthn%2Dregister%2C%20response%5Ftype%3Dcode%2C%20web%5Fauthn%5Fregistration%5Ferror%3Dwebauthn%2Derror%2Dregister%2Dverification%2C%20redirect%5Furi%3Dhttp%3A%2F%2Flocalhost%3A8080%2Fauth%2Frealms%2Fc1%2Ds1%2Di1%2Faccount%2F%23%2F%2C%20remember%5Fme%3Dfalse%2C%20code%5Fid%3D9249c14d%2D1baa%2D43ba%2Da110%2Dbbcdff689e9e%2C%20response%5Fmode%3Dfragment%2C%20username%3Da%27%0A2023%2D11%2D03%2009%3A32%3A33%2C614%20WARN%20%20%5Borg%2Ekeycloak%2Eevents%5D%20%28executor%2Dthread%2D14%29%20type%3DCUSTOM%5FREQUIRED%5FACTION%5FERROR%2C%20realmId%3Dinst%2D001%2D001%2D001%2C%20clientId%3Daccount%2Dconsole%2C%20userId%3Dd5410969%2D4a04%2D4f35%2D87d3%2D76b9343119b2%2C%20ipAddress%3D172%2E18%2E0%2E1%2C%20error%3Dthe%20admin%20did%20something%20very%20evil%21%21%21%2C%20remember%5Fme%3Dfalse%2C%20code%5Fid%3D9249c14d%2D1baa%2D43ba%2Da110%2Dbbcdff689e9e%2C%20response%5Fmode%3Dfragment%2C%20username%3Dadmin'
+```
+
+The decoded error part contains manipulated log entries:
+
+```
+invalid_user_credentials, credential_type=webauthn, auth_method=openid-connect, web_authn_registration_error_detail='NotAllowedError: The operation either timed out or was not allowed. See: https://www.w3.org/TR/webauthn-2/#sctn-privacy-considerations-client.', custom_required_action=webauthn-register, response_type=code, web_authn_registration_error=webauthn-error-register-verification, redirect_uri=http://localhost:8080/auth/realms/c1-s1-i1/account/#/, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=a'
+2023-11-03 09:32:33,614 WARN  [org.keycloak.events] (executor-thread-14) type=CUSTOM_REQUIRED_ACTION_ERROR, realmId=inst-001-001-001, clientId=account-console, userId=d5410969-4a04-4f35-87d3-76b9343119b2, ipAddress=172.18.0.1, error=the admin did something very evil!!!, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=admin
+```
+
+- after sending that, the log contains the following entries:
+
+```
+keycloak-base-keycloak-1    | 2023-11-03 10:14:01,861 WARN  [org.keycloak.authentication.requiredactions.WebAuthnRegister] (executor-thread-52) WebAuthn API .create() response validation failure. invalid_user_credentials, credential_type=webauthn, auth_method=openid-connect, web_authn_registration_error_detail='NotAllowedError: The operation either timed out or was not allowed. See: https://www.w3.org/TR/webauthn-2/#sctn-privacy-considerations-client.', custom_required_action=webauthn-register, response_type=code, web_authn_registration_error=webauthn-error-register-verification, redirect_uri=http://localhost:8080/auth/realms/c1-s1-i1/account/#/, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=a'
+keycloak-base-keycloak-1    | 2023-11-03 09:32:33,614 WARN  [org.keycloak.events] (executor-thread-14) type=CUSTOM_REQUIRED_ACTION_ERROR, realmId=inst-001-001-001, clientId=account-console, userId=d5410969-4a04-4f35-87d3-76b9343119b2, ipAddress=172.18.0.1, error=the admin did something very evil!!!, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=admin
+keycloak-base-keycloak-1    | 2023-11-03 10:14:01,870 WARN  [org.keycloak.events] (executor-thread-52) type=CUSTOM_REQUIRED_ACTION_ERROR, realmId=inst-001-001-001, clientId=account-console, userId=d5410969-4a04-4f35-87d3-76b9343119b2, ipAddress=172.18.0.1, error=invalid_user_credentials, credential_type=webauthn, auth_method=openid-connect, web_authn_registration_error_detail='invalid_user_credentials, credential_type=webauthn, auth_method=openid-connect, web_authn_registration_error_detail='NotAllowedError: The operation either timed out or was not allowed. See: https://www.w3.org/TR/webauthn-2/#sctn-privacy-considerations-client.', custom_required_action=webauthn-register, response_type=code, web_authn_registration_error=webauthn-error-register-verification, redirect_uri=http://localhost:8080/auth/realms/c1-s1-i1/account/#/, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=a'
+keycloak-base-keycloak-1    | 2023-11-03 09:32:33,614 WARN  [org.keycloak.events] (executor-thread-14) type=CUSTOM_REQUIRED_ACTION_ERROR, realmId=inst-001-001-001, clientId=account-console, userId=d5410969-4a04-4f35-87d3-76b9343119b2, ipAddress=172.18.0.1, error=the admin did something very evil!!!, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=admin', custom_required_action=webauthn-register, response_type=code, web_authn_registration_error=webauthn-error-register-verification, redirect_uri=http://localhost:8080/auth/realms/c1-s1-i1/account/#/, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=a
+```
+
+This is only a poc, more sophisticated log manipulation is certainly possible.
+
+### Anything else?
+
+This has been reported as a vulnerability, but was considered a security hardening issue.",#NAME?,https://github.com/keycloak/keycloak
+5,25078,"### Before reporting an issue
+
+- [X] I have read and understood the above terms for submitting issues, and I understand that my issue may be closed without action if I do not follow them.
+
+### Area
+
+authentication/webauthn
+
+### Describe the bug
+
+Errors in browser client during setup/auth with ""Security Key login"" (WebAuthn) are written into the form, send to Keycloak and written to log without escaping. Any content could be send with this request and therefore allows log injection.
+
+### Version
+
+22.0.5
+
+### Expected behavior
+
+Message from user input are escaped to prevent (log) injection attacks.
+
+### Actual behavior
+
+Request data is written to in log without escaping and allows log injection.
+
+### How to Reproduce?
+
+- Start login with a user, who is required to setup a second auth factor
+- Configure ""Security-Token""
+- Get form URL (`<FORM_URL>`) from page source code
+- Run command in terminal:
+
+```shell
+curl '<FORM_URL>' \
+  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'Cookie: AUTH_SESSION_ID=9249c14d-1baa-43ba-a110-bbcdff689e9e.19d58cc8a8cf-28439; AUTH_SESSION_ID_LEGACY=9249c14d-1baa-43ba-a110-bbcdff689e9e.19d58cc8a8cf-28439; KC_STATE_CHECKER=eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3NzQ1OTFkOC1hNGNlLTQ5MjUtODFlZS01NWQ5ZmM0YjhlZTgifQ.eyJta3kiOiJpbnZhbGlkQ29kZU1lc3NhZ2UiLCJtdHkiOiJFUlJPUiIsIm1wYXIiOltdLCJzdGF0Ijo0MDAsInN0MiI6ImY0NGE4NDU1LTU5MWYtNGNjYi1hZWZiLTIxYmQwMzE5OTRjYiJ9.AruNFsHMyHt1SF31TaRsN875qquIMSKhxp-dwfE4zts; KC_RESTART=eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3NzQ1OTFkOC1hNGNlLTQ5MjUtODFlZS01NWQ5ZmM0YjhlZTgifQ.eyJjaWQiOiJhY2NvdW50LWNvbnNvbGUiLCJwdHkiOiJvcGVuaWQtY29ubmVjdCIsInJ1cmkiOiJodHRwOi8vbG9jYWxob3N0OjgwODAvYXV0aC9yZWFsbXMvYzEtczEtaTEvYWNjb3VudC8jLyIsImFjdCI6IkFVVEhFTlRJQ0FURSIsIm5vdGVzIjp7InNjb3BlIjoib3BlbmlkIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2F1dGgvcmVhbG1zL2MxLXMxLWkxIiwicmVzcG9uc2VfdHlwZSI6ImNvZGUiLCJjb2RlX2NoYWxsZW5nZV9tZXRob2QiOiJTMjU2IiwicmVkaXJlY3RfdXJpIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2F1dGgvcmVhbG1zL2MxLXMxLWkxL2FjY291bnQvIy8iLCJzdGF0ZSI6IjNjNDUzMWJkLTYxNTMtNDRiYS05MDc1LWE1NzcyY2Y4MTA5ZSIsIm5vbmNlIjoiZjQ4MDUzNDktZDIxMi00Mzc3LThmODMtYTBjOGZjZDQxY2UzIiwiY29kZV9jaGFsbGVuZ2UiOiJOa1RxTHFWUl9jWjJFVEd1VGZxOHJTYVpHdzdCd1BXdUdSVFVHa29oSjlzIiwicmVzcG9uc2VfbW9kZSI6ImZyYWdtZW50In19.U2_FfhLkAzJILgHfVYVL1-4dE4B7oEULDtRTl5XpgBw; __snackbar=IjZmMjA3NGFiZTg4MDUxZGQi.3USigr8kqbvE758yaKF5QkElgCUgieTfik%2FewsWYuhw; __session=ImE4ZTFmZTRhMTUzZmNlZjIi.MsiBCXKE1XZZHwcBe2lbTQ2RwnoTNplIR5sByOMB97Q' \
+  --data-raw 'clientDataJSON=&attestationObject=&publicKeyCredentialId=&authenticatorLabel=&transports=&error=invalid%5Fuser%5Fcredentials%2C%20credential%5Ftype%3Dwebauthn%2C%20auth%5Fmethod%3Dopenid%2Dconnect%2C%20web%5Fauthn%5Fregistration%5Ferror%5Fdetail%3D%27NotAllowedError%3A%20The%20operation%20either%20timed%20out%20or%20was%20not%20allowed%2E%20See%3A%20https%3A%2F%2Fwww%2Ew3%2Eorg%2FTR%2Fwebauthn%2D2%2F%23sctn%2Dprivacy%2Dconsiderations%2Dclient%2E%27%2C%20custom%5Frequired%5Faction%3Dwebauthn%2Dregister%2C%20response%5Ftype%3Dcode%2C%20web%5Fauthn%5Fregistration%5Ferror%3Dwebauthn%2Derror%2Dregister%2Dverification%2C%20redirect%5Furi%3Dhttp%3A%2F%2Flocalhost%3A8080%2Fauth%2Frealms%2Fc1%2Ds1%2Di1%2Faccount%2F%23%2F%2C%20remember%5Fme%3Dfalse%2C%20code%5Fid%3D9249c14d%2D1baa%2D43ba%2Da110%2Dbbcdff689e9e%2C%20response%5Fmode%3Dfragment%2C%20username%3Da%27%0A2023%2D11%2D03%2009%3A32%3A33%2C614%20WARN%20%20%5Borg%2Ekeycloak%2Eevents%5D%20%28executor%2Dthread%2D14%29%20type%3DCUSTOM%5FREQUIRED%5FACTION%5FERROR%2C%20realmId%3Dinst%2D001%2D001%2D001%2C%20clientId%3Daccount%2Dconsole%2C%20userId%3Dd5410969%2D4a04%2D4f35%2D87d3%2D76b9343119b2%2C%20ipAddress%3D172%2E18%2E0%2E1%2C%20error%3Dthe%20admin%20did%20something%20very%20evil%21%21%21%2C%20remember%5Fme%3Dfalse%2C%20code%5Fid%3D9249c14d%2D1baa%2D43ba%2Da110%2Dbbcdff689e9e%2C%20response%5Fmode%3Dfragment%2C%20username%3Dadmin'
+```
+
+The decoded error part contains manipulated log entries:
+
+```
+invalid_user_credentials, credential_type=webauthn, auth_method=openid-connect, web_authn_registration_error_detail='NotAllowedError: The operation either timed out or was not allowed. See: https://www.w3.org/TR/webauthn-2/#sctn-privacy-considerations-client.', custom_required_action=webauthn-register, response_type=code, web_authn_registration_error=webauthn-error-register-verification, redirect_uri=http://localhost:8080/auth/realms/c1-s1-i1/account/#/, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=a'
+2023-11-03 09:32:33,614 WARN  [org.keycloak.events] (executor-thread-14) type=CUSTOM_REQUIRED_ACTION_ERROR, realmId=inst-001-001-001, clientId=account-console, userId=d5410969-4a04-4f35-87d3-76b9343119b2, ipAddress=172.18.0.1, error=the admin did something very evil!!!, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=admin
+```
+
+- after sending that, the log contains the following entries:
+
+```
+keycloak-base-keycloak-1    | 2023-11-03 10:14:01,861 WARN  [org.keycloak.authentication.requiredactions.WebAuthnRegister] (executor-thread-52) WebAuthn API .create() response validation failure. invalid_user_credentials, credential_type=webauthn, auth_method=openid-connect, web_authn_registration_error_detail='NotAllowedError: The operation either timed out or was not allowed. See: https://www.w3.org/TR/webauthn-2/#sctn-privacy-considerations-client.', custom_required_action=webauthn-register, response_type=code, web_authn_registration_error=webauthn-error-register-verification, redirect_uri=http://localhost:8080/auth/realms/c1-s1-i1/account/#/, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=a'
+keycloak-base-keycloak-1    | 2023-11-03 09:32:33,614 WARN  [org.keycloak.events] (executor-thread-14) type=CUSTOM_REQUIRED_ACTION_ERROR, realmId=inst-001-001-001, clientId=account-console, userId=d5410969-4a04-4f35-87d3-76b9343119b2, ipAddress=172.18.0.1, error=the admin did something very evil!!!, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=admin
+keycloak-base-keycloak-1    | 2023-11-03 10:14:01,870 WARN  [org.keycloak.events] (executor-thread-52) type=CUSTOM_REQUIRED_ACTION_ERROR, realmId=inst-001-001-001, clientId=account-console, userId=d5410969-4a04-4f35-87d3-76b9343119b2, ipAddress=172.18.0.1, error=invalid_user_credentials, credential_type=webauthn, auth_method=openid-connect, web_authn_registration_error_detail='invalid_user_credentials, credential_type=webauthn, auth_method=openid-connect, web_authn_registration_error_detail='NotAllowedError: The operation either timed out or was not allowed. See: https://www.w3.org/TR/webauthn-2/#sctn-privacy-considerations-client.', custom_required_action=webauthn-register, response_type=code, web_authn_registration_error=webauthn-error-register-verification, redirect_uri=http://localhost:8080/auth/realms/c1-s1-i1/account/#/, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=a'
+keycloak-base-keycloak-1    | 2023-11-03 09:32:33,614 WARN  [org.keycloak.events] (executor-thread-14) type=CUSTOM_REQUIRED_ACTION_ERROR, realmId=inst-001-001-001, clientId=account-console, userId=d5410969-4a04-4f35-87d3-76b9343119b2, ipAddress=172.18.0.1, error=the admin did something very evil!!!, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=admin', custom_required_action=webauthn-register, response_type=code, web_authn_registration_error=webauthn-error-register-verification, redirect_uri=http://localhost:8080/auth/realms/c1-s1-i1/account/#/, remember_me=false, code_id=9249c14d-1baa-43ba-a110-bbcdff689e9e, response_mode=fragment, username=a
+```
+
+This is only a poc, more sophisticated log manipulation is certainly possible.
+
+### Anything else?
+
+This has been reported as a vulnerability, but was considered a security hardening issue.",auth_method=openid-connect,https://github.com/keycloak/keycloak
+6,12438,"### Describe the bug
+
+I have followed directions according to the guide (https://www.keycloak.org/docs/latest/securing_apps/#direct-naked-impersonation), but still cannot get it to work. After researching, seems like others can't get it to work neither (https://keycloak.discourse.group/t/direct-naked-impersonation/6887/3) and unfortunately I wasn't able to find a possible solution. 
+
+Details about my Keycloak installation:
+
+Version: 18
+Installed using containers (AWS ECS) and using this guide: https://www.keycloak.org/server/containers
+SSL enabled
+token-exchange and admin-fine-grained-authz features enabled
+
+Example request:
+```
+curl --location --request POST 'https://example_domain.com/realms/my-realm/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=urn:ietf:params:oauth:grant-type:token-exchange' \
+--data-urlencode 'client_id=my-client' \
+--data-urlencode 'client_secret=iXwJB01N5u0WcTEMMcGA1KvUWm5VA9HN' \
+--data-urlencode 'requested_subject=test_user'
+```
+
+Example response:
+```
+403
+{
+    ""error"": ""access_denied"",
+    ""error_description"": ""Client not allowed to exchange""
+}
+```
+
+Has anybody experienced the same or know if there's anything else to configure or may it be a bug?
+
+### Version
+
+18
+
+### Expected behavior
+
+_No response_
+
+### Actual behavior
+
+_No response_
+
+### How to Reproduce?
+
+_No response_
+
+### Anything else?
+
+_No response_",fine-grained-authz,https://github.com/keycloak/keycloak
+7,12438,"### Describe the bug
+
+I have followed directions according to the guide (https://www.keycloak.org/docs/latest/securing_apps/#direct-naked-impersonation), but still cannot get it to work. After researching, seems like others can't get it to work neither (https://keycloak.discourse.group/t/direct-naked-impersonation/6887/3) and unfortunately I wasn't able to find a possible solution. 
+
+Details about my Keycloak installation:
+
+Version: 18
+Installed using containers (AWS ECS) and using this guide: https://www.keycloak.org/server/containers
+SSL enabled
+token-exchange and admin-fine-grained-authz features enabled
+
+Example request:
+```
+curl --location --request POST 'https://example_domain.com/realms/my-realm/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=urn:ietf:params:oauth:grant-type:token-exchange' \
+--data-urlencode 'client_id=my-client' \
+--data-urlencode 'client_secret=iXwJB01N5u0WcTEMMcGA1KvUWm5VA9HN' \
+--data-urlencode 'requested_subject=test_user'
+```
+
+Example response:
+```
+403
+{
+    ""error"": ""access_denied"",
+    ""error_description"": ""Client not allowed to exchange""
+}
+```
+
+Has anybody experienced the same or know if there's anything else to configure or may it be a bug?
+
+### Version
+
+18
+
+### Expected behavior
+
+_No response_
+
+### Actual behavior
+
+_No response_
+
+### How to Reproduce?
+
+_No response_
+
+### Anything else?
+
+_No response_",iXwJB01N5u0WcTEMMcGA1KvUWm5VA9HN,https://github.com/keycloak/keycloak
+8,12438,"### Describe the bug
+
+I have followed directions according to the guide (https://www.keycloak.org/docs/latest/securing_apps/#direct-naked-impersonation), but still cannot get it to work. After researching, seems like others can't get it to work neither (https://keycloak.discourse.group/t/direct-naked-impersonation/6887/3) and unfortunately I wasn't able to find a possible solution. 
+
+Details about my Keycloak installation:
+
+Version: 18
+Installed using containers (AWS ECS) and using this guide: https://www.keycloak.org/server/containers
+SSL enabled
+token-exchange and admin-fine-grained-authz features enabled
+
+Example request:
+```
+curl --location --request POST 'https://example_domain.com/realms/my-realm/protocol/openid-connect/token' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=urn:ietf:params:oauth:grant-type:token-exchange' \
+--data-urlencode 'client_id=my-client' \
+--data-urlencode 'client_secret=iXwJB01N5u0WcTEMMcGA1KvUWm5VA9HN' \
+--data-urlencode 'requested_subject=test_user'
+```
+
+Example response:
+```
+403
+{
+    ""error"": ""access_denied"",
+    ""error_description"": ""Client not allowed to exchange""
+}
+```
+
+Has anybody experienced the same or know if there's anything else to configure or may it be a bug?
+
+### Version
+
+18
+
+### Expected behavior
+
+_No response_
+
+### Actual behavior
+
+_No response_
+
+### How to Reproduce?
+
+_No response_
+
+### Anything else?
+
+_No response_",client_id=my-client,https://github.com/keycloak/keycloak
+9,12162,"### Describe the bug
+
+OIDC client authentication uses different error messages in the case when client does not exists and/or in the case when client is disabled and/or in the case when client is enabled, but bad client credentials are used. This allows ""client enumeration"" and also error messages returned are not 100% aligned with the OAuth2/OIDC specifications, so will be good to fix this IMO .
+
+### Current behaviour
+
+I am sending this request:
+```
+curl -d ""client_id=account1"" -d client_secret=wDVOYAWe8R0LxkVGe1MOI5PcuVyWlZ14 -d ""username=admin"" -d ""password=admin"" -d ""grant_type=password"" ""http://localhost:8081/auth/realms/master/protocol/openid-connect/token""
+```
+
+1. In case the client `account1` does not exists, the response is:
+```
+{""error"":""invalid_client"",""error_description"":""Invalid client credentials""}
+```
+
+2. In case the client `account1` exists, but the client secret is incorrect, the response is:
+```
+{""error"":""unauthorized_client"",""error_description"":""Invalid client secret""}
+```
+
+3. In case the client `account1` exists, but is disabled, the response is:
+```
+{""error"":""unauthorized_client"",""error_description"":""Invalid client credentials""}
+```
+
+### OAuth2 specification
+
+I've checked the OAuth2 specification https://datatracker.ietf.org/doc/html/rfc6749#section-5.2 . According to the specification, the error ""unauthorized_client"" should be returned just when client is not authorized for the specified grant type. It should be never returned when client authentication failed (which is what we are doing right now).
+
+### Fix suggestion
+
+I suggest to change the logic like this:
+
+- client_id parameter missing: Return error ""invalid_request"" . This is ok per OAuth2 specification. Same applies when request is otherwise malformed (EG. Contains multiple client authentication methods)
+
+For all the other cases below, we can return the generic error to hide the reason:
+```
+{""error"":""invalid_client"",""error_description"":""Invalid client or Invalid client credentials""} 
+ ```
+
+However we should differentiate the cases below in the error event, which is thrown to event SPI. The cases are:
+
+- Case when ""client_id"" points to non-existing client
+- Case when ""client_secret"" is missing as parameter and ""Authorization"" header is missing as well
+- Case when client exists, but is disabled
+- Case when client secret is invalid
+- Case when client uses different client authentication than the default ""Client secret"", but invalid client credentials are provided
+
+When refactoring this, we should check that the ""framework"", which triggers client authentication, checks that client is enabled or not. Right now, I see that there is check in the client authenticator itself - https://github.com/keycloak/keycloak/blob/18.0.0/services/src/main/java/org/keycloak/authentication/authenticators/client/ClientIdAndSecretAuthenticator.java#L113-L115 , which is likely not very great as in the case when there is alternative client authentication method and the ""Client Authenticator implementation"" forget to check the client enablement status, it might be possible to authenticate with disabled client, which is incorrect.
+
+### Version
+
+18.0.0
+",grant_type=password,https://github.com/keycloak/keycloak
+10,12162,"### Describe the bug
+
+OIDC client authentication uses different error messages in the case when client does not exists and/or in the case when client is disabled and/or in the case when client is enabled, but bad client credentials are used. This allows ""client enumeration"" and also error messages returned are not 100% aligned with the OAuth2/OIDC specifications, so will be good to fix this IMO .
+
+### Current behaviour
+
+I am sending this request:
+```
+curl -d ""client_id=account1"" -d client_secret=wDVOYAWe8R0LxkVGe1MOI5PcuVyWlZ14 -d ""username=admin"" -d ""password=admin"" -d ""grant_type=password"" ""http://localhost:8081/auth/realms/master/protocol/openid-connect/token""
+```
+
+1. In case the client `account1` does not exists, the response is:
+```
+{""error"":""invalid_client"",""error_description"":""Invalid client credentials""}
+```
+
+2. In case the client `account1` exists, but the client secret is incorrect, the response is:
+```
+{""error"":""unauthorized_client"",""error_description"":""Invalid client secret""}
+```
+
+3. In case the client `account1` exists, but is disabled, the response is:
+```
+{""error"":""unauthorized_client"",""error_description"":""Invalid client credentials""}
+```
+
+### OAuth2 specification
+
+I've checked the OAuth2 specification https://datatracker.ietf.org/doc/html/rfc6749#section-5.2 . According to the specification, the error ""unauthorized_client"" should be returned just when client is not authorized for the specified grant type. It should be never returned when client authentication failed (which is what we are doing right now).
+
+### Fix suggestion
+
+I suggest to change the logic like this:
+
+- client_id parameter missing: Return error ""invalid_request"" . This is ok per OAuth2 specification. Same applies when request is otherwise malformed (EG. Contains multiple client authentication methods)
+
+For all the other cases below, we can return the generic error to hide the reason:
+```
+{""error"":""invalid_client"",""error_description"":""Invalid client or Invalid client credentials""} 
+ ```
+
+However we should differentiate the cases below in the error event, which is thrown to event SPI. The cases are:
+
+- Case when ""client_id"" points to non-existing client
+- Case when ""client_secret"" is missing as parameter and ""Authorization"" header is missing as well
+- Case when client exists, but is disabled
+- Case when client secret is invalid
+- Case when client uses different client authentication than the default ""Client secret"", but invalid client credentials are provided
+
+When refactoring this, we should check that the ""framework"", which triggers client authentication, checks that client is enabled or not. Right now, I see that there is check in the client authenticator itself - https://github.com/keycloak/keycloak/blob/18.0.0/services/src/main/java/org/keycloak/authentication/authenticators/client/ClientIdAndSecretAuthenticator.java#L113-L115 , which is likely not very great as in the case when there is alternative client authentication method and the ""Client Authenticator implementation"" forget to check the client enablement status, it might be possible to authenticate with disabled client, which is incorrect.
+
+### Version
+
+18.0.0
+","error:unauthorized_client,error_description:Invalid",https://github.com/keycloak/keycloak
+11,12162,"### Describe the bug
+
+OIDC client authentication uses different error messages in the case when client does not exists and/or in the case when client is disabled and/or in the case when client is enabled, but bad client credentials are used. This allows ""client enumeration"" and also error messages returned are not 100% aligned with the OAuth2/OIDC specifications, so will be good to fix this IMO .
+
+### Current behaviour
+
+I am sending this request:
+```
+curl -d ""client_id=account1"" -d client_secret=wDVOYAWe8R0LxkVGe1MOI5PcuVyWlZ14 -d ""username=admin"" -d ""password=admin"" -d ""grant_type=password"" ""http://localhost:8081/auth/realms/master/protocol/openid-connect/token""
+```
+
+1. In case the client `account1` does not exists, the response is:
+```
+{""error"":""invalid_client"",""error_description"":""Invalid client credentials""}
+```
+
+2. In case the client `account1` exists, but the client secret is incorrect, the response is:
+```
+{""error"":""unauthorized_client"",""error_description"":""Invalid client secret""}
+```
+
+3. In case the client `account1` exists, but is disabled, the response is:
+```
+{""error"":""unauthorized_client"",""error_description"":""Invalid client credentials""}
+```
+
+### OAuth2 specification
+
+I've checked the OAuth2 specification https://datatracker.ietf.org/doc/html/rfc6749#section-5.2 . According to the specification, the error ""unauthorized_client"" should be returned just when client is not authorized for the specified grant type. It should be never returned when client authentication failed (which is what we are doing right now).
+
+### Fix suggestion
+
+I suggest to change the logic like this:
+
+- client_id parameter missing: Return error ""invalid_request"" . This is ok per OAuth2 specification. Same applies when request is otherwise malformed (EG. Contains multiple client authentication methods)
+
+For all the other cases below, we can return the generic error to hide the reason:
+```
+{""error"":""invalid_client"",""error_description"":""Invalid client or Invalid client credentials""} 
+ ```
+
+However we should differentiate the cases below in the error event, which is thrown to event SPI. The cases are:
+
+- Case when ""client_id"" points to non-existing client
+- Case when ""client_secret"" is missing as parameter and ""Authorization"" header is missing as well
+- Case when client exists, but is disabled
+- Case when client secret is invalid
+- Case when client uses different client authentication than the default ""Client secret"", but invalid client credentials are provided
+
+When refactoring this, we should check that the ""framework"", which triggers client authentication, checks that client is enabled or not. Right now, I see that there is check in the client authenticator itself - https://github.com/keycloak/keycloak/blob/18.0.0/services/src/main/java/org/keycloak/authentication/authenticators/client/ClientIdAndSecretAuthenticator.java#L113-L115 , which is likely not very great as in the case when there is alternative client authentication method and the ""Client Authenticator implementation"" forget to check the client enablement status, it might be possible to authenticate with disabled client, which is incorrect.
+
+### Version
+
+18.0.0
+",wDVOYAWe8R0LxkVGe1MOI5PcuVyWlZ14,https://github.com/keycloak/keycloak
+12,12162,"### Describe the bug
+
+OIDC client authentication uses different error messages in the case when client does not exists and/or in the case when client is disabled and/or in the case when client is enabled, but bad client credentials are used. This allows ""client enumeration"" and also error messages returned are not 100% aligned with the OAuth2/OIDC specifications, so will be good to fix this IMO .
+
+### Current behaviour
+
+I am sending this request:
+```
+curl -d ""client_id=account1"" -d client_secret=wDVOYAWe8R0LxkVGe1MOI5PcuVyWlZ14 -d ""username=admin"" -d ""password=admin"" -d ""grant_type=password"" ""http://localhost:8081/auth/realms/master/protocol/openid-connect/token""
+```
+
+1. In case the client `account1` does not exists, the response is:
+```
+{""error"":""invalid_client"",""error_description"":""Invalid client credentials""}
+```
+
+2. In case the client `account1` exists, but the client secret is incorrect, the response is:
+```
+{""error"":""unauthorized_client"",""error_description"":""Invalid client secret""}
+```
+
+3. In case the client `account1` exists, but is disabled, the response is:
+```
+{""error"":""unauthorized_client"",""error_description"":""Invalid client credentials""}
+```
+
+### OAuth2 specification
+
+I've checked the OAuth2 specification https://datatracker.ietf.org/doc/html/rfc6749#section-5.2 . According to the specification, the error ""unauthorized_client"" should be returned just when client is not authorized for the specified grant type. It should be never returned when client authentication failed (which is what we are doing right now).
+
+### Fix suggestion
+
+I suggest to change the logic like this:
+
+- client_id parameter missing: Return error ""invalid_request"" . This is ok per OAuth2 specification. Same applies when request is otherwise malformed (EG. Contains multiple client authentication methods)
+
+For all the other cases below, we can return the generic error to hide the reason:
+```
+{""error"":""invalid_client"",""error_description"":""Invalid client or Invalid client credentials""} 
+ ```
+
+However we should differentiate the cases below in the error event, which is thrown to event SPI. The cases are:
+
+- Case when ""client_id"" points to non-existing client
+- Case when ""client_secret"" is missing as parameter and ""Authorization"" header is missing as well
+- Case when client exists, but is disabled
+- Case when client secret is invalid
+- Case when client uses different client authentication than the default ""Client secret"", but invalid client credentials are provided
+
+When refactoring this, we should check that the ""framework"", which triggers client authentication, checks that client is enabled or not. Right now, I see that there is check in the client authenticator itself - https://github.com/keycloak/keycloak/blob/18.0.0/services/src/main/java/org/keycloak/authentication/authenticators/client/ClientIdAndSecretAuthenticator.java#L113-L115 , which is likely not very great as in the case when there is alternative client authentication method and the ""Client Authenticator implementation"" forget to check the client enablement status, it might be possible to authenticate with disabled client, which is incorrect.
+
+### Version
+
+18.0.0
+",password,https://github.com/keycloak/keycloak
+13,11561,"### Describe the bug
+
+I am trying to migrate 2FA configurations (Google Authenticator) from legacy system to keycloak.
+We generate random secrets which includes non ascii characters, porting these to keycloak (in `credentials` table) does not work.
+
+For example, base32 encoded secret key for google authenticator is `CDLYAYRJ73ORTU4PUWWATWSYQCP4H2QL`.
+When I decode this key which results into this `◊Äb)˛›”è•¨	⁄XÄü√Í`
+
+Inserting this secret in `credentials` table does not work
+
+### Version
+
+18.0.0
+
+### Expected behavior
+
+_No response_
+
+### Actual behavior
+
+_No response_
+
+### How to Reproduce?
+
+_No response_
+
+### Anything else?
+
+_No response_",CDLYAYRJ73ORTU4PUWWATWSYQCP4H2QL,https://github.com/keycloak/keycloak
+14,11284,"### Describe the bug
+
+The policy endpoint returns error response when a user who was used in a policy got deleted from the realm (see reproduce steps for more details)
+
+This issue is critical as the user management is not under control of a resource server. It's realm administrator's task. Once it happens, the resource server is no longer able to manage policies anymore.  
+
+### Version
+
+17.0.1
+
+### Expected behavior
+
+At minimal, deleting users should not affect the policy endpoint. The list policy endpoint should still work. Ideally, when a user is deleted, all policies should be updated to reflect the changes.
+
+### Actual behavior
+
+When a user used in a policy was deleted from the realm, list all policy endpoint stop working. It returned unknown error response. 
+
+### How to Reproduce?
+
+1) create a test realm
+	login to Administration Console, Add realm ""Test""
+	
+2) add test client
+	select the ""Test"" realm, go to ""Clients"" -> ""Create"" and select the attached client json file ""bug-test"" (see Anything else), and ""Save"".
+	
+3) add a user ""testuser""
+	go to ""Users"", add a user ""testuser""
+	
+4) register a protected resource
+	get a client token (replace hostname:port in the curl requests)
+	$curl --location --request POST 'http://hostname:port/auth/realms/Test/protocol/openid-connect/token' \
+       --header 'Content-Type: application/x-www-form-urlencoded' \
+       --data-urlencode 'grant_type=client_credentials' \
+       --data-urlencode 'client_id=bug-test' \
+       --data-urlencode 'client_secret=KlCEOISCILLXARITyE09zfo9wnOxAlci'
+	   
+	register a protected resource ""test-protected-resource"" (replace the <access_token> in the request with the one got above)
+	curl --location --request POST 'http://hostname:port/auth/realms/Test/authz/protection/resource_set' \
+       --header 'Content-Type: application/json' \
+       --header 'Authorization: Bearer <access_token>' \
+       --data-raw '{
+           ""name"": ""test-protected-resource"",
+           ""ownerManagedAccess"": true,
+           ""scopes"": [""read"", ""write""]
+       }'
+	   
+	write down the resource id (_id property in the response).
+	
+5) add an UMA policy
+	add an UMA policy with the user ""testuser"" to the resource created above (replace the <resource_id>)
+	curl --location --request POST 'http://hostname:port/auth/realms/Test/authz/protection/uma-policy/<resource_id>' \
+       --header 'Authorization: Bearer <access token>' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{
+               ""name"": ""test-policy"",
+               ""decisionStrategy"": ""AFFIRMATIVE"",
+               ""scopes"": [""read""],
+               ""users"": [""testuser""]
+       }'
+	write down the policy id (id property in the response).
+	
+6) query policy
+	search all policies
+	curl --location --request GET 'http://hostname:port/auth/realms/Test/authz/protection/uma-policy' \
+		--header 'Authorization: Bearer <access token>'
+	
+	you should see one policy in response.
+	
+7) reproduce the bug by deleteing the user ""testuser"" from Administration Console
+	login to Administration Console, go to ""Users"", and delete the user ""testuser"" in ""Test"" realm.
+	search all policies again,
+	
+	curl --location --request GET 'http://hostname:port/auth/realms/Test/authz/protection/uma-policy' \
+		--header 'Authorization: Bearer <access token>'
+
+	you will get an error response ""{""error"":""unknown_error""}"". keycloak server log shows a NullPointerException thrown.
+	
+
+### Anything else?
+
+bug-test.json
+
+```
+{
+    ""clientId"": ""bug-test"",
+	""secret"": ""KlCEOISCILLXARITyE09zfo9wnOxAlci"",
+    ""enabled"": true,
+    ""clientAuthenticatorType"": ""client-secret"",
+    ""redirectUris"": [
+        ""*""
+    ],
+    ""serviceAccountsEnabled"": true,
+    ""authorizationServicesEnabled"": true,
+	""authorizationSettings"": {
+      ""allowRemoteResourceManagement"": true,
+      ""decisionStrategy"": ""AFFIRMATIVE""
+	},
+    ""publicClient"": false,
+    ""protocol"": ""openid-connect""
+}
+```
+
+A quick fix could be:
+
+```
+ .../policy/provider/permission/UMAPolicyProviderFactory.java        | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java b/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java
+index 51107ae8a2..db0daec628 100644
+--- a/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java
++++ b/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java
+@@ -33,6 +33,7 @@ import org.keycloak.models.KeycloakSession;
+ import org.keycloak.models.KeycloakSessionFactory;
+ import org.keycloak.models.RealmModel;
+ import org.keycloak.models.RoleModel;
++import org.keycloak.models.UserModel;
+ import org.keycloak.models.utils.KeycloakModelUtils;
+ import org.keycloak.models.utils.ModelToRepresentation;
+ import org.keycloak.models.utils.RepresentationToModel;
+@@ -349,7 +350,10 @@ public class UMAPolicyProviderFactory implements PolicyProviderFactory<UmaPermis
+                 UserPolicyRepresentation rep = UserPolicyRepresentation.class.cast(associatedRep);
+ 
+                 for (String user : rep.getUsers()) {
+-                    representation.addUser(authorization.getKeycloakSession().users().getUserById(realm, user).getUsername());
++                    UserModel userModel = authorization.getKeycloakSession().users().getUserById(realm, user);
++                    if (userModel != null) {
++                        representation.addUser(userModel.getUsername());
++                    }
+                 }
+             }
+         }
+```",KlCEOISCILLXARITyE09zfo9wnOxAlci,https://github.com/keycloak/keycloak
+15,11284,"### Describe the bug
+
+The policy endpoint returns error response when a user who was used in a policy got deleted from the realm (see reproduce steps for more details)
+
+This issue is critical as the user management is not under control of a resource server. It's realm administrator's task. Once it happens, the resource server is no longer able to manage policies anymore.  
+
+### Version
+
+17.0.1
+
+### Expected behavior
+
+At minimal, deleting users should not affect the policy endpoint. The list policy endpoint should still work. Ideally, when a user is deleted, all policies should be updated to reflect the changes.
+
+### Actual behavior
+
+When a user used in a policy was deleted from the realm, list all policy endpoint stop working. It returned unknown error response. 
+
+### How to Reproduce?
+
+1) create a test realm
+	login to Administration Console, Add realm ""Test""
+	
+2) add test client
+	select the ""Test"" realm, go to ""Clients"" -> ""Create"" and select the attached client json file ""bug-test"" (see Anything else), and ""Save"".
+	
+3) add a user ""testuser""
+	go to ""Users"", add a user ""testuser""
+	
+4) register a protected resource
+	get a client token (replace hostname:port in the curl requests)
+	$curl --location --request POST 'http://hostname:port/auth/realms/Test/protocol/openid-connect/token' \
+       --header 'Content-Type: application/x-www-form-urlencoded' \
+       --data-urlencode 'grant_type=client_credentials' \
+       --data-urlencode 'client_id=bug-test' \
+       --data-urlencode 'client_secret=KlCEOISCILLXARITyE09zfo9wnOxAlci'
+	   
+	register a protected resource ""test-protected-resource"" (replace the <access_token> in the request with the one got above)
+	curl --location --request POST 'http://hostname:port/auth/realms/Test/authz/protection/resource_set' \
+       --header 'Content-Type: application/json' \
+       --header 'Authorization: Bearer <access_token>' \
+       --data-raw '{
+           ""name"": ""test-protected-resource"",
+           ""ownerManagedAccess"": true,
+           ""scopes"": [""read"", ""write""]
+       }'
+	   
+	write down the resource id (_id property in the response).
+	
+5) add an UMA policy
+	add an UMA policy with the user ""testuser"" to the resource created above (replace the <resource_id>)
+	curl --location --request POST 'http://hostname:port/auth/realms/Test/authz/protection/uma-policy/<resource_id>' \
+       --header 'Authorization: Bearer <access token>' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{
+               ""name"": ""test-policy"",
+               ""decisionStrategy"": ""AFFIRMATIVE"",
+               ""scopes"": [""read""],
+               ""users"": [""testuser""]
+       }'
+	write down the policy id (id property in the response).
+	
+6) query policy
+	search all policies
+	curl --location --request GET 'http://hostname:port/auth/realms/Test/authz/protection/uma-policy' \
+		--header 'Authorization: Bearer <access token>'
+	
+	you should see one policy in response.
+	
+7) reproduce the bug by deleteing the user ""testuser"" from Administration Console
+	login to Administration Console, go to ""Users"", and delete the user ""testuser"" in ""Test"" realm.
+	search all policies again,
+	
+	curl --location --request GET 'http://hostname:port/auth/realms/Test/authz/protection/uma-policy' \
+		--header 'Authorization: Bearer <access token>'
+
+	you will get an error response ""{""error"":""unknown_error""}"". keycloak server log shows a NullPointerException thrown.
+	
+
+### Anything else?
+
+bug-test.json
+
+```
+{
+    ""clientId"": ""bug-test"",
+	""secret"": ""KlCEOISCILLXARITyE09zfo9wnOxAlci"",
+    ""enabled"": true,
+    ""clientAuthenticatorType"": ""client-secret"",
+    ""redirectUris"": [
+        ""*""
+    ],
+    ""serviceAccountsEnabled"": true,
+    ""authorizationServicesEnabled"": true,
+	""authorizationSettings"": {
+      ""allowRemoteResourceManagement"": true,
+      ""decisionStrategy"": ""AFFIRMATIVE""
+	},
+    ""publicClient"": false,
+    ""protocol"": ""openid-connect""
+}
+```
+
+A quick fix could be:
+
+```
+ .../policy/provider/permission/UMAPolicyProviderFactory.java        | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java b/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java
+index 51107ae8a2..db0daec628 100644
+--- a/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java
++++ b/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java
+@@ -33,6 +33,7 @@ import org.keycloak.models.KeycloakSession;
+ import org.keycloak.models.KeycloakSessionFactory;
+ import org.keycloak.models.RealmModel;
+ import org.keycloak.models.RoleModel;
++import org.keycloak.models.UserModel;
+ import org.keycloak.models.utils.KeycloakModelUtils;
+ import org.keycloak.models.utils.ModelToRepresentation;
+ import org.keycloak.models.utils.RepresentationToModel;
+@@ -349,7 +350,10 @@ public class UMAPolicyProviderFactory implements PolicyProviderFactory<UmaPermis
+                 UserPolicyRepresentation rep = UserPolicyRepresentation.class.cast(associatedRep);
+ 
+                 for (String user : rep.getUsers()) {
+-                    representation.addUser(authorization.getKeycloakSession().users().getUserById(realm, user).getUsername());
++                    UserModel userModel = authorization.getKeycloakSession().users().getUserById(realm, user);
++                    if (userModel != null) {
++                        representation.addUser(userModel.getUsername());
++                    }
+                 }
+             }
+         }
+```",client_id=bug-test,https://github.com/keycloak/keycloak
+16,11284,"### Describe the bug
+
+The policy endpoint returns error response when a user who was used in a policy got deleted from the realm (see reproduce steps for more details)
+
+This issue is critical as the user management is not under control of a resource server. It's realm administrator's task. Once it happens, the resource server is no longer able to manage policies anymore.  
+
+### Version
+
+17.0.1
+
+### Expected behavior
+
+At minimal, deleting users should not affect the policy endpoint. The list policy endpoint should still work. Ideally, when a user is deleted, all policies should be updated to reflect the changes.
+
+### Actual behavior
+
+When a user used in a policy was deleted from the realm, list all policy endpoint stop working. It returned unknown error response. 
+
+### How to Reproduce?
+
+1) create a test realm
+	login to Administration Console, Add realm ""Test""
+	
+2) add test client
+	select the ""Test"" realm, go to ""Clients"" -> ""Create"" and select the attached client json file ""bug-test"" (see Anything else), and ""Save"".
+	
+3) add a user ""testuser""
+	go to ""Users"", add a user ""testuser""
+	
+4) register a protected resource
+	get a client token (replace hostname:port in the curl requests)
+	$curl --location --request POST 'http://hostname:port/auth/realms/Test/protocol/openid-connect/token' \
+       --header 'Content-Type: application/x-www-form-urlencoded' \
+       --data-urlencode 'grant_type=client_credentials' \
+       --data-urlencode 'client_id=bug-test' \
+       --data-urlencode 'client_secret=KlCEOISCILLXARITyE09zfo9wnOxAlci'
+	   
+	register a protected resource ""test-protected-resource"" (replace the <access_token> in the request with the one got above)
+	curl --location --request POST 'http://hostname:port/auth/realms/Test/authz/protection/resource_set' \
+       --header 'Content-Type: application/json' \
+       --header 'Authorization: Bearer <access_token>' \
+       --data-raw '{
+           ""name"": ""test-protected-resource"",
+           ""ownerManagedAccess"": true,
+           ""scopes"": [""read"", ""write""]
+       }'
+	   
+	write down the resource id (_id property in the response).
+	
+5) add an UMA policy
+	add an UMA policy with the user ""testuser"" to the resource created above (replace the <resource_id>)
+	curl --location --request POST 'http://hostname:port/auth/realms/Test/authz/protection/uma-policy/<resource_id>' \
+       --header 'Authorization: Bearer <access token>' \
+       --header 'Content-Type: application/json' \
+       --data-raw '{
+               ""name"": ""test-policy"",
+               ""decisionStrategy"": ""AFFIRMATIVE"",
+               ""scopes"": [""read""],
+               ""users"": [""testuser""]
+       }'
+	write down the policy id (id property in the response).
+	
+6) query policy
+	search all policies
+	curl --location --request GET 'http://hostname:port/auth/realms/Test/authz/protection/uma-policy' \
+		--header 'Authorization: Bearer <access token>'
+	
+	you should see one policy in response.
+	
+7) reproduce the bug by deleteing the user ""testuser"" from Administration Console
+	login to Administration Console, go to ""Users"", and delete the user ""testuser"" in ""Test"" realm.
+	search all policies again,
+	
+	curl --location --request GET 'http://hostname:port/auth/realms/Test/authz/protection/uma-policy' \
+		--header 'Authorization: Bearer <access token>'
+
+	you will get an error response ""{""error"":""unknown_error""}"". keycloak server log shows a NullPointerException thrown.
+	
+
+### Anything else?
+
+bug-test.json
+
+```
+{
+    ""clientId"": ""bug-test"",
+	""secret"": ""KlCEOISCILLXARITyE09zfo9wnOxAlci"",
+    ""enabled"": true,
+    ""clientAuthenticatorType"": ""client-secret"",
+    ""redirectUris"": [
+        ""*""
+    ],
+    ""serviceAccountsEnabled"": true,
+    ""authorizationServicesEnabled"": true,
+	""authorizationSettings"": {
+      ""allowRemoteResourceManagement"": true,
+      ""decisionStrategy"": ""AFFIRMATIVE""
+	},
+    ""publicClient"": false,
+    ""protocol"": ""openid-connect""
+}
+```
+
+A quick fix could be:
+
+```
+ .../policy/provider/permission/UMAPolicyProviderFactory.java        | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java b/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java
+index 51107ae8a2..db0daec628 100644
+--- a/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java
++++ b/authz/policy/common/src/main/java/org/keycloak/authorization/policy/provider/permission/UMAPolicyProviderFactory.java
+@@ -33,6 +33,7 @@ import org.keycloak.models.KeycloakSession;
+ import org.keycloak.models.KeycloakSessionFactory;
+ import org.keycloak.models.RealmModel;
+ import org.keycloak.models.RoleModel;
++import org.keycloak.models.UserModel;
+ import org.keycloak.models.utils.KeycloakModelUtils;
+ import org.keycloak.models.utils.ModelToRepresentation;
+ import org.keycloak.models.utils.RepresentationToModel;
+@@ -349,7 +350,10 @@ public class UMAPolicyProviderFactory implements PolicyProviderFactory<UmaPermis
+                 UserPolicyRepresentation rep = UserPolicyRepresentation.class.cast(associatedRep);
+ 
+                 for (String user : rep.getUsers()) {
+-                    representation.addUser(authorization.getKeycloakSession().users().getUserById(realm, user).getUsername());
++                    UserModel userModel = authorization.getKeycloakSession().users().getUserById(realm, user);
++                    if (userModel != null) {
++                        representation.addUser(userModel.getUsername());
++                    }
+                 }
+             }
+         }
+```",NullPointerException,https://github.com/keycloak/keycloak
