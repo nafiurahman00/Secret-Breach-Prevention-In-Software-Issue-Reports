@@ -1,7 +1,7 @@
 from flask import Flask, request
 import pandas as pd
 
-from secret_finding_for_tool import prediction
+import secret_finding_for_tool
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -21,9 +21,12 @@ def predict_endpoint():
     data.to_csv('issue.csv', index=False)     
     df = pd.read_csv('issue.csv')
     content = df['body'][0]
-    result = prediction(content)
-    return {'prediction': result}
-
+    # print(secret_finding_for_tool.prediction(content))
+    result,result_strings = secret_finding_for_tool.prediction(content)
+    print(result)
+    print(result_strings)
+    return {'prediction': result,
+            'candidates':result_strings}
 
 if __name__ == '__main__':
     app.run(port=5000)
