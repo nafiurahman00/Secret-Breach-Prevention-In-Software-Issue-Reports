@@ -1,38 +1,48 @@
-comment_or_body
-"https://github.com/googleapis/google-api-nodejs-client/blob/master/samples/drive/list.js doesn't work
+body
+"rying to create a SQL VM with auto backup enabled, but getting a 400 error with code BackupScheduleTypeNotSet, despite backupScheduleType being specified in the request.
 
-```nodejs
-root@docker:~/gg# cat oauth2.keys.json
+Request
+PUT https://management.azure.com/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/acctestRG-mssql-210108235644463787/providers/Microsoft.SqlVirtualMachine/sqlVirtualMachines/acctest-VM-210108235644463787?api-version=2017-03-01-preview
 {
-  ""web"" : {
-""redirect_uris"": [
-  ""https://hello.example.net""
-],
-    ""client_id"": ""10xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxontent.com"",
-    ""client_secret"": ""5fS6xxxxxxxxxxxxxxxxxxf0w"",
-    ""project_id"": ""maxxxxxxxxxxxxxx76211""
-  }
+""location"": ""westeurope"",
+""properties"": {
+""autoBackupSettings"": {
+""enable"": true,
+""enableEncryption"": false,
+""retentionPeriod"": 21,
+""storageAccountUrl"": ""https://unlikely23exst2acctpiakc.blob.core.windows.net/"",
+""storageAccessKey"": ""mDCN2IFsCkM250yvHFRJv4UZEPJ+CPAM8q/mWDNiENdXarhuSBRD8QoDhkBVZIhUDIDEv61LQtD8oi75D4Uwng=="",
+""password"": """",
+""backupSystemDbs"": false,
+""backupScheduleType"": ""Automated"",
+""fullBackupFrequency"": ""Weekly"",
+""fullBackupStartTime"": 0,
+""fullBackupWindowHours"": 0,
+""logBackupFrequency"": 0
+},
+""serverConfigurationsManagementSettings"": {
+""sqlConnectivityUpdateSettings"": {
+""connectivityType"": ""PRIVATE"",
+""port"": 1433,
+""sqlAuthUpdateUserName"": """",
+""sqlAuthUpdatePassword"": """"
+},
+""additionalFeaturesServerConfigurations"": {
+""isRServicesEnabled"": false
 }
-root@docker:~/gg# node e.js
-Error: The provided keyfile does not define a valid
-redirect URI. There must be at least one redirect URI defined, and this sample
-assumes it redirects to 'http://localhost:3000/oauth2callback'.  Please edit
-your keyfile, and add a 'redirect_uris' section.  For example:
+},
+""sqlManagement"": ""Full"",
+""sqlServerLicenseType"": ""PAYG"",
+""virtualMachineResourceId"": ""/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/acctestRG-mssql-210108235644463787/providers/Microsoft.Compute/virtualMachines/acctest-VM-210108235644463787""
+},
+""tags"": {}
+}
 
-""redirect_uris"": [
-  ""http://localhost:3000/oauth2callback""
-]
-
-    at authenticate (/root/gg/node_modules/@google-cloud/local-auth/build/src/index.js:56:15)
-    at runSample (/root/gg/e.js:11:22)
-    at Object.<anonymous> (/root/gg/e.js:25:3)
-    at Module._compile (internal/modules/cjs/loader.js:778:30)
-    at Object.Module._extensions..js (internal/modules/cjs/loader.js:789:10)
-    at Module.load (internal/modules/cjs/loader.js:653:32)
-    at tryModuleLoad (internal/modules/cjs/loader.js:593:12)
-    at Function.Module._load (internal/modules/cjs/loader.js:585:3)
-    at Function.Module.runMain (internal/modules/cjs/loader.js:831:12)
-    at startup (internal/bootstrap/node.js:283:19)
-```
-
-what's wrong?!"
+Response
+400 Bad Request
+{
+""error"": {
+""code"": ""BackupScheduleTypeNotSet"",
+""message"": ""Backup schedule type needs to be set.""
+}
+}"
