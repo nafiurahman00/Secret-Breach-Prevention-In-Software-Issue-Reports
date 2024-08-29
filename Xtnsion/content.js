@@ -51,7 +51,7 @@ async function checkDescription(descriptionField, indicator, spinner) {
 
   if (containsSecret.prediction) {
     indicator.style.backgroundColor = "red";
-    results = "Contains secret"
+    results = "Contains strings that might be secret"
     for (let i = 0; i < containsSecret.candidates.length; i++) {
       results+= "\n";
       results+= (i+1).toString()
@@ -77,12 +77,17 @@ function startChecking(descriptionField) {
     checkDescription(descriptionField, indicator, spinner);
   }, CHECK_INTERVAL_MS);
   intervals.push(checkInterval);
+
+  // if intervals size more than 10000, then start removing the first element
+  if (intervals.length > 10000) {
+    clearInterval(intervals.shift());
+  }
 }
 
 async function checkForSecrets(description) {
   try {
     console.log(description);
-    const response = await fetch("http://127.0.0.1:5000/checkdescription", {
+    const response = await fetch("https://103.94.135.163:5000/checkdescription", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -95,7 +100,10 @@ async function checkForSecrets(description) {
     return result;
   } catch (error) {
     console.error("Error checking for secrets:", error);
-    return false; // Default to no secrets if there's an error
+    return {
+      prediction: false,
+      candidates: []
+    }
   }
 }
 

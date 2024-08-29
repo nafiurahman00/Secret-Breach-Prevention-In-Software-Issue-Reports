@@ -125,7 +125,7 @@ def prediction(text):
     data = pd.DataFrame.from_dict(data_dict, "index")
     # return if data is empty
     if len(data) == 0:
-        return False
+        return False,[]
     
     data=data.drop_duplicates(subset=["Issue ID", "Candidate String"], keep='first')
     print(data.shape)
@@ -150,7 +150,7 @@ def prediction(text):
     X_candidate_test = merged_df['Candidate String'].tolist()  # Convert the 'candidate_string' column to a list of strings
 
     model = RobertaForSequenceClassification.from_pretrained("roberta-base", num_labels=2)
-    model_path = "models/25k/adamW_cntxt200_data25k_pre.pth"
+    model_path = "models/adamW_cntxt200_data25k_pre.pth"
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     model.eval()  # Set the model to evaluation mode for inference
 
@@ -198,38 +198,13 @@ def prediction(text):
 
     secret_has = False
     secrets = []
+    
     for i in range(len(predicted_labels_list_output)):
         if(predicted_labels_list_output[i]==1):
             secret_has=True
             secrets.append(X_candidate_test[i])
+    
     return secret_has,secrets
 
 if __name__ == "__main__":
-    
-    df = pd.read_csv("crawled_issue/data_keycloak.csv")
-    text = df[df['Issue ID'] == 26405]['Issue Body'].values[0]
-    # result,result_strings = prediction(text)
-    # print(result)
-    # print(result_strings)
-    print(prediction(text))
-
-
-
-    
-
-
-
-             
-
-    
-
-
-
-
-
-
-
-          
-    
-
-
+    print(prediction("a"))
