@@ -51,9 +51,9 @@ We conducted a **survey with 30 software developers** to gather insights into th
 1. **Dataset and Models:**  
    - Upload the **benchmark dataset** and **notebooks** to **Google Colab** or run them locally.  
 2. **Browser Extension:**  
-   - Install the **SBMBot** extension to enable secret breach prevention in GitHub issue reports.  
+   - Install the **SBMBot** extension to enable secret breach prevention in GitHub issue reports. Installation and usage tutorial can be found [here](https://youtu.be/rvaP-ddnfv8). 
 3. **Crawler:**  
-   - Use the **crawler** codes to fetch issue reports from real repositories for experimentation.
+   - Use the **issue_crawler.ipynb** code from **crawler**  to fetch issue reports from real repositories for experimentation. SOme of the repositories used in the experiments are mentioned in the crawled_repos.txt file.
 
 ---
 
