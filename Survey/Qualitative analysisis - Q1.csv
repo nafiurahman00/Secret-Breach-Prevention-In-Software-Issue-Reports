@@ -1,0 +1,29 @@
+,,Highly severe,Moderately/Contextually severe,Potential Data Breach and Unauthorized access
+,"It is common, maybe not so severe, but secrets can be easily leaked in issue reports, even inadvertently.",,1,
+,going through code snippet manually is necessary yet time consuming. which is often ignored in issue reports. ,,1,
+,"Sharing secrets in issue reports is highly severe, as it can lead to security breaches and unauthorized access.",1,,2
+,Database will be compromised and people will get unwanted access,1,,1
+,"The severity of sharing secrets in issue reports can be quite high, depending on the nature of the secrets and the context in which they are shared.",1,1,
+,It's really concerning. Can cause severe security breaches. ,1,,
+,very high,1,,
+,Secret sharing can result in severe data breach,1,,
+,Very bad,1,,
+,Until the repository is public I don't think it'll be a big issue,,1,
+,"time stamps are not reported. Peeps can understand when I am working on which project.
+One example didn't mark the ip address(serious breach, peeps would start ddos :V)",,1,
+,Can totally compromise an open-source production app,1,,
+,7 on a scale of 0 to 10,,1,
+,"
+Secret sharing in issue reports is a serious security risk, leading to unauthorized access and breaches. One should always redact sensitive data before submission.",1,,1
+,Very severe,1,,
+,it's dangerous,1,,
+,Very Severe,1,,
+,Might be very dangerous,1,,
+,The consequences of secret sharing in public issue reports can be devastating,1,,
+,Quite Severe,1,,
+,"It is quite severe, I think. It might lead to all sorts of security breaches for the resource owner, and might jeopardize important works and resources from the said person's end.",1,,
+,"Sharing sensitive information like API keys or database credentials in issue reports is highly severe, as it can lead to security breaches, unauthorized access, and data exploitation.",,,3
+,It is extreme,1,,
+,High,1,,
+,highly severe,1,,
+,,19,6,7

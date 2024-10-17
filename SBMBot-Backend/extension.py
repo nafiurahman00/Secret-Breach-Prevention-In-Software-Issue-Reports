@@ -35,4 +35,4 @@ def verify(path):
     return send_from_directory('static',path)
 
 if __name__ == 'main':
-    app.run(host="0.0.0.0",port=5000,ssl_context=('certificate.crt', 'private.key'))
+    app.run(host="0.0.0.0",port=5000,ssl_context=('certificate.crt', 'private.key')) # Replace with the path to your certificate and private key

@@ -51,7 +51,7 @@ def prediction(text):
     df = df_unique
     print(df.head())
     print(df.shape)
-    excel_data = pd.read_excel('dataset/Secret-Regular-Expression.xlsx')
+    excel_data = pd.read_excel('../dataset/Secret-Regular-Expression.xlsx')
 
     # Read the values of the file in the dataframe
     regex = pd.DataFrame(excel_data, columns=[
@@ -150,7 +150,7 @@ def prediction(text):
     X_candidate_test = merged_df['Candidate String'].tolist()  # Convert the 'candidate_string' column to a list of strings
 
     model = RobertaForSequenceClassification.from_pretrained("roberta-base", num_labels=2)
-    model_path = "models/adamW_cntxt200_data25k_pre.pth"
+    model_path = "../models/adamW_cntxt200_data25k_pre.pth"
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     model.eval()  # Set the model to evaluation mode for inference
 
