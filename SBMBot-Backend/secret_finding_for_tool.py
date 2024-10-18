@@ -129,7 +129,7 @@ def prediction(text):
     
     data=data.drop_duplicates(subset=["Issue ID", "Candidate String"], keep='first')
     print(data.shape)
-    data.to_csv('crawled_issue/issues-with-candidate-strings.csv')
+    #data.to_csv('crawled_issue/issues-with-candidate-strings.csv')
 
     data = data.rename(columns={'Issue ID': 'Issue_id'})
     print(data.shape)
