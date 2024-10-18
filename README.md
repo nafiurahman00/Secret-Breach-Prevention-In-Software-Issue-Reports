@@ -8,7 +8,7 @@ This project focuses on **preventing secret breaches** in software issue reports
 
 ## **Benchmark Dataset**  
 We curated a new **benchmark dataset of 25,000 issue reports**, containing **437 instances with confirmed secret breaches**.  
-- You can access the dataset [here](#).  
+- You can access the dataset [here](https://drive.google.com/drive/u/0/folders/1QQ9XltpERkJre-vYXWhSQUYDPg17cvXB).  
 
 This dataset serves as the foundation for evaluating **regex-based detection tools** and **language models**.
 
