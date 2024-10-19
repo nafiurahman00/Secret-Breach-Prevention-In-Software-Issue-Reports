@@ -2,7 +2,7 @@
 ## **Secret Breach Prevention in Software Issue Reports**
 
 ### Overview  
-This project focuses on **preventing secret breaches** in software issue reports by utilizing a combination of **pre-trained language models** (BERT, RoBERTa) and **regex-based detection techniques**. Accidental disclosure of sensitive information, such as API keys, tokens, or passwords, can pose serious security risks. To address this, we developed models and tools that automatically detect and prevent such breaches in real-time.
+This repository focuses on **preventing secret breaches** in software issue reports by utilizing a combination of **pre-trained language models** (BERT, RoBERTa) and **regex-based detection techniques**. Accidental disclosure of sensitive information, such as API keys, tokens, or passwords, can pose serious security risks. To address this, we developed models and tools that automatically detect and prevent such breaches in real-time.
 
 ---
 
