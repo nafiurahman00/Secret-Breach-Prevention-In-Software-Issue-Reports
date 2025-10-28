@@ -240,7 +240,17 @@ This two-stage approach significantly reduces false positives while maintaining 
 
 If you use this code or data in your research, please cite our paper:
 
-**Bibtex will be shared after review process**
+```
+@misc{wahab2024secretbreachpreventionsoftware,
+      title={Secret Breach Prevention in Software Issue Reports}, 
+      author={Zahin Wahab and Sadif Ahmed and Md Nafiu Rahman and Rifat Shahriyar and Gias Uddin},
+      year={2024},
+      eprint={2410.23657},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2410.23657}, 
+}
+```
 
 ---
 
