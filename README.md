@@ -1,79 +1,248 @@
-# **IssueReportSecretBreachPrevention-ReplicationPackage**  
-## **Secret Breach Prevention in Software Issue Reports**
+# Secret Leak Detection in Software Issue Reports using LLMs: A Comprehensive Evaluation
 
-### Overview  
-This repository focuses on **preventing secret breaches** in software issue reports by utilizing a combination of **pre-trained language models** (BERT, RoBERTa) and **regex-based detection techniques**. Accidental disclosure of sensitive information, such as API keys, tokens, or passwords, can pose serious security risks. To address this, we developed models and tools that automatically detect and prevent such breaches in real-time.
+## Overview
+
+This repository contains the replication package for our paper **"Secret Leak Detection in Software Issue Reports using LLMs: A Comprehensive Evaluation"**. This work presents a comprehensive study on detecting accidentally exposed secrets (API keys, tokens, credentials) in GitHub issue reports using Large Language Models.
+
+## Abstract
+
+In the digital era, accidental exposure of sensitive information such as API keys, tokens, and credentials is a growing security threat. While most prior work focuses on detecting secrets in source code, leakage in software issue reports remains largely unexplored. This study fills that gap through a large-scale analysis and a practical detection pipeline for exposed secrets in GitHub issues. 
+
+Our pipeline combines regular expression–based extraction with large language model (LLM)–based contextual classification to detect real secrets and reduce false positives. We build a benchmark of **54,148 instances** from public GitHub issues, including **5,881 manually verified true secrets**. Using this dataset, we evaluate entropy-based baselines and keyword heuristics used by prior secret detection tools, classical machine learning, deep learning, and LLM-based methods.
+
+### Key Findings
+
+- **Regex and entropy-based approaches** achieve high recall but poor precision
+- **Smaller models** (CodeBERT, XL-Net) greatly improve performance (**F1 = 92.70%**)
+- **Proprietary models** (GPT-4o) perform moderately in few-shot settings (**F1 = 80.13%**)
+- **Fine-tuned open-source LLMs** (Qwen, LLaMA) achieve up to **94.49% F1**
+- **Real-world validation** on 178 GitHub repositories achieves **F1 = 0.82**
+
+## Repository Structure
+
+```
+├── Data/                          # Dataset files
+│   ├── main_data.csv             # Main dataset with 54,148 instances
+│   ├── train.csv                 # Training split
+│   ├── val.csv                   # Validation split
+│   ├── test.csv                  # Test split
+│   └── test_wild.csv             # In-the-wild test data (178 repos)
+│
+├── Data-Handling/                 # Data collection and preprocessing
+│   ├── Dataset_Generation_labelled.ipynb
+│   ├── inspect_labelled_reports.ipynb
+│   ├── Fetching/                 # Data collection scripts
+│   │   ├── crawler-1.py
+│   │   ├── crawler-2.py
+│   │   ├── fetch_real_repo_issues_and_scan.py
+│   │   └── github_repo_urls.txt
+│   └── Analysis/                 # Data analysis and visualization
+│       ├── analyze_trends.py
+│       ├── custom_visualizations.py
+│       └── visualize_trends.py
+│
+├── Baselines/                     # Baseline methods
+│   ├── regex+entropy.ipynb       # Regex + Entropy baseline
+│   ├── regex+entropy+keyword+heuristic.ipynb
+│   ├── handcrafted_features_classifier.py
+│   └── textcnn_ensemble.py       # TextCNN ensemble model
+│
+├── Model/                         # LLM-based detection models
+│   ├── bert_training.ipynb       # BERT/CodeBERT training
+│   ├── bert_inference.ipynb
+│   ├── llama_training.ipynb      # LLaMA fine-tuning
+│   ├── llama_inference.ipynb
+│   ├── qwen_training.ipynb       # Qwen fine-tuning
+│   ├── qwen_inference.ipynb
+│   ├── mistral_training.ipynb    # Mistral fine-tuning
+│   ├── mistral_inference.ipynb
+│   ├── gemma_training.ipynb      # Gemma fine-tuning
+│   ├── gemma_inference.ipynb
+│   ├── deepseek_training.ipynb   # DeepSeek fine-tuning
+│   ├── deepseek_inference.ipynb
+│   ├── gpt.py                    # GPT-4o evaluation
+│   └── gemini.py                 # Gemini evaluation
+│
+├── Results/                       # Experimental results
+│   ├── regex_entropy_predictions.csv
+│   ├── regex_entropy_keyword_heuristic_predictions.csv
+│   ├── decision_tree.csv
+│   ├── logistic_regression.csv
+│   ├── naive_bayes.csv
+│   ├── random_forest.csv
+│   ├── svm.csv
+│   ├── k-nearest_neighbors.csv
+│   ├── llama.csv                 # LLaMA fine-tuned results
+│   ├── qwen.csv                  # Qwen fine-tuned results
+│   ├── mistral.csv               # Mistral fine-tuned results
+│   ├── gpt4o_zs.csv              # GPT-4o zero-shot results
+│   ├── gpt4o_fs.csv              # GPT-4o few-shot results
+│   ├── gemini_zs.csv             # Gemini zero-shot results
+│   ├── gemini_fs.csv             # Gemini few-shot results
+│   ├── albert-base-v2test_predictions.csv
+│   ├── bert-base-casedtest_predictions.csv
+│   ├── bert-base-uncasedtest_predictions.csv
+│   ├── distilbert-base-casedtest_predictions.csv
+│   ├── distilbert-base-uncasedtest_predictions.csv
+│   ├── funnel-transformer_mediumtest_predictions.csv
+│   ├── google_bigbird-roberta-basetest_predictions.csv
+│   ├── google_electra-base-discriminatortest_predictions.csv
+│   ├── microsoft_codebert-basetest_predictions.csv
+│   ├── roberta-basetest_predictions.csv
+│   ├── xlnet-base-casedtest_predictions.csv
+│   └── test_metrics.txt          # Aggregated metrics for all models
+│
+└── Survey/                        # Motivational survey data
+    ├── Motivation Survey.pdf     # Survey questionnaire and responses
+    └── Motivational survey.xlsx  # Survey data in spreadsheet format
+```
+
+## Requirements
+
+### Software Dependencies
+
+```bash
+# Python 3.8+
+pip install torch transformers pandas numpy scikit-learn
+pip install jupyter notebook
+pip install matplotlib seaborn
+
+# For proprietary models
+pip install openai google-generativeai
+```
+
+## Dataset
+
+Our dataset contains 54,148 instances extracted from public GitHub issues:
+- **5,881 manually verified true secrets**
+- **48,267 false positives** (strings that look like secrets but aren't)
+- Covers multiple secret types: API keys, tokens, passwords, credentials, etc.
+- You can access the dataset [here](https://drive.google.com/drive/u/0/folders/1QQ9XltpERkJre-vYXWhSQUYDPg17cvXB). 
+
+The dataset is split into:
+- Training set: `Data/train.csv`
+- Validation set: `Data/val.csv`
+- Test set: `Data/test.csv`
+- In-the-wild test set: `Data/test_wild.csv` (178 real repositories)
+
+## Replication Instructions
+
+### Baseline Methods
+
+#### Regex + Entropy
+```bash
+jupyter notebook Baselines/regex+entropy.ipynb
+```
+
+#### Regex + Entropy + Keywords + Heuristics
+```bash
+jupyter notebook Baselines/regex+entropy+keyword+heuristic.ipynb
+```
+
+#### Handcrafted Features Classifier
+```bash
+python Baselines/handcrafted_features_classifier.py
+```
+
+#### TextCNN Ensemble
+```bash
+python Baselines/textcnn_ensemble.py
+```
+
+### Fine-tuned Models
+
+#### BERT/CodeBERT
+```bash
+# Training
+jupyter notebook Model/bert_training.ipynb
+
+# Inference
+jupyter notebook Model/bert_inference.ipynb
+```
+
+#### Open-Source LLMs (LLaMA, Qwen, Mistral, Gemma, DeepSeek)
+
+Each model has a training and inference notebook:
+```bash
+# Example for LLaMA
+jupyter notebook Model/llama_training.ipynb
+jupyter notebook Model/llama_inference.ipynb
+
+# Similar for Qwen, Mistral, Gemma, DeepSeek
+```
+
+### Proprietary Models (Few-Shot)
+
+#### GPT-4o
+```bash
+# Set your OpenAI API key
+export OPENAI_API_KEY="your-api-key"
+python Model/gpt.py
+```
+
+#### Gemini
+```bash
+# Set your Google API key
+export GOOGLE_API_KEY="your-api-key"
+python Model/gemini.py
+```
+
+## Results
+
+| Model Type | Model | F1 Score | Precision | Recall |
+|-----------|-------|----------|-----------|--------|
+| Baseline | Regex + Entropy | - | Low | High |
+| Small Model | CodeBERT | 92.70% | - | - |
+| Small Model | XL-Net | 92.70% | - | - |
+| Proprietary (Few-shot) | GPT-4o | 80.13% | - | - |
+| Fine-tuned LLM | Qwen | 94.49% | - | - |
+| Fine-tuned LLM | LLaMA | 94.49% | - | - |
+| **In-the-Wild** | Best Model | **82.00%** | - | - |
+
+Detailed prediction results for all models are available in the `Results/` directory. Each CSV file contains the model's predictions on the test set with corresponding ground truth labels and confidence scores. - You can access the results [here](https://drive.google.com/drive/u/0/folders/1QQ9XltpERkJre-vYXWhSQUYDPg17cvXB). 
+
+## Data Collection
+
+### Fetching GitHub Issues
+
+The repository includes scripts to collect GitHub issues:
+
+```bash
+# Crawler scripts
+python Data-Handling/Fetching/crawler-1.py
+python Data-Handling/Fetching/crawler-2.py
+
+# Fetch and scan real repositories
+python Data-Handling/Fetching/fetch_real_repo_issues_and_scan.py
+```
+
+### Data Analysis
+
+```bash
+# Analyze trends in the dataset
+python Data-Handling/Analysis/analyze_trends.py
+
+# Generate visualizations
+python Data-Handling/Analysis/visualize_trends.py
+python Data-Handling/Analysis/custom_visualizations.py
+```
+
+## Detection Pipeline
+
+Our detection pipeline consists of two stages:
+
+1. **Extraction Stage**: Use regex patterns to extract potential secrets from issue text
+2. **Classification Stage**: Use LLMs to classify whether extracted strings are real secrets
+
+This two-stage approach significantly reduces false positives while maintaining high recall.
+
+## Citation
+
+If you use this code or data in your research, please cite our paper:
+
+**Bibtex will be shared after review process**
 
 ---
 
-## **Benchmark Dataset**  
-We curated a new **benchmark dataset of 25,000 issue reports**, containing **437 instances with confirmed secret breaches**.  
-- You can access the dataset [here](https://drive.google.com/drive/u/0/folders/1QQ9XltpERkJre-vYXWhSQUYDPg17cvXB).  
+**Note**: This repository is for research purposes. The dataset contains only publicly available information from GitHub issues that were already exposed at the time of collection.
 
-This dataset serves as the foundation for evaluating **regex-based detection tools** and **language models**.
-
----
-
-## **Language Models**  
-To improve the detection accuracy, we implemented and compared various **pre-trained language models**, including:  
-- **BERT**  
-- **RoBERTa**  
-- **Electra**  
-- **SpanBERT**  
-
-These models help filter out false positives generated by regex-based detection. The models were trained and evaluated on **Google Colab** and **local machines**.  
-- To replicate the experiments, upload the **Python notebooks** from this package and the **dataset** to **Google Drive**, and open them in **Google Colab**.
-
----
-
-## **Experimentation on Real-World Repositories**  
-We tested the models on **real-world GitHub repositories** to validate their performance in real scenarios.  
-- Crawling codes for fetching issue reports are available in the **`crawler`** folder.
-
----
-
-## **SBMBot: Real-Time Secret Breach Detection Tool**  
-We extended our models into a browser extension called **SBMBot**.  
-- **SBMBot** offers **real-time, context-aware warnings** to users while they create issue reports, helping prevent accidental disclosures of sensitive information.  
-- **Frontend code** is available in the **`SBMBot-Extension`** folder.  
-- **Backend code** can be found in the **`SBMBot-Backend`** folder.
-
----
-
-## **Survey of Software Developers**  
-We conducted a **survey with 30 software developers** to gather insights into the challenges of preventing secret breaches in issue reports.  
-- **Survey questionnaire** and **responses** are available in the **`Survey`** folder.  
-- The folder also contains a **qualitative and quantitative analysis** of the survey data.
-
----
-
-## **How to Use**  
-1. **Dataset and Models:**  
-   - Upload the **benchmark dataset** and **notebooks** to **Google Colab** or run them locally.  
-2. **Browser Extension:**  
-   - Install the **SBMBot** extension to enable secret breach prevention in GitHub issue reports. Installation and usage tutorial can be found [here](https://youtu.be/rvaP-ddnfv8). 
-3. **Crawler:**  
-   - Use the **issue_crawler.ipynb** code from **crawler**  to fetch issue reports from real repositories for experimentation. SOme of the repositories used in the experiments are mentioned in the crawled_repos.txt file.
-
----
-
-## **Contributions**  
-1. **Benchmark Dataset Creation**:  
-   - Curated a new benchmark dataset of **25,000 issue reports**, including **437 instances** with confirmed secret breaches.
-
-2. **Assessment and Enhancement of Regex-based Tools**:  
-   - Evaluated existing **regex-based tools** for secret breach detection.  
-   - Enhanced their accuracy through **pre-processing** techniques and **pre-trained language models**.
-
-3. **Language Model Implementation and Comparison**:  
-   - Implemented and compared various **pre-trained language models**.  
-   - These models were used to **filter out false positives** identified by regex-based detection.
-
-4. **SBMBot Browser Extension**:  
-   - Developed **SBMBot**, a browser extension providing **real-time feedback** to prevent secret breaches when creating GitHub issues.  
-   - SBMBot helps users mitigate secret breaches by detecting sensitive content during issue report creation.
- 
-
----
-
-This project offers a comprehensive solution to secure issue reports, combining **state-of-the-art language models** and **practical tools** like the SBMBot extension. We hope it helps organizations enhance the security of their open-source repositories.  
