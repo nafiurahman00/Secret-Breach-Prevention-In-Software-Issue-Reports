@@ -117,7 +117,7 @@ Our dataset contains 54,148 instances extracted from public GitHub issues:
 - **5,881 manually verified true secrets**
 - **48,267 false positives** (strings that look like secrets but aren't)
 - Covers multiple secret types: API keys, tokens, passwords, credentials, etc.
-- You can access the dataset [here](https://drive.google.com/drive/u/0/folders/1QQ9XltpERkJre-vYXWhSQUYDPg17cvXB). 
+- You can access the full replication package (dataset and source codes) [here](https://doi.org/10.5281/zenodo.17430335). 
 
 The dataset is split into:
 - Training set: `Data/train.csv`
